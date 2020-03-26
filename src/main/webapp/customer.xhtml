@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<h:head>
+  <h:outputStylesheet name="style.css" />
+  <title>Management</title>
+</h:head>
+
+<f:metadata>
+  <f:viewParam name="custid" value="#{customerManager.customer}"
+    converter="customerIDConverter" required="true"
+    requiredMessage="Bad Request." />
+    <!--<f:viewAction action="#{customerManager.checkId}" />-->
+</f:metadata>
+
+<h:body>
+  <h:form id="customerManager">
+    <h:panelGrid columns="3" role="presentation" styleClass="indexPanel"
+      border="0">
+      <f:facet name="header">
+        <h:panelGroup styleClass="headerPanel" layout="block">
+          <h:outputText value="Management" />
+        </h:panelGroup>
+      </f:facet>
+
+      <h:outputLabel id="customerIdLabel" for="customerID">ID:</h:outputLabel>
+      <h:inputText id="customerID"
+        value="#{customerManager.customer.customerID}" size="20"
+        readonly="#{customerManager.customer.customerID > 0}"></h:inputText>
+      <h:message for="customerID" />
+
+      <h:outputLabel id="statusLabel" for="status">Status:</h:outputLabel>
+      <h:inputText id="status"
+        value="#{customerManager.customer.statusCode}" size="35" />
+      <h:message for="status" />
+
+      <h:outputLabel id="firstNameLabel" for="firstName">First Name:</h:outputLabel>
+      <h:inputText id="firstName"
+        value="#{customerManager.customer.firstName}" size="35"></h:inputText>
+      <h:message for="firstName" />
+
+      <h:outputLabel id="lastNameLabel" for="lastName">Last Name:</h:outputLabel>
+      <h:inputText id="lastName"
+        value="#{customerManager.customer.lastName}" size="35"></h:inputText>
+      <h:message for="lastName" />
+
+      <h:outputLabel id="emailLabel" for="email">E-mail:</h:outputLabel>
+      <h:inputText id="email" value="#{customerManager.customer.email}"
+        size="35"></h:inputText>
+      <h:message for="email" />
+
+      <h:outputLabel id="streetAddressLabel" for="streetAddress">Street Address:</h:outputLabel>
+      <h:inputText id="streetAddress"
+        value="#{customerManager.customer.streetAddress}" size="35"></h:inputText>
+      <h:message for="streetAddress" />
+
+      <h:outputLabel id="cityLabel" for="city">City:</h:outputLabel>
+      <h:inputText id="city" value="#{customerManager.customer.city}"
+        size="35"></h:inputText>
+      <h:message for="city" />
+
+      <h:outputLabel id="stateLabel" for="state">State:</h:outputLabel>
+      <h:inputText id="state" value="#{customerManager.customer.state}"
+        size="30"></h:inputText>
+      <h:message for="state" />
+
+      <h:outputLabel id="zipCodeLabel" for="zipCode">Zipcode:</h:outputLabel>
+      <h:inputText id="zipCode"
+        value="#{customerManager.customer.zipCode}" size="30"></h:inputText>
+      <h:message for="zipCode" />
+
+      <f:facet name="footer">
+        <h:panelGroup styleClass="footerPanel" layout="block">
+          <h:commandButton type="submit" id="updateBtn" value="Update"
+            action="#{customerManager.update}" />
+          <h:commandButton id="deleteBtn" value="Delete"
+            action="#{customerManager.delete}" />
+          <h:button value="Cancel" outcome="/index" />
+        </h:panelGroup>
+      </f:facet>
+    </h:panelGrid>
+
+    <h:message for="updateBtn" infoClass="msgsBlock" />
+    <h:message for="deleteBtn" infoClass="msgsBlock"
+      errorClass="msgsBlock" />
+
+  </h:form>
+
+</h:body>
+</html>

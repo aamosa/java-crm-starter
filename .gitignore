@@ -1,0 +1,10 @@
+target/
+.project/
+.idea/
+.vscode/
+.metadata/
+.classpath
+.settings
+*.sh
+*.bat
+*.iml
