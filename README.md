@@ -1,4 +1,4 @@
 
-###  Java CRM Starter Webapp
+###  Java CRM Starter Web App
 
-A simplistic and bootstrap JSF, JPA, and Java EE 8 project.
+A simplistic and bootstrapped JSF, JPA, and Java EE 8 project.
