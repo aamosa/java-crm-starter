@@ -1,0 +1,13 @@
+<ui:composition xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+  <!-- :TODO -->
+  <c:choose>
+    <c:when test="#{type == 'text'}">
+      <h:inputText id="#{id}" value="#{bean[property]}" label="#{label}" required="#{required}">
+        <f:ajax event="blur" render="#{id}" />
+      </h:inputText>
+      <h:message id="#{id}" for="#{id}" />
+    </c:when>
+  
+</ui:composition>

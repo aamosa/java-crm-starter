@@ -72,11 +72,11 @@ public class SearchBacking implements Serializable {
             else
                 getCustomerByLastName(lastName.toUpperCase());
             break;
-        case "searchByCustomerID":
+        case "searchByID":
             Customer ce = entityoperations.findByID(customerID);
             values = ce != null ? Arrays.asList(ce) : null;
             break;
-        case "listAllCustomers":
+        case "fetchAll":
             values = customers;
             break;
         case "searchByDate":
