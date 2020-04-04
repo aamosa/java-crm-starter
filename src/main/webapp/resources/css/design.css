@@ -166,7 +166,7 @@ body {
     pointer-events: none;
 }
 
-.header-dropdown select, .header-dropdown input.header-input {
+.header-dropdown select, .header-dropdown input {
     padding: 8px 33px 8px 10px;
     font-size: 12px;
     line-height: 1.25em;

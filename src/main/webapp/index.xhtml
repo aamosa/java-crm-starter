@@ -1,17 +1,15 @@
-<ui:composition template="/WEB-INF/template.xhtml" 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core" 
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/WEB-INF/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:syn="http://syn.example.org/jsf">
 
   <ui:define name="title">Dashboard</ui:define>
-  
+
   <ui:define name="header-stuff">
     <div class="fields">
       <h:form id="indexForm">
         <div class="header-dropdown selector">
-          <label>Search Option:</label>
+          <h:outputLabel for="searchOption" value="Search Option:" />
           <h:selectOneMenu id="searchOption" value="#{entityUserBean.searchOption}">
             <f:selectItem itemValue="search" itemLabel="Select search option" />
             <f:selectItem itemValue="searchByName" itemLabel="Search By Name" />
@@ -25,38 +23,30 @@
         </div>
 
         <h:panelGroup layout="block" styleClass="header-dropdown" id="searchOptionPanel">
-          <h:outputLabel id="firstNameLabel" for="fName"
-            rendered="#{entityUserBean.searchOption eq 'searchByName'}">First Name:</h:outputLabel>
-          <h:inputText id="fName" value="#{entityUserBean.firstName}" label="Contact Name:"
-            rendered="#{entityUserBean.searchOption eq 'searchByName'}" required="false"
-            styleClass="header-input" />
+          <syn:input id="fName" label="First Name" value="#{entityUserBean.firstName}"
+            rendered="#{entityUserBean.searchOption eq 'searchByName'}" />
 
-          <h:outputLabel id="lastNameLabel" for="lName"
-            rendered="#{entityUserBean.searchOption eq 'searchByName'}">Last Name:</h:outputLabel>
-          <h:inputText id="lName" value="#{entityUserBean.lastName}"
+          <syn:input id="lName" label="Last Name" value="#{entityUserBean.lastName}"
             rendered="#{entityUserBean.searchOption eq 'searchByName'}" required="true"
-            requiredMessage="Name cannot be blank." styleClass="header-input" />
+            requiredMessage="Name field cannot be blank." />
 
-          <h:outputLabel for="searchDateFrom" rendered="#{entityUserBean.searchOption eq 'searchByDate'}">Search Date From:</h:outputLabel>
-          <h:inputText id="searchDateFrom" value="#{entityUserBean.searchDateFrom}"
-            label="Search Date From" styleClass="header-input" required="true"
-            rendered="#{entityUserBean.searchOption eq 'searchByDate'}"
+          <syn:input id="searchDateFrom" value="#{entityUserBean.searchDateFrom}"
+            label="Search Date From" rendered="#{entityUserBean.searchOption eq 'searchByDate'}"
+            required="true" requiredMessage="Please enter a valid date. For example 04/10/2019">
+            <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+          </syn:input>
+
+          <syn:input id="searchDateTo" value="#{entityUserBean.searchDateTo}" label="Search Date To"
+            rendered="#{entityUserBean.searchOption eq 'searchByDate'}" required="true"
             requiredMessage="Please enter a valid date. For example 04/10/2019">
             <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
-          </h:inputText>
+          </syn:input>
 
-          <h:outputLabel for="searchDateTo" rendered="#{entityUserBean.searchOption eq 'searchByDate'}">Search Date To:</h:outputLabel>
-          <h:inputText id="searchDateTo" value="#{entityUserBean.searchDateTo}" label="Search Date To"
-            styleClass="header-input" rendered="#{entityUserBean.searchOption eq 'searchByDate'}">
-            <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
-          </h:inputText>
-
-          <h:outputLabel for="searchID" rendered="#{entityUserBean.searchOption eq 'searchByID'}">ID:</h:outputLabel>
-          <h:inputText id="searchID" value="#{entityUserBean.customerID}" styleClass="header-input"
-            required="true" rendered="#{entityUserBean.searchOption eq 'searchByID'}"
-            requiredMessage="ID field cannot be blank." validatorMessage="Improper ID.">
+          <syn:input id="searchID" value="#{entityUserBean.customerID}" label="ID"
+            rendered="#{entityUserBean.searchOption eq 'searchByID'}" required="true"
+            requiredMessage="ID field cannot be blank.">
             <f:validateLongRange minimum="1" maximum="1000000000" />
-          </h:inputText>
+          </syn:input>
         </h:panelGroup>
 
         <h:panelGroup layout="block" styleClass="header-dropdown search" id="searchButtonPanel">
@@ -67,9 +57,10 @@
           <h:commandButton styleClass="header-search tab" type="reset" id="resetBtn" value="Refresh" />
         </h:panelGroup>
       </h:form>
+
     </div>
   </ui:define>
-  
+
   <ui:define name="content-stuff">
     <div class="table-wrapper">
       <h:panelGroup layout="block">
@@ -176,7 +167,7 @@
           </h:column>
         </h:dataTable>
       </h:panelGroup>
-      
+
     </div>
   </ui:define>
 </ui:composition>
