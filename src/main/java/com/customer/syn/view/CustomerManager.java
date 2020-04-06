@@ -1,6 +1,5 @@
 package com.customer.syn.view;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -26,24 +25,13 @@ public class CustomerManager implements Serializable {
     private EntityOperations entityoperations;
 
     private Customer customer;
+    
+    private boolean edit;
+    
 
     @PostConstruct
-    public void post() {
+    public void init() {
         // TODO:
-    }
-
-    @PreDestroy
-    public void pre() {
-        // TODO:
-    }
-
-    public void initialize() throws IOException {
-        if (customer == null) {
-            logger.severe("Initialize invoked: customer is null, creating new customer()");
-            customer = new Customer();
-        } else {
-            logger.severe("Initialize invoked: customer is not null!");
-        }
     }
 
     /** Persist new entity instance */
@@ -57,19 +45,25 @@ public class CustomerManager implements Serializable {
     }
 
     /** Update the entity instance. */
-    public String update() {
+    public String update(Customer ce) {
         try {
-            entityoperations.mergeEntity(customer);
-            String msg = "Customer with ID #: " + customer.getCustomerID() + " updated!";
+            entityoperations.mergeEntity(ce);
+            ce.setEditable(false);
+            String msg = "ID #: " + ce.getCustomerID() + " updated.";
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            FacesContext.getCurrentInstance().addMessage("customerManager:updateBtn", new FacesMessage(msg, msg));
-            return "customer?faces-redirect=true&includeViewParams=true";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(msg, msg));
+            return null;
         } catch (Exception e) {
             return null;
         }
     }
+    
+    public void edit(Customer customer ) {
+        this.customer = customer;
+        edit = true;
+    }
 
-    /** Delete the entity */
+    /** Delete the entity instance */
     public String delete() {
         try {
             entityoperations.deleteEntity((Integer) customer.getCustomerID());
@@ -84,6 +78,14 @@ public class CustomerManager implements Serializable {
     }
 
     // ------------------------------------------------ setters and getters
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
 
     public Customer getCustomer() {
         return customer;

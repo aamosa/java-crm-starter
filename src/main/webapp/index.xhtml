@@ -10,7 +10,7 @@
       <h:form id="indexForm">
         <div class="header-dropdown selector">
           <h:outputLabel for="searchOption" value="Search Option:" />
-          <h:selectOneMenu id="searchOption" value="#{entityUserBean.searchOption}">
+          <h:selectOneMenu id="searchOption" value="#{searchBacking.searchOption}">
             <f:selectItem itemValue="search" itemLabel="Select search option" />
             <f:selectItem itemValue="searchByName" itemLabel="Search By Name" />
             <f:selectItem itemValue="searchByDate" itemLabel="Search By Date Range" />
@@ -18,32 +18,32 @@
             <f:selectItem itemValue="fetchAll" itemLabel="Display All" />
 
             <f:ajax event="change" execute="@this" render="searchOptionPanel" />
-            <f:ajax listener="#{entityUserBean.refresh}" />
+            <f:ajax listener="#{searchBacking.refresh}" />
           </h:selectOneMenu>
         </div>
 
         <h:panelGroup layout="block" styleClass="header-dropdown" id="searchOptionPanel">
-          <syn:input id="fName" label="First Name" value="#{entityUserBean.firstName}"
-            rendered="#{entityUserBean.searchOption eq 'searchByName'}" />
+          <syn:input id="fName" label="First Name" value="#{searchBacking.firstName}"
+            rendered="#{searchBacking.searchOption eq 'searchByName'}" />
 
-          <syn:input id="lName" label="Last Name" value="#{entityUserBean.lastName}"
-            rendered="#{entityUserBean.searchOption eq 'searchByName'}" required="true"
+          <syn:input id="lName" label="Last Name" value="#{searchBacking.lastName}"
+            rendered="#{searchBacking.searchOption eq 'searchByName'}" required="true"
             requiredMessage="Name field cannot be blank." />
 
-          <syn:input id="searchDateFrom" value="#{entityUserBean.searchDateFrom}"
-            label="Search Date From" rendered="#{entityUserBean.searchOption eq 'searchByDate'}"
+          <syn:input id="searchDateFrom" value="#{searchBacking.searchDateFrom}"
+            label="Search Date From" rendered="#{searchBacking.searchOption eq 'searchByDate'}"
             required="true" requiredMessage="Please enter a valid date. For example 04/10/2019">
             <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
           </syn:input>
 
-          <syn:input id="searchDateTo" value="#{entityUserBean.searchDateTo}" label="Search Date To"
-            rendered="#{entityUserBean.searchOption eq 'searchByDate'}" required="true"
+          <syn:input id="searchDateTo" value="#{searchBacking.searchDateTo}" label="Search Date To"
+            rendered="#{searchBacking.searchOption eq 'searchByDate'}" required="true"
             requiredMessage="Please enter a valid date. For example 04/10/2019">
             <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
           </syn:input>
 
-          <syn:input id="searchID" value="#{entityUserBean.customerID}" label="ID"
-            rendered="#{entityUserBean.searchOption eq 'searchByID'}" required="true"
+          <syn:input id="searchID" value="#{searchBacking.customerID}" label="ID"
+            rendered="#{searchBacking.searchOption eq 'searchByID'}" required="true"
             requiredMessage="ID field cannot be blank.">
             <f:validateLongRange minimum="1" maximum="1000000000" />
           </syn:input>
@@ -51,121 +51,106 @@
 
         <h:panelGroup layout="block" styleClass="header-dropdown search" id="searchButtonPanel">
           <h:commandButton styleClass="header-search tab" id="submitBtn" value="Search"
-            action="#{entityUserBean.search}">
+            action="#{searchBacking.search}">
             <f:ajax execute="@form" render="@form :resultsPanel userMsgs grwl" />
           </h:commandButton>
           <h:commandButton styleClass="header-search tab" type="reset" id="resetBtn" value="Refresh" />
         </h:panelGroup>
       </h:form>
-
     </div>
   </ui:define>
 
   <ui:define name="content-stuff">
-    <div class="table-wrapper">
-      <h:panelGroup layout="block">
+    <div class="conwrap">
+      
+      <h:panelGroup id="msgs" layout="block" rendered="{not empty facesContext.messageList}">
         <h:messages id="userMsgs" infoClass="info messages" errorClass="error messages" />
       </h:panelGroup>
-
+        
       <h:panelGroup id="grwl" layout="block">
         <h:outputText value="No Matching Records Found."
-          rendered="#{empty entityUserBean.values and !facesContext.validationFailed}"
+          rendered="#{empty searchBacking.values and !facesContext.validationFailed}"
           styleClass="alert messages" />
       </h:panelGroup>
 
-      <h:panelGroup id="resultsPanel">
-        <h:dataTable id="someTable" value="#{entityUserBean.values}" var="customer"
-          rendered="#{!empty entityUserBean.values}" styleClass="data-table">
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="ID" />
-            </f:facet>
-            <h:link outcome="customer" value="#{customer.customerID}" includeViewParams="true">
-              <f:param name="custid" value="#{customer.customerID}" />
-            </h:link>
+      <h:panelGroup id="resultsPanel" layout="block">
+        <h:form id="editTable">
+
+          <h:dataTable id="someTable" value="#{searchBacking.values}" var="c"
+            rendered="#{!empty searchBacking.values}" styleClass="data-table">
+            <h:column>
+              <h:commandLink value="Edit" action="#{searchBacking.edit(c)}" styleClass="tab" />
+              <h:commandLink value="Save" action="#{customerManager.update(c)}" rendered="#{c.editable}" styleClass="tab" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">ID</f:facet>
+              <h:link outcome="customer" value="#{c.customerID}" includeViewParams="true">
+                <f:param name="custid" value="#{c.customerID}" />
+              </h:link>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">Status</f:facet>
+            #{c.statusCode}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Status" />
-            </f:facet>
-            <h:outputText value="#{customer.statusCode}" />
+            <h:column>
+              <f:facet name="header">First Name</f:facet>
+              <h:outputText value="#{c.firstName}" rendered="#{!c.editable}" />
+              <h:inputText value="#{c.firstName}" rendered="#{c.editable}" size="10" />
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="First Name" />
-            </f:facet>
-            <h:outputText value="#{customer.firstName}" />
+            <h:column>
+              <f:facet name="header">Last Name</f:facet>
+              #{c.lastName}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Last Name" />
-            </f:facet>
-            <h:outputText value="#{customer.lastName}" />
+            <h:column>
+              <f:facet name="header">Street Address</f:facet>
+            #{c.streetAddress}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Street Address" />
-            </f:facet>
-            <h:outputText value="#{customer.streetAddress}" />
+            <h:column>
+              <f:facet name="header">City</f:facet>
+            #{c.city}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="City" />
-            </f:facet>
-            <h:outputText value="#{customer.city}" />
+            <h:column>
+              <f:facet name="header">State</f:facet>
+            #{c.state}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="State" />
-            </f:facet>
-            <h:outputText value="#{customer.state}" />
+            <h:column>
+              <f:facet name="header">Zip</f:facet>
+            #{c.zipCode}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Zipcode" />
-            </f:facet>
-            <h:outputText value="#{customer.zipCode}" />
+            <h:column>
+              <f:facet name="header">Email</f:facet>
+            #{c.email}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Email" />
-            </f:facet>
-            <h:outputText value="#{customer.email}" />
+            <h:column>
+              <f:facet name="header">Phone</f:facet>
+            #{c.phone}
           </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Phone" />
-            </f:facet>
-            <h:outputText value="#{customer.phone}" />
-          </h:column>
+            <h:column>
+              <f:facet name="header">Date Created</f:facet>
+              <h:outputText value="#{c.createdTime}">
+                <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
+              </h:outputText>
+            </h:column>
 
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Created" />
-            </f:facet>
-            <h:outputText value="#{customer.createdTime}">
-              <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-            </h:outputText>
-          </h:column>
-
-          <h:column>
-            <f:facet name="header">
-              <h:outputText value="Last Updated" />
-            </f:facet>
-            <h:outputText value="#{customer.lastUpdatedTime}">
-              <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-            </h:outputText>
-          </h:column>
-        </h:dataTable>
+            <h:column>
+              <f:facet name="header">Date Updated</f:facet>
+              <h:outputText value="#{c.lastUpdatedTime}">
+                <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
+              </h:outputText>
+            </h:column>
+          </h:dataTable>
+        </h:form>
       </h:panelGroup>
 
     </div>

@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @NamedQueries({ @NamedQuery(name = "Customer.getAll", query = "SELECT c FROM Customer c"),
         @NamedQuery(name = "Customer.getByLastName",  query = "SELECT c FROM Customer c WHERE c.lastName LIKE :lastName"),
@@ -60,6 +61,9 @@ public class Customer implements Serializable {
 
     @Column(name = "created", nullable = false)
     private LocalDateTime createdTime;
+    
+    @Transient
+    private boolean editable;
 
     @PrePersist
     private void onPersist() {
@@ -156,5 +160,13 @@ public class Customer implements Serializable {
 
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 }

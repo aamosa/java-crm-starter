@@ -18,15 +18,13 @@ import javax.inject.Named;
 import com.customer.syn.resource.Customer;
 import com.customer.syn.resource.EntityOperations;
 
-@FacesConfig(
-        // Activates CDI build-in beans
-        version = JSF_2_3)
-@Named("entityUserBean")
+@FacesConfig(version = JSF_2_3) // Activates CDI build-in beans
+@Named("searchBacking")
 @ViewScoped
 public class SearchBacking implements Serializable {
 
     private static final long serialVersionUID = 12L;
-
+    
     private int customerID;
     private String firstName;
     private String lastName;
@@ -34,13 +32,17 @@ public class SearchBacking implements Serializable {
     private LocalDate searchDateTo;
     private LocalDate searchDateFrom;
 
-    private List<Customer> customers;
     private List<Customer> values;
+    private List<Customer> customers;
 
     @Inject
     private EntityOperations entityoperations;
     
+    
+    // ---------------------------------------------- constructors
+
     public SearchBacking() {}
+
     
     /**
      * Don't do extensive business logic in getter methods, getters are called by
@@ -63,7 +65,6 @@ public class SearchBacking implements Serializable {
         values = entityoperations.findByFullName(fName, lName);
     }
 
-    /** Search */
     public void search() {
         switch (searchOption) {
         case "searchByName":
@@ -88,6 +89,11 @@ public class SearchBacking implements Serializable {
         }
     }
     
+    public void edit(Customer ce) {
+        ce.setEditable(true);
+    }
+
+
     /** Refresh */
     public void refresh(AjaxBehaviorEvent e) {
         this.values = null;
@@ -97,8 +103,8 @@ public class SearchBacking implements Serializable {
     private void clear() {
         // TODO:
     }
-    
 
+    
     // ---------------------------------------------- setters and getters
 
     public List<Customer> getValues() {

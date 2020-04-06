@@ -45,7 +45,7 @@ public class CustomerConverter implements Converter {
             return String.valueOf(((Customer) value).getCustomerID());
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "coversion error", "conversion error"));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "conversion error", "conversion error"));
             throw new ConverterException();
         }
     }

@@ -14,15 +14,20 @@
   <ui:include src="/WEB-INF/include/resource.xhtml" />
   <title><ui:insert name="title">Default title</ui:insert></title>
 </h:head>
+
+<ui:insert name="meta"></ui:insert>
+
 <h:body>
   <div id="main-block">
     <div id="header-wrapper">
       <div id="nav-container">
         <div id="user-bar">
           <div class="fields">
-            <a class="primary-user tab alert" href="">Alerts</a>
-            <h:link value="Admin" outcome="index" styleClass="primary-user tab" />
-            <a class="primary-user tab" href="">Sign Out</a>
+            <h:link outcome="index" styleClass="selected tab" value="Dashboard" />
+            <a class="tab" href="">Create</a>
+            <a class="tab" href="">Reports</a>
+            <h:link outcome="index" styleClass="tab" value="Settings" />
+            <a class="tab" href="">Sign Out</a>
           </div>
 
           <div class="fields right">
@@ -38,7 +43,9 @@
       <div id="header-block">
         <div id="header-container">
           <div id="header">
-            <ui:insert name="header-stuff">placeholder</ui:insert>
+          
+            <ui:insert name="header-stuff">Header</ui:insert>
+            
           </div>
         </div>
       </div>
@@ -46,6 +53,7 @@
 
     <div id="content-wrapper">
       <div id="right-column" class="column">
+      
         <ui:insert name="content-stuff">Placeholder Content.</ui:insert>
 
         <div id="footer">
