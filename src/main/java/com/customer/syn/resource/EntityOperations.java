@@ -2,6 +2,9 @@ package com.customer.syn.resource;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +31,8 @@ public class EntityOperations {
     }
 
     /**
+     * Fetch all entities.
+     * 
      * @return a <code>List&lt;Customer&gt;</code> of all the managed entities.
      */
     @SuppressWarnings("unchecked")
@@ -54,6 +59,15 @@ public class EntityOperations {
     }
 
     /**
+     * Update the specified entity in the current persistence context.
+     * 
+     * @param ce the <code>Customer</code> entity to update.
+     */
+    public void mergeEntity(Customer ce) {
+        em.merge(ce);
+    }
+
+    /**
      * @param lastName string representing the last name to lookup.
      * @return a <code>List&lt;Customer&gt;</code> of entities.
      */
@@ -64,6 +78,7 @@ public class EntityOperations {
     }
 
     /**
+     * Fetch entities created in the specified date range.
      * 
      * @param from <code>LocalDate</code> object representing the <em>from</em> date
      *             starting at midnight.
@@ -74,7 +89,8 @@ public class EntityOperations {
     @SuppressWarnings("unchecked")
     public List<Customer> findByDateRange(LocalDate from, LocalDate to) {
         return em.createNamedQuery("Customer.getByDateRange").setParameter("from", from.atStartOfDay())
-                .setParameter("to", to.atStartOfDay()).getResultList();
+                .setParameter("to", to.atStartOfDay())
+                .getResultList();
     }
 
     /**
@@ -88,13 +104,4 @@ public class EntityOperations {
                 .setParameter("lastName", lastName).getResultList();
     }
 
-    /**
-     * Updates the managed entity into the current persistence context.
-     * 
-     * @param ce the <code>Customer</code> entity to update.
-     */
-    public void mergeEntity(Customer ce) {
-        em.merge(ce);
-    }
-    
 }

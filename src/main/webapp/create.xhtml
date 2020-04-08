@@ -1,0 +1,42 @@
+<ui:composition template="/WEB-INF/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:syn="http://syn.example.org/jsf">
+
+  <ui:define name="title">Create Menu</ui:define>
+
+  <ui:define name="header-stuff">
+    <div class="fields">
+      <h:form id="createForm">
+        <div class="header-dropdown selector">
+          <h:outputLabel for="cOption" value="Create:" />
+          <h:selectOneMenu id="cOption" value="#{createBacking.createWhat}">
+            <f:selectItem itemValue="null" itemLabel="Select create option:" />
+            <f:selectItem itemValue="createCustomer" itemLabel="Create new Customer" />
+            <f:selectItem itemValue="createTask" itemLabel="Create new Task" />
+          </h:selectOneMenu>
+        </div>
+      </h:form>
+    </div>
+  </ui:define>
+
+  <ui:define name="content-stuff">
+    <div class="fields">
+      <h:form id="cInputForm">
+
+        <syn:input id="cFname" value="#{createBacking.customer.firstName}" label="First Name:" />
+        <syn:input id="cLname" value="#{createBacking.customer.lastName}" label="Last Name:" />
+        <syn:input id="cEmail" value="#{createBacking.customer.email}" label="Email:" />
+        <syn:input id="cPhone" value="#{createBacking.customer.phone}" label="Phone:" />
+        <syn:input id="cSaddress" value="#{createBacking.customer.streetAddress}" label="Street Address:" />
+        <syn:input id="cCity" value="#{createBacking.customer.city}" label="City:" />
+        <syn:input id="cZip" value="#{createBacking.customer.zipCode}" label="Zip:" />
+
+        <h:panelGroup id="btnPanel" layout="block">
+          <h:commandButton id="svBtn" value="Create" action="#{createBacking.save}" styleClass="tab" />
+          <h:button id="rstBtn" value="Reset" styleClass="tab" />
+        </h:panelGroup>
+      </h:form>
+    </div>
+  </ui:define>
+</ui:composition>

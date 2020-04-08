@@ -24,7 +24,7 @@
         <div id="user-bar">
           <div class="fields">
             <h:link outcome="index" styleClass="selected tab" value="Dashboard" />
-            <a class="tab" href="">Create</a>
+            <h:link outcome="create" styleClass="tab" value="Create" />
             <a class="tab" href="">Reports</a>
             <h:link outcome="index" styleClass="tab" value="Settings" />
             <a class="tab" href="">Sign Out</a>
@@ -43,9 +43,9 @@
       <div id="header-block">
         <div id="header-container">
           <div id="header">
-          
+
             <ui:insert name="header-stuff">Header</ui:insert>
-            
+
           </div>
         </div>
       </div>
@@ -53,8 +53,15 @@
 
     <div id="content-wrapper">
       <div id="right-column" class="column">
-      
-        <ui:insert name="content-stuff">Placeholder Content.</ui:insert>
+        <div class="conwrap">
+          <h:panelGroup id="grwl" layout="block">
+            <h:messages id="gmsgs" infoClass="info messages" errorClass="error messages"
+              rendered="#{not empty facesContext.messageList}" />
+          </h:panelGroup>
+
+          <ui:insert name="content-stuff"></ui:insert>
+
+        </div>
 
         <div id="footer">
           <div id="footer-top"></div>

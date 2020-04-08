@@ -6,10 +6,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.annotation.FacesConfig;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -24,7 +25,7 @@ import com.customer.syn.resource.EntityOperations;
 public class SearchBacking implements Serializable {
 
     private static final long serialVersionUID = 12L;
-    
+
     private int customerID;
     private String firstName;
     private String lastName;
@@ -37,13 +38,12 @@ public class SearchBacking implements Serializable {
 
     @Inject
     private EntityOperations entityoperations;
-    
-    
+
     // ---------------------------------------------- constructors
 
-    public SearchBacking() {}
+    public SearchBacking() {
+    }
 
-    
     /**
      * Don't do extensive business logic in getter methods, getters are called by
      * JSF multiple times during the life-cycle events.
@@ -57,21 +57,13 @@ public class SearchBacking implements Serializable {
         customers = entityoperations.findAll();
     }
 
-    public void getCustomerByLastName(String name) {
-        values = entityoperations.findByLastName(name);
-    }
-
-    public void getCustomerByFullName(String fName, String lName) {
-        values = entityoperations.findByFullName(fName, lName);
-    }
-
     public void search() {
         switch (searchOption) {
         case "searchByName":
             if (!firstName.trim().isEmpty() && !lastName.trim().isEmpty())
-                getCustomerByFullName(firstName.toUpperCase(), lastName.toUpperCase());
+                values = entityoperations.findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
             else
-                getCustomerByLastName(lastName.toUpperCase());
+                values = entityoperations.findByLastName(lastName.toUpperCase());
             break;
         case "searchByID":
             Customer ce = entityoperations.findByID(customerID);
@@ -87,24 +79,25 @@ public class SearchBacking implements Serializable {
         default:
             return;
         }
+
+        if (values == null || values.size() < 1) {
+            FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage("No records found."));
+        }
     }
     
-    public void edit(Customer ce) {
+    /** Edit */ 
+    public String edit(Customer ce) {
         ce.setEditable(true);
+        return null;
     }
-
 
     /** Refresh */
     public void refresh(AjaxBehaviorEvent e) {
         this.values = null;
     }
+   
 
-    /** Clear */
-    private void clear() {
-        // TODO:
-    }
-
-    
     // ---------------------------------------------- setters and getters
 
     public List<Customer> getValues() {

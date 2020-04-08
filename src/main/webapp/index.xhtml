@@ -30,9 +30,9 @@
             rendered="#{searchBacking.searchOption eq 'searchByName'}" required="true"
             requiredMessage="Name field cannot be blank." />
 
-          <syn:input id="searchDateFrom" value="#{searchBacking.searchDateFrom}"
-            label="Search Date From" rendered="#{searchBacking.searchOption eq 'searchByDate'}"
-            required="true" requiredMessage="Please enter a valid date. For example 04/10/2019">
+          <syn:input id="searchDateFrom" value="#{searchBacking.searchDateFrom}" label="Search Date From"
+            rendered="#{searchBacking.searchOption eq 'searchByDate'}" required="true"
+            requiredMessage="Please enter a valid date. For example 04/10/2019">
             <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
           </syn:input>
 
@@ -52,7 +52,7 @@
         <h:panelGroup layout="block" styleClass="header-dropdown search" id="searchButtonPanel">
           <h:commandButton styleClass="header-search tab" id="submitBtn" value="Search"
             action="#{searchBacking.search}">
-            <f:ajax execute="@form" render="@form :resultsPanel userMsgs grwl" />
+            <f:ajax execute="@form" render="@form :somePanel grwl" />
           </h:commandButton>
           <h:commandButton styleClass="header-search tab" type="reset" id="resetBtn" value="Refresh" />
         </h:panelGroup>
@@ -61,98 +61,95 @@
   </ui:define>
 
   <ui:define name="content-stuff">
-    <div class="conwrap">
-      
-      <h:panelGroup id="msgs" layout="block" rendered="{not empty facesContext.messageList}">
-        <h:messages id="userMsgs" infoClass="info messages" errorClass="error messages" />
-      </h:panelGroup>
-        
-      <h:panelGroup id="grwl" layout="block">
-        <h:outputText value="No Matching Records Found."
-          rendered="#{empty searchBacking.values and !facesContext.validationFailed}"
-          styleClass="alert messages" />
-      </h:panelGroup>
+    <h:panelGroup id="somePanel" layout="block">
+      <c:if
+        test="#{empty faceContext.messageList and not facesContext.validationFailed and empty searchBacking.values}">
+        <h1>Welcome.</h1>
+      </c:if>
+      <h:form id="editTable">
+        <h:dataTable id="someTable" value="#{searchBacking.values}" var="c"
+          rendered="#{!empty searchBacking.values}" styleClass="data-table">
+          <h:column>
+            <h:commandLink value="Edit" action="#{searchBacking.edit(c)}" styleClass="tab skinny"/>
+            <h:commandLink value="Update" action="#{tableBacking.update(c)}" rendered="#{c.editable}"
+              styleClass="tab skinny"/>
+          </h:column>
 
-      <h:panelGroup id="resultsPanel" layout="block">
-        <h:form id="editTable">
+          <h:column>
+            <f:facet name="header">ID</f:facet>
+            <h:link outcome="customer" value="#{c.customerID}" includeViewParams="true">
+              <f:param name="custid" value="#{c.customerID}" />
+            </h:link>
+          </h:column>
 
-          <h:dataTable id="someTable" value="#{searchBacking.values}" var="c"
-            rendered="#{!empty searchBacking.values}" styleClass="data-table">
-            <h:column>
-              <h:commandLink value="Edit" action="#{searchBacking.edit(c)}" styleClass="tab" />
-              <h:commandLink value="Save" action="#{customerManager.update(c)}" rendered="#{c.editable}" styleClass="tab" />
+          <h:column>
+            <f:facet name="header">Status</f:facet>
+              #{c.statusCode}
             </h:column>
 
-            <h:column>
-              <f:facet name="header">ID</f:facet>
-              <h:link outcome="customer" value="#{c.customerID}" includeViewParams="true">
-                <f:param name="custid" value="#{c.customerID}" />
-              </h:link>
-            </h:column>
-
-            <h:column>
-              <f:facet name="header">Status</f:facet>
-            #{c.statusCode}
+          <h:column>
+            <f:facet name="header">First Name</f:facet>
+            <h:outputText value="#{c.firstName}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.firstName}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">First Name</f:facet>
-              <h:outputText value="#{c.firstName}" rendered="#{!c.editable}" />
-              <h:inputText value="#{c.firstName}" rendered="#{c.editable}" size="10" />
+          <h:column>
+            <f:facet name="header">Last Name</f:facet>
+            <h:outputText value="#{c.lastName}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.lastName}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">Last Name</f:facet>
-              #{c.lastName}
+          <h:column>
+            <f:facet name="header">Street Address</f:facet>
+            <h:outputText value="#{c.streetAddress}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.streetAddress}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">Street Address</f:facet>
-            #{c.streetAddress}
+          <h:column>
+            <f:facet name="header">City</f:facet>
+            <h:outputText value="#{c.city}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.city}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">City</f:facet>
-            #{c.city}
+          <h:column>
+            <f:facet name="header">State</f:facet>
+            <h:outputText value="#{c.state}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.state}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">State</f:facet>
-            #{c.state}
+          <h:column>
+            <f:facet name="header">Zip</f:facet>
+            <h:outputText value="#{c.zipCode}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.zipCode}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">Zip</f:facet>
-            #{c.zipCode}
+          <h:column>
+            <f:facet name="header">Email</f:facet>
+            <h:outputText value="#{c.email}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.email}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">Email</f:facet>
-            #{c.email}
+          <h:column>
+            <f:facet name="header">Phone</f:facet>
+            <h:outputText value="#{c.phone}" rendered="#{!c.editable}" />
+            <h:inputText value="#{c.phone}" rendered="#{c.editable}" />
           </h:column>
 
-            <h:column>
-              <f:facet name="header">Phone</f:facet>
-            #{c.phone}
+          <h:column>
+            <f:facet name="header">Date Created</f:facet>
+            <h:outputText value="#{c.createdTime}">
+              <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
+            </h:outputText>
           </h:column>
 
-            <h:column>
-              <f:facet name="header">Date Created</f:facet>
-              <h:outputText value="#{c.createdTime}">
-                <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-              </h:outputText>
-            </h:column>
-
-            <h:column>
-              <f:facet name="header">Date Updated</f:facet>
-              <h:outputText value="#{c.lastUpdatedTime}">
-                <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-              </h:outputText>
-            </h:column>
-          </h:dataTable>
-        </h:form>
-      </h:panelGroup>
-
-    </div>
+          <h:column>
+            <f:facet name="header">Date Updated</f:facet>
+            <h:outputText value="#{c.lastUpdatedTime}">
+              <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
+            </h:outputText>
+          </h:column>
+        </h:dataTable>
+      </h:form>
+    </h:panelGroup>
   </ui:define>
 </ui:composition>

@@ -18,10 +18,12 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-@NamedQueries({ @NamedQuery(name = "Customer.getAll", query = "SELECT c FROM Customer c"),
-        @NamedQuery(name = "Customer.getByLastName",  query = "SELECT c FROM Customer c WHERE c.lastName LIKE :lastName"),
-        @NamedQuery(name = "Customer.getByFullName",  query = "SELECT c FROM Customer c WHERE c.firstName LIKE :firstName AND c.lastName LIKE :lastName"),
-        @NamedQuery(name = "Customer.getByDateRange", query = "SELECT c FROM Customer c WHERE c.createdTime between :from AND :to") })
+@NamedQueries({ 
+        @NamedQuery(name = "Customer.getAll", query = "SELECT c FROM Customer c"),
+        @NamedQuery(name = "Customer.getByLastName", query = "SELECT c FROM Customer c WHERE c.lastName LIKE :lastName"),
+        @NamedQuery(name = "Customer.getByFullName", query = "SELECT c FROM Customer c WHERE c.firstName LIKE :firstName AND c.lastName LIKE :lastName"),
+        @NamedQuery(name = "Customer.getByDateRange", query = "SELECT c FROM Customer c WHERE c.createdTime between :from AND :to")
+})
 @Table(name = "test_customers")
 @Entity
 public class Customer implements Serializable {
@@ -31,37 +33,33 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int customerID;
-    
-    @Basic(optional = false)
-    private String firstName;
-    
-    @Basic(optional = false)
-    private String lastName;
-    
-    private String city;
-    private String streetAddress;
 
-    @Basic
+    private String firstName;
+    private String lastName;
+    private String streetAddress;
+    private String city;
+
+    @Column(name = "status_code", columnDefinition = "CHAR(1) default 'A'")
     private String statusCode;
 
-    @Basic(optional = true)
+    @Basic
     private String phone;
-
-    @Column(nullable = false, length = 2)
-    private String state;
     
+    @Basic
+    private String state;
+
     @Basic
     private String zipCode;
 
-    @Column(nullable = true)
+    @Column
     private String email;
 
-    @Column(name = "updated", nullable = false)
+    @Column(name = "date_updated", nullable = false)
     private LocalDateTime lastUpdatedTime;
 
-    @Column(name = "created", nullable = false)
+    @Column(name = "date_created", nullable = false)
     private LocalDateTime createdTime;
-    
+
     @Transient
     private boolean editable;
 
@@ -74,8 +72,8 @@ public class Customer implements Serializable {
     private void onUpdate() {
         lastUpdatedTime = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
     }
-
     
+
     // ----------------------------------------------------- setters and getters
 
     public int getCustomerID() {
