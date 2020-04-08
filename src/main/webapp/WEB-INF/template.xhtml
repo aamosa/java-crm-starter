@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en" 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:syn="http://syn.example.org/jsf">
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:syn="http://syn.example.org/jsf">
 
 <h:head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,11 +23,10 @@
       <div id="nav-container">
         <div id="user-bar">
           <div class="fields">
-            <h:link outcome="index" styleClass="selected tab" value="Dashboard" />
-            <h:link outcome="create" styleClass="tab" value="Create" />
-            <a class="tab" href="">Reports</a>
-            <h:link outcome="index" styleClass="tab" value="Settings" />
-            <a class="tab" href="">Sign Out</a>
+            <ui:repeat value="#{menuBacking.menu}" var="page">
+              <h:link value="#{page.title}" outcome="#{page.view}"
+                styleClass="#{view.viewId eq page.view ? 'selected tab' : 'tab'}" />
+            </ui:repeat>
           </div>
 
           <div class="fields right">
@@ -44,7 +43,7 @@
         <div id="header-container">
           <div id="header">
 
-            <ui:insert name="header-stuff">Header</ui:insert>
+            <ui:insert name="header-stuff"></ui:insert>
 
           </div>
         </div>

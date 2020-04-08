@@ -23,10 +23,12 @@ public class CreateBacking {
     /** Persist new entity instance */
     public String save() {
         entityOperations.save(this.customer);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New entry created."));
+        FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage("New entry created."));
 
         // keep messages in flash scope so they survive the redirect.
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash()
+            .setKeepMessages(true);
         
         // using POST-Redirect-GET pattern here to prevent re-execution on page reload!
         return "create?faces-redirect=true&includeViewParams=true";
