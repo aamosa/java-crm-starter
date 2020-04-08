@@ -50,6 +50,14 @@ public class MenuBacking implements Serializable {
         public String getView() {
             return view;
         }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setView(String view) {
+            this.view = view;
+        }
     }
 
 }
