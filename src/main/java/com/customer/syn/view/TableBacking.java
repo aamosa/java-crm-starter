@@ -31,7 +31,7 @@ public class TableBacking implements Serializable {
         ce.setEditable(false);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("ID#: " + ce.getCustomerID() + " updated."));
-        return "index";
+        return null;
     }
 
     /** Delete the entity instance */

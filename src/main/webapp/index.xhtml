@@ -62,10 +62,6 @@
 
   <ui:define name="content-stuff">
     <h:panelGroup id="somePanel" layout="block">
-      <c:if
-        test="#{empty faceContext.messageList and not facesContext.validationFailed and empty searchBacking.values}">
-        <h1>Welcome.</h1>
-      </c:if>
       <h:form id="editTable">
         <h:dataTable id="someTable" value="#{searchBacking.values}" var="c"
           rendered="#{!empty searchBacking.values}" styleClass="data-table">
@@ -77,9 +73,7 @@
 
           <h:column>
             <f:facet name="header">ID</f:facet>
-            <h:link outcome="customer" value="#{c.customerID}" includeViewParams="true">
-              <f:param name="custid" value="#{c.customerID}" />
-            </h:link>
+            #{c.customerID}
           </h:column>
 
           <h:column>

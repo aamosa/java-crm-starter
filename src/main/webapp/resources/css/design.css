@@ -109,7 +109,8 @@ body {
     flex-direction: row;
 }
 
-.fields select, .fields input[type=text], .data-table input[type=text] {
+.fields select, .fields input[type=text], .data-table input[type=text],
+    .create-form input[type=text] {
     padding: 8px 33px 8px 10px;
     font-size: 12px;
     line-height: 1.25em;
@@ -121,6 +122,40 @@ body {
     border-radius: 4px;
     border: 1px solid #b1bdc8;
     box-shadow: inset 0 0 4px 0 rgba(39, 49, 58, .26);
+}
+
+.fields label, .create-form label {
+    display: block;
+    margin: 0 0 .28571429rem 0;
+    color: #222;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: none;
+}
+
+.create-form {
+    width: 100%;
+    max-width: 360px;
+    padding: 10px;
+    margin: auto;
+}
+
+.create-form input[type=text] {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border-radius: 1px;
+}
+
+.create-form label {
+    margin: 0.75rem 0 0 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+
+.create-form div {
+    margin: 0.65rem 0;
 }
 
 .data-table input[type=text] {
@@ -150,15 +185,6 @@ body {
 
 .fields div {
     padding: 0 0.2em;
-}
-
-.fields label {
-    display: block;
-    margin: 0 0 .28571429rem 0;
-    color: #222;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: none;
 }
 
 a.selected {
@@ -211,7 +237,7 @@ div#grwl {
     color: #222;
     font-weight: 600;
     font-size: 12px;
-    margin: 0.1em;
+    margin: 0.09rem;
     border-radius: 4px;
     border: 1px solid #9e9e9e;
     color: #12344d;
@@ -529,37 +555,4 @@ p.copy-text {
     padding: 10px 0;
     margin: 0 auto;
     text-align: center;
-}
-
-img.footer-img {
-    padding: 1em;
-}
-
-div.footer-social-links {
-    clear: left;
-    float: right;
-    text-align: right;
-    padding: 1em;
-}
-
-.footer-social-links h2 {
-    color: #1f3760;
-    font-size: 18px;
-    font-weight: 500;
-    padding: 0.5em 0 0.5em 0;
-    text-transform: uppercase;
-}
-
-.footer-menu a:hover {
-    text-decoration: underline;
-    color: #fff;
-}
-
-.footer-menu a:link, .footer-menu a:visited {
-    color: #fff;
-}
-
-#footer-bottom {
-    width: 980px;
-    margin: 10px auto;
 }
