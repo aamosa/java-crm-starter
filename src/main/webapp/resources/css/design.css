@@ -126,7 +126,7 @@ body {
 
 .fields label, .create-form label {
     display: block;
-    margin: 0 0 .28571429rem 0;
+    margin: 0.4rem 0 0 0;
     color: #222;
     font-size: 11px;
     font-weight: 600;
@@ -136,7 +136,6 @@ body {
 .create-form {
     width: 100%;
     max-width: 360px;
-    padding: 10px;
     margin: auto;
 }
 
@@ -152,7 +151,6 @@ body {
     font-size: 0.95rem;
     font-weight: 500;
 }
-
 
 .create-form div {
     margin: 0.65rem 0;
@@ -175,7 +173,8 @@ body {
 
 .fields div:first-child {
     padding: 0;
-    padding-right: 0.25em;
+    margin-right: 0.75rem;
+    margin-left: 2.5rem;
 }
 
 .fields div:last-child {
@@ -275,11 +274,11 @@ div#grwl {
 }
 
 #user-bar {
-    width: 80%;
-    margin: 0 auto;
-    background-color: #dadada;
-    padding: 4px 0px;
     display: flex;
+    width: 75%;
+    margin: 0 auto;
+    padding: 4px 0px;
+    background-color: #dadada;
     justify-content: space-between;
 }
 
@@ -548,7 +547,6 @@ ul.footer-menu li {
 }
 
 p.copy-text {
-    /*clear:both;*/
     font-size: 12px;
     color: #555;
     line-height: 2em;

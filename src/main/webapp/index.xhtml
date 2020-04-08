@@ -54,7 +54,7 @@
             action="#{searchBacking.search}">
             <f:ajax execute="@form" render="@form :somePanel grwl" />
           </h:commandButton>
-          <h:commandButton styleClass="header-search tab" type="reset" id="resetBtn" value="Refresh" />
+          <h:button id="rsetBtn" value="Refresh" styleClass="header-search tab" />
         </h:panelGroup>
       </h:form>
     </div>
@@ -66,9 +66,11 @@
         <h:dataTable id="someTable" value="#{searchBacking.values}" var="c"
           rendered="#{!empty searchBacking.values}" styleClass="data-table">
           <h:column>
-            <h:commandLink value="Edit" action="#{searchBacking.edit(c)}" styleClass="tab skinny"/>
-            <h:commandLink value="Update" action="#{tableBacking.update(c)}" rendered="#{c.editable}"
-              styleClass="tab skinny"/>
+            <h:commandLink value="Edit" action="#{searchBacking.edit(c)}" styleClass="tab skinny" />
+            <h:commandLink value="Save" action="#{tableBacking.update(c)}" rendered="#{c.editable}"
+              styleClass="tab skinny" />
+            <h:commandLink value="Delete" action="#{tableBacking.delete(c)}" rendered="#{c.editable}"
+              styleClass="tab skinny" />
           </h:column>
 
           <h:column>

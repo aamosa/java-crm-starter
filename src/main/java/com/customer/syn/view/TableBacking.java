@@ -35,12 +35,14 @@ public class TableBacking implements Serializable {
     }
 
     /** Delete the entity instance */
-    public void delete(Customer ce) {
+    public String delete(Customer ce) {
         entityoperations.deleteEntity(ce.getCustomerID());
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("ID#: " + ce.getCustomerID() + " deleted."));
-        // FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-        // return "customer?faces-redirect=true";
+        
+        FacesContext.getCurrentInstance().getExternalContext().getFlash()
+        .setKeepMessages(true);
+        return "index?faces-redirect=true";
     }
 
 }
