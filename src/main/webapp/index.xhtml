@@ -9,8 +9,8 @@
     <div class="fields">
       <h:form id="indexForm">
         <div class="header-dropdown selector">
-          <h:outputLabel for="searchOption" value="Search Option:" />
-          <h:selectOneMenu id="searchOption" value="#{searchBacking.searchOption}">
+          <syn:input type="selectmenu" id="searchOption" label="Search Option"
+            value="#{searchBacking.searchOption}">
             <f:selectItem itemValue="search" itemLabel="Select search option" />
             <f:selectItem itemValue="searchByName" itemLabel="Search By Name" />
             <f:selectItem itemValue="searchByDate" itemLabel="Search By Date Range" />
@@ -19,7 +19,7 @@
 
             <f:ajax event="change" execute="@this" render="searchOptionPanel" />
             <f:ajax listener="#{searchBacking.refresh}" />
-          </h:selectOneMenu>
+          </syn:input>
         </div>
 
         <h:panelGroup layout="block" styleClass="header-dropdown" id="searchOptionPanel">
