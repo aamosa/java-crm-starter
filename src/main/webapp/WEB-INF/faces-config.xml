@@ -3,11 +3,22 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
 	version="2.3">
-	
-	<managed-bean>
-		<managed-bean-name>currentTime</managed-bean-name>
-		<managed-bean-class>java.util.Date</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
+
+	<application>
+		<local-config>
+			<default-locale>en</default-locale>
+		</local-config>
+		<resource-bundle>
+			<base-name>com.customer.syn.messages</base-name>
+			<var>msg</var>
+		</resource-bundle>
+		<message-bundle>com.customer.syn.messages</message-bundle>
+	</application>
+
+	<!-- <managed-bean> -->
+	<!-- <managed-bean-name>currentTime</managed-bean-name> -->
+	<!-- <managed-bean-class>java.util.Date</managed-bean-class> -->
+	<!-- <managed-bean-scope>request</managed-bean-scope> -->
+	<!-- </managed-bean> -->
 
 </faces-config>
