@@ -8,12 +8,15 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
+import com.customer.syn.util.ValueLabelHolder;
+
 @Named
 @ApplicationScoped
 public class MenuBacking implements Serializable {
 
     private static final long serialVersionUID = 54L;
-    private List<Page> menu;
+    private List<ValueLabelHolder<String>> menu;
+    private List<ValueLabelHolder<String>> searchOptions;
 
     public MenuBacking() {}
 
@@ -21,43 +24,29 @@ public class MenuBacking implements Serializable {
     public void init() {
         // :TODO load from property file or DB here
         menu = new ArrayList<>();
-        menu.add(new Page("Dashboard", "/index.xhtml"));
-        menu.add(new Page("Create", "/create.xhtml"));
+        menu.add(new ValueLabelHolder<>("Dashboard", "/index.xhtml"));
+        menu.add(new ValueLabelHolder<>("Create", "/create.xhtml"));
+        initSearchOptions();
     }
 
+    
+    private void initSearchOptions() {
+        searchOptions = new ArrayList<>();
+        searchOptions.add(new ValueLabelHolder<>("Search By Name", "searchByName"));
+        searchOptions.add(new ValueLabelHolder<>("Search By Date Range", "searchByDate"));
+        searchOptions.add(new ValueLabelHolder<>("Search By Id", "searchByID"));
+        searchOptions.add(new ValueLabelHolder<>("Display All", "fetchAll"));
+    }
+    
+    
     // -------------------------------------------------- setters and getters
 
-    public List<Page> getMenu() {
+    public List<ValueLabelHolder<String>> getMenu() {
         return menu;
     }
-
-    // -------------------------------------------------- inner class
-
-    public class Page {
-
-        private String title;
-        private String view;
-
-        public Page(String title, String view) {
-            this.title = title;
-            this.view = view;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getView() {
-            return view;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public void setView(String view) {
-            this.view = view;
-        }
+    
+    public List<ValueLabelHolder<String>> getSearchOptions() {
+        return searchOptions;
     }
 
 }

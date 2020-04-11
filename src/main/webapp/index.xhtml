@@ -10,40 +10,37 @@
       <h:form id="indexForm">
         <div class="header-dropdown selector">
           <syn:input type="selectmenu" id="searchOption" label="Search Option"
-            value="#{searchBacking.searchOption}">
-            <f:selectItem itemValue="search" itemLabel="Select search option" />
-            <f:selectItem itemValue="searchByName" itemLabel="Search By Name" />
-            <f:selectItem itemValue="searchByDate" itemLabel="Search By Date Range" />
-            <f:selectItem itemValue="searchByID" itemLabel="Search By ID" />
-            <f:selectItem itemValue="fetchAll" itemLabel="Display All" />
-
-            <f:ajax event="change" execute="@this" render="searchOptionPanel" />
-            <f:ajax listener="#{searchBacking.refresh}" />
+            value="#{search.searchOption}">
+            <f:selectItem itemValue="#{null}" itemLabel="Select Search Option" />
+            <f:selectItems value="#{menuBacking.searchOptions}" var="s" itemValue="#{s.value}"
+              itemLabel="#{s.label}" />
+            <f:ajax event="change" execute="@this" render="searchPanel" />
+            <f:ajax listener="#{search.refresh}" />
           </syn:input>
         </div>
 
-        <h:panelGroup layout="block" styleClass="header-dropdown" id="searchOptionPanel">
-          <syn:input id="fName" label="First Name" value="#{searchBacking.firstName}"
-            rendered="#{searchBacking.searchOption eq 'searchByName'}" />
+        <h:panelGroup layout="block" styleClass="header-dropdown" id="searchPanel">
+          <syn:input id="fName" label="First Name" value="#{search.firstName}"
+            rendered="#{search.searchOption eq 'searchByName'}" />
 
-          <syn:input id="lName" label="Last Name" value="#{searchBacking.lastName}"
-            rendered="#{searchBacking.searchOption eq 'searchByName'}" required="true"
+          <syn:input id="lName" label="Last Name" value="#{search.lastName}"
+            rendered="#{search.searchOption eq 'searchByName'}" required="true"
             requiredMessage="Name field cannot be blank." />
 
-          <syn:input id="searchDateFrom" value="#{searchBacking.searchDateFrom}" label="Search Date From"
-            rendered="#{searchBacking.searchOption eq 'searchByDate'}" required="true"
+          <syn:input id="searchDateFrom" value="#{search.searchDateFrom}" label="Search Date From"
+            rendered="#{search.searchOption eq 'searchByDate'}" required="true"
             requiredMessage="Please enter a valid date. For example 04/10/2019">
             <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
           </syn:input>
 
-          <syn:input id="searchDateTo" value="#{searchBacking.searchDateTo}" label="Search Date To"
-            rendered="#{searchBacking.searchOption eq 'searchByDate'}" required="true"
+          <syn:input id="searchDateTo" value="#{search.searchDateTo}" label="Search Date To"
+            rendered="#{search.searchOption eq 'searchByDate'}" required="true"
             requiredMessage="Please enter a valid date. For example 04/10/2019">
             <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
           </syn:input>
 
-          <syn:input id="searchID" value="#{searchBacking.customerID}" label="ID"
-            rendered="#{searchBacking.searchOption eq 'searchByID'}" required="true"
+          <syn:input id="searchID" value="#{search.customerID}" label="ID"
+            rendered="#{search.searchOption eq 'searchByID'}" required="true"
             requiredMessage="ID field cannot be blank.">
             <f:validateLongRange minimum="1" maximum="1000000000" />
           </syn:input>
@@ -51,7 +48,7 @@
 
         <h:panelGroup layout="block" styleClass="header-dropdown search" id="searchButtonPanel">
           <h:commandButton styleClass="header-search tab" id="submitBtn" value="Search"
-            action="#{searchBacking.search}">
+            action="#{search.search}">
             <f:ajax execute="@form" render="@form :somePanel grwl" />
           </h:commandButton>
           <h:button id="rsetBtn" value="Refresh" styleClass="header-search tab" />
@@ -63,10 +60,10 @@
   <ui:define name="content-stuff">
     <h:panelGroup id="somePanel" layout="block">
       <h:form id="editTable">
-        <h:dataTable id="someTable" value="#{searchBacking.values}" var="c"
-          rendered="#{!empty searchBacking.values}" styleClass="data-table">
+        <h:dataTable id="someTable" value="#{search.values}" var="c" rendered="#{!empty search.values}"
+          styleClass="data-table">
           <h:column>
-            <h:commandLink value="Edit" action="#{searchBacking.edit(c)}" styleClass="tab skinny" />
+            <h:commandLink value="Edit" action="#{search.edit(c)}" styleClass="tab skinny" />
             <h:commandLink value="Save" action="#{tableBacking.update(c)}" rendered="#{c.editable}"
               styleClass="tab skinny" />
             <h:commandLink value="Delete" action="#{tableBacking.delete(c)}" rendered="#{c.editable}"

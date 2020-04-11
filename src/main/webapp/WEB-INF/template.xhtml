@@ -23,9 +23,9 @@
       <div id="nav-container">
         <div id="user-bar">
           <div class="fields">
-            <ui:repeat value="#{menuBacking.menu}" var="page">
-              <h:link value="#{page.title}" outcome="#{page.view}"
-                styleClass="#{view.viewId eq page.view ? 'selected tab' : 'tab'}" />
+            <ui:repeat value="#{menuBacking.menu}" var="m">
+              <h:link value="#{m.label}" outcome="#{m.value}"
+                styleClass="#{view.viewId eq m.value ? 'selected tab' : 'tab'}" />
             </ui:repeat>
           </div>
 

@@ -20,7 +20,7 @@ import com.customer.syn.resource.Customer;
 import com.customer.syn.resource.EntityOperations;
 
 @FacesConfig(version = JSF_2_3) // Activates CDI build-in beans
-@Named("searchBacking")
+@Named("search")
 @ViewScoped
 public class SearchBacking implements Serializable {
 
@@ -35,6 +35,7 @@ public class SearchBacking implements Serializable {
 
     private List<Customer> values;
     private List<Customer> customers;
+    
 
     @Inject
     private EntityOperations entityoperations;
