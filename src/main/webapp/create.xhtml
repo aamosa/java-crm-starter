@@ -23,13 +23,13 @@
   <ui:define name="content-stuff">
     <div class="create-form">
       <h:form id="cInputForm">
-        <syn:input id="cFname" value="#{createBacking.customer.firstName}" label="First Name:" />
-        <syn:input id="cLname" value="#{createBacking.customer.lastName}" label="Last Name:" />
-        <syn:input id="cEmail" value="#{createBacking.customer.email}" label="Email:" />
-        <syn:input id="cPhone" value="#{createBacking.customer.phone}" label="Phone:" />
-        <syn:input id="cSaddress" value="#{createBacking.customer.streetAddress}" label="Street Address:" />
-        <syn:input id="cCity" value="#{createBacking.customer.city}" label="City:" />
-        <syn:input id="cZip" value="#{createBacking.customer.zipCode}" label="Zip:" />
+        <syn:input value="#{createBacking.customer.firstName}" label="First Name" required="true" />
+        <syn:input value="#{createBacking.customer.lastName}" label="Last Name" required="true" />
+        <syn:input value="#{createBacking.customer.email}" label="Email" required="true" />
+        <syn:input value="#{createBacking.customer.phone}" label="Phone" />
+        <syn:input value="#{createBacking.customer.streetAddress}" label="Street Address" />
+        <syn:input value="#{createBacking.customer.city}" label="City" />
+        <syn:input value="#{createBacking.customer.zipCode}" label="Zip" />
 
         <h:panelGroup id="btnPanel" layout="block">
           <h:commandButton id="svBtn" value="Create" action="#{createBacking.save}" styleClass="tab" />

@@ -199,24 +199,26 @@ div#grwl {
     text-align: center;
 }
 
-.messages {
-    padding: 1.25em 1.5em;
-    font-size: 11px;
-    font-weight: 700;
-    text-align: center;
-    display: inline-block;
+#gmsgs {
+    width: 500px;
+    margin: auto;
 }
 
-.info, .alert {
+.messages {
+    padding: 0.55rem;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    display: list-item;
+}
+
+.info, .alert, .error {
     background-color: #ffe5c2;
     background-image: none;
-    border: solid 1px #ffae43;
 }
 
 .error {
-    background-color: #f0a6b0;
-    background-image: none;
-    border: solid 1px #dc2a41;
+    background-color: #ffc476;
 }
 
 .tab {
