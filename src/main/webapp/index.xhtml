@@ -58,88 +58,91 @@
   <ui:define name="content-stuff">
     <h:panelGroup id="somePanel" layout="block">
       <h:form id="editTable">
-        <h:dataTable id="someTable" value="#{search.values}" var="c" rendered="#{!empty search.values}"
-          styleClass="data-table">
-          <h:column>
+
+        <p:dataTable id="someTable" value="#{search.values}" var="c" rendered="#{!empty search.values}"
+            paginator="true" rows="10">
+
+          <p:column>
             <h:commandLink value="Edit" action="#{search.edit(c)}" styleClass="tab skinny" />
             <h:commandLink value="Save" action="#{tableBacking.update(c)}" rendered="#{c.editable}"
               styleClass="tab skinny" />
             <h:commandLink value="Delete" action="#{tableBacking.delete(c)}" rendered="#{c.editable}"
               styleClass="tab skinny" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">ID</f:facet>
             #{c.customerID}
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Status</f:facet>
               #{c.statusCode}
-            </h:column>
+            </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">First Name</f:facet>
             <h:outputText value="#{c.firstName}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.firstName}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Last Name</f:facet>
             <h:outputText value="#{c.lastName}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.lastName}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Street Address</f:facet>
             <h:outputText value="#{c.streetAddress}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.streetAddress}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">City</f:facet>
             <h:outputText value="#{c.city}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.city}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">State</f:facet>
             <h:outputText value="#{c.state}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.state}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Zip</f:facet>
             <h:outputText value="#{c.zipCode}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.zipCode}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Email</f:facet>
             <h:outputText value="#{c.email}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.email}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Phone</f:facet>
             <h:outputText value="#{c.phone}" rendered="#{!c.editable}" />
             <h:inputText value="#{c.phone}" rendered="#{c.editable}" />
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Date Created</f:facet>
             <h:outputText value="#{c.createdTime}">
               <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
             </h:outputText>
-          </h:column>
+          </p:column>
 
-          <h:column>
+          <p:column>
             <f:facet name="header">Date Updated</f:facet>
             <h:outputText value="#{c.lastUpdatedTime}">
               <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
             </h:outputText>
-          </h:column>
-        </h:dataTable>
+          </p:column>
+        </p:dataTable>
+
       </h:form>
     </h:panelGroup>
   </ui:define>

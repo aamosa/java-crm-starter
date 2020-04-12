@@ -109,7 +109,7 @@ body {
     flex-direction: row;
 }
 
-.fields select, .fields input[type=text], .data-table input[type=text],
+.fields select, .fields input[type=text], .ui-datatable input[type=text],
     .create-form input[type=text] {
     padding: 8px 33px 8px 10px;
     font-size: 12px;
@@ -156,7 +156,7 @@ body {
     margin: 0.65rem 0;
 }
 
-.data-table input[type=text] {
+.ui-datatable input[type=text] {
     font-size: 11px;
     padding: 6px 4px;
     border-radius: 2px;
@@ -372,7 +372,7 @@ div#grwl {
     font-weight: normal;
 }
 
-table.data-table {
+.ui-datatable {
     border: 1px solid #b7b7b7;
     background-color: #fff;
     border-collapse: collapse;
@@ -380,45 +380,53 @@ table.data-table {
     margin: 0.5em auto;
 }
 
-table.data-table td, table.data-table th {
+.ui-datatable a {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.ui-datatable td, .ui-datatable th {
     border: 1px solid #999999;
     padding: 0.5em;
     white-space: nowrap;
 }
 
-table.data-table tbody td {
+.ui-datatable table {
+    table-layout: auto;
+}
+
+.ui-datatable tbody td {
     font-size: 11px;
 }
 
-table.data-table tr:nth-child(even) {
+.ui-datatable tr:nth-child(even) {
     background: #f3f3f3;
 }
 
-table.data-table thead {
+.ui-datatable thead {
     background: #dadada;
 }
 
-table.data-table thead th {
+.ui-datatable thead th {
     font-size: 12px;
     font-weight: bold;
 }
 
-table.data-table tfoot {
+.ui-datatable tfoot {
     font-size: 12px;
     font-weight: bold;
     color: #FFFFFF;
-    /* background: #D0E4F5; */
 }
 
-table.data-table tfoot td {
+.ui-datatable tfoot td {
     font-size: 12px;
 }
 
-table.data-table tfoot .links {
+.ui-datatable tfoot .links {
     text-align: right;
 }
 
-table.data-table tfoot .links a {
+.ui-datatable tfoot .links a {
     display: inline-block;
     background: #1C6EA4;
     color: #FFFFFF;
