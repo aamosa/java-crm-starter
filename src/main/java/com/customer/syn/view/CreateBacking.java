@@ -6,8 +6,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.Customer;
 import com.customer.syn.resource.EntityOperations;
+import com.customer.syn.resource.model.Contact;
 
 @Named
 @RequestScoped
@@ -18,11 +18,11 @@ public class CreateBacking {
 
     private String createWhat;
 
-    private Customer customer = new Customer();
+    private Contact contact = new Contact();
 
     /** Persist new entity instance */
     public String save() {
-        entityOperations.save(this.customer);
+        entityOperations.save(this.contact);
         FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage("New entry created."));
 
@@ -36,12 +36,12 @@ public class CreateBacking {
 
     // ---------------------------------------------- setters and getters
 
-    public Customer getCustomer() {
-        return customer;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     public String getCreateWhat() {

@@ -1,84 +1,41 @@
-package com.customer.syn.resource;
-
-import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+package com.customer.syn.resource.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-@NamedQueries({ 
-        @NamedQuery(name = "Customer.getAll", query = "SELECT c FROM Customer c"),
-        @NamedQuery(name = "Customer.getByLastName", query = "SELECT c FROM Customer c WHERE c.lastName LIKE :lastName"),
-        @NamedQuery(name = "Customer.getByFullName", query = "SELECT c FROM Customer c WHERE c.firstName LIKE :firstName AND c.lastName LIKE :lastName"),
-        @NamedQuery(name = "Customer.getByDateRange", query = "SELECT c FROM Customer c WHERE c.createdTime between :from AND :to")
-})
-@Table(name = "test_customers")
+@NamedQueries({ @NamedQuery(name = "Contact.getAll", query = "SELECT c FROM Contact c"),
+        @NamedQuery(name = "Contact.getByLastName", query = "SELECT c FROM Contact c WHERE c.lastName LIKE :lastName"),
+        @NamedQuery(name = "Contact.getByFullName", query = "SELECT c FROM Contact c WHERE c.firstName LIKE :firstName AND c.lastName LIKE :lastName"),
+        @NamedQuery(name = "Contact.getByDateRange", query = "SELECT c FROM Contact c WHERE c.createdAt between :from AND :to") })
+@Table(name = "contacts")
 @Entity
-public class Customer implements Serializable {
+public class Contact extends BaseEntity<Long> {
 
     private static final long serialVersionUID = -14L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int customerID;
 
     private String firstName;
     private String lastName;
     private String streetAddress;
     private String city;
-
-    @Column(name = "status_code", columnDefinition = "CHAR(1) default 'A'")
-    private String statusCode;
-
-    @Basic
     private String phone;
-    
-    @Basic
     private String state;
-
-    @Basic
     private String zipCode;
-
-    @Column
     private String email;
-
-    @Column(name = "date_updated", nullable = false)
-    private LocalDateTime lastUpdatedTime;
-
-    @Column(name = "date_created", nullable = false)
-    private LocalDateTime createdTime;
 
     @Transient
     private boolean editable;
 
-    @PrePersist
-    private void onPersist() {
-        lastUpdatedTime = createdTime = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
-    }
+    @Basic
+    @Column(columnDefinition = "CHAR(1) default 'A'")
+    private String statusCode;
 
-    @PreUpdate
-    private void onUpdate() {
-        lastUpdatedTime = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
-    }
     
-
     // ----------------------------------------------------- setters and getters
-
-    public int getCustomerID() {
-        return customerID;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -142,14 +99,6 @@ public class Customer implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public LocalDateTime getLastUpdatedTime() {
-        return lastUpdatedTime;
-    }
-
-    public LocalDateTime getCreatedTime() {
-        return createdTime;
     }
 
     public String getStatusCode() {

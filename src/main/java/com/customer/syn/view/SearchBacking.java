@@ -16,8 +16,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.Customer;
 import com.customer.syn.resource.EntityOperations;
+import com.customer.syn.resource.model.Contact;
 
 @FacesConfig(version = JSF_2_3) // Activates CDI build-in beans
 @Named("search")
@@ -26,15 +26,15 @@ public class SearchBacking implements Serializable {
 
     private static final long serialVersionUID = 12L;
 
-    private int customerID;
+    private Long contactId;
     private String firstName;
     private String lastName;
     private String searchOption;
     private LocalDate searchDateTo;
     private LocalDate searchDateFrom;
 
-    private List<Customer> values;
-    private List<Customer> customers;
+    private List<Contact> values;
+    private List<Contact> entities;
     
 
     @Inject
@@ -55,7 +55,7 @@ public class SearchBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-        customers = entityoperations.findAll();
+        entities = entityoperations.findAll();
     }
 
     public void search() {
@@ -67,11 +67,11 @@ public class SearchBacking implements Serializable {
                 values = entityoperations.findByLastName(lastName.toUpperCase());
             break;
         case "searchByID":
-            Customer ce = entityoperations.findByID(customerID);
+            Contact ce = entityoperations.findByID(contactId);
             values = ce != null ? Arrays.asList(ce) : null;
             break;
         case "fetchAll":
-            values = customers;
+            values = entities;
             break;
         case "searchByDate":
             values = entityoperations.findByDateRange(searchDateFrom, searchDateTo);
@@ -88,7 +88,7 @@ public class SearchBacking implements Serializable {
     }
     
     /** Edit */ 
-    public String edit(Customer ce) {
+    public String edit(Contact ce) {
         ce.setEditable(true);
         return null;
     }
@@ -101,16 +101,16 @@ public class SearchBacking implements Serializable {
 
     // ---------------------------------------------- setters and getters
 
-    public List<Customer> getValues() {
+    public List<Contact> getValues() {
         return values;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public Long getContactId() {
+        return contactId;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setContactId(Long contactId) {
+        this.contactId = contactId;
     }
 
     public String getFirstName() {

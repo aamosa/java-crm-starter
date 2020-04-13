@@ -12,7 +12,7 @@
           <h:outputLabel for="cOption" value="Create:" />
           <h:selectOneMenu id="cOption" value="#{createBacking.createWhat}">
             <f:selectItem itemValue="null" itemLabel="Select create option:" />
-            <f:selectItem itemValue="createCustomer" itemLabel="Create new Customer" />
+            <f:selectItem itemValue="createContact" itemLabel="Create new Contact" />
             <f:selectItem itemValue="createTask" itemLabel="Create new Task" />
           </h:selectOneMenu>
         </div>
@@ -23,13 +23,14 @@
   <ui:define name="content-stuff">
     <div class="create-form">
       <h:form id="cInputForm">
-        <syn:input value="#{createBacking.customer.firstName}" label="First Name" required="true" />
-        <syn:input value="#{createBacking.customer.lastName}" label="Last Name" required="true" />
-        <syn:input value="#{createBacking.customer.email}" label="Email" required="true" />
-        <syn:input value="#{createBacking.customer.phone}" label="Phone" />
-        <syn:input value="#{createBacking.customer.streetAddress}" label="Street Address" />
-        <syn:input value="#{createBacking.customer.city}" label="City" />
-        <syn:input value="#{createBacking.customer.zipCode}" label="Zip" />
+        <syn:input value="#{createBacking.contact.firstName}" label="First Name" required="true" />
+        <syn:input value="#{createBacking.contact.lastName}" label="Last Name" required="true" />
+        <syn:input value="#{createBacking.contact.email}" label="Email" required="true" />
+        <syn:input value="#{createBacking.contact.phone}" label="Phone" />
+        <syn:input value="#{createBacking.contact.streetAddress}" label="Street Address" />
+        <syn:input value="#{createBacking.contact.city}" label="City" />
+        <syn:input value="#{createBacking.contact.state}" label="State" />
+        <syn:input value="#{createBacking.contact.zipCode}" label="Zip" />
 
         <h:panelGroup id="btnPanel" layout="block">
           <h:commandButton id="svBtn" value="Create" action="#{createBacking.save}" styleClass="tab" />

@@ -8,8 +8,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.Customer;
 import com.customer.syn.resource.EntityOperations;
+import com.customer.syn.resource.model.Contact;
 
 @Named
 @RequestScoped
@@ -26,19 +26,19 @@ public class TableBacking implements Serializable {
     public TableBacking() {}
 
     /** Update the entity instance. */
-    public String update(Customer ce) {
+    public String update(Contact ce) {
         entityoperations.mergeEntity(ce);
         ce.setEditable(false);
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("ID#: " + ce.getCustomerID() + " updated."));
+                new FacesMessage("ID#: " + ce.getId() + " updated."));
         return null;
     }
 
     /** Delete the entity instance */
-    public String delete(Customer ce) {
-        entityoperations.deleteEntity(ce.getCustomerID());
+    public String delete(Contact ce) {
+        entityoperations.deleteEntity(ce.getId());
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("ID#: " + ce.getCustomerID() + " deleted."));
+                new FacesMessage("ID#: " + ce.getId() + " deleted."));
         
         FacesContext.getCurrentInstance().getExternalContext().getFlash()
         .setKeepMessages(true);

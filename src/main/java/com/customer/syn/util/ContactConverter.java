@@ -8,16 +8,16 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-import com.customer.syn.resource.Customer;
 import com.customer.syn.resource.EntityOperations;
+import com.customer.syn.resource.model.Contact;
 
 /**
  * Custom {@link Converter} implementation for working with
  * <code>Customer</code> entity objects.
  */
 @SuppressWarnings("rawtypes")
-@FacesConverter(value = "customerIDConverter", managed = true)
-public class CustomerConverter implements Converter {
+@FacesConverter(value = "contactIdConverter", managed = true)
+public class ContactConverter implements Converter {
 
     @Inject
     private EntityOperations entityoperations;
@@ -28,7 +28,7 @@ public class CustomerConverter implements Converter {
             return null;
 
         try {
-            return entityoperations.findByID(Integer.valueOf(value));
+            return entityoperations.findByID(Long.valueOf(value));
         } catch (NumberFormatException nfe) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "invalid Id", "invalid Id"));
@@ -41,8 +41,8 @@ public class CustomerConverter implements Converter {
         if (value == null)
             return "";
 
-        if (value instanceof Customer) {
-            return String.valueOf(((Customer) value).getCustomerID());
+        if (value instanceof Contact) {
+            return String.valueOf(((Contact) value).getId());
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "conversion error", "conversion error"));
