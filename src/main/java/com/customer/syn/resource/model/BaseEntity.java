@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Version;
 
 @MappedSuperclass
 public abstract class BaseEntity<T> implements Serializable {
@@ -21,6 +22,9 @@ public abstract class BaseEntity<T> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected T Id;
+
+//    @Version
+//    protected T version;
 
     @Column(nullable = false, updatable = false)
     protected Instant createdAt;
@@ -36,22 +40,30 @@ public abstract class BaseEntity<T> implements Serializable {
 
     @PreUpdate
     public void onUpdate() {
-         setUpdatedAt(Instant.now());
+        setUpdatedAt(Instant.now());
     }
 
     public T getId() {
         return Id;
     }
 
-    public void setId(T id) {
+    protected void setId(T id) {
         Id = id;
     }
+
+//    public T getVersion() {
+//        return this.version;
+//    }
+//
+//    protected void setVersion(T version) {
+//        this.version = version;
+//    }
 
     public LocalDateTime getCreatedAt() {
         return LocalDateTime.ofInstant(createdAt, ZoneOffset.UTC);
     }
 
-    public void setCreatedAt(Instant time) {
+    protected void setCreatedAt(Instant time) {
         this.createdAt = time;
     }
 
@@ -59,7 +71,7 @@ public abstract class BaseEntity<T> implements Serializable {
         return LocalDateTime.ofInstant(updatedAt, ZoneOffset.UTC);
     }
 
-    public void setUpdatedAt (Instant time) {
+    public void setUpdatedAt(Instant time) {
         this.updatedAt = time;
     }
 

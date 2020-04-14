@@ -7,6 +7,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 @NamedQueries({ @NamedQuery(name = "Contact.getAll", query = "SELECT c FROM Contact c"),
         @NamedQuery(name = "Contact.getByLastName", query = "SELECT c FROM Contact c WHERE c.lastName LIKE :lastName"),
@@ -17,9 +18,13 @@ import javax.persistence.Transient;
 public class Contact extends BaseEntity<Long> {
 
     private static final long serialVersionUID = -14L;
-
+    
+    @NotNull
     private String firstName;
+    
+    @NotNull
     private String lastName;
+    
     private String streetAddress;
     private String city;
     private String phone;

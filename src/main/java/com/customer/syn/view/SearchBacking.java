@@ -35,16 +35,14 @@ public class SearchBacking implements Serializable {
 
     private List<Contact> values;
     private List<Contact> entities;
-    
 
     @Inject
     private EntityOperations entityoperations;
 
     // ---------------------------------------------- constructors
 
-    public SearchBacking() {
-    }
-
+    public SearchBacking() {}
+    
     /**
      * Don't do extensive business logic in getter methods, getters are called by
      * JSF multiple times during the life-cycle events.
