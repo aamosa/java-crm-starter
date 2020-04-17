@@ -1,0 +1,45 @@
+<ui:composition template="/WEB-INF/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:syn="http://syn.customer.com/jsf">
+
+   <ui:define name="title">Create Menu</ui:define>
+
+   <ui:define name="header-stuff">
+      <div class="fields">
+         <h:form id="createForm">
+            <div class="header-dropdown selector">
+               <h:outputLabel for="cOption" value="Create:" />
+               <h:selectOneMenu id="cOption" value="#{createBacking.createWhat}">
+                  <f:selectItem itemValue="null" itemLabel="Select create option:" />
+                  <f:selectItem itemValue="createContact" itemLabel="Create new Contact" />
+                  <f:selectItem itemValue="createTask" itemLabel="Create new Task" />
+               </h:selectOneMenu>
+            </div>
+         </h:form>
+      </div>
+   </ui:define>
+
+   <ui:define name="content-stuff">
+      <div class="create-form">
+         <h:form id="cInputForm">
+            <syn:input value="#{createBacking.contact.firstName}" label="First Name"
+               required="true" />
+            <syn:input value="#{createBacking.contact.lastName}" label="Last Name"
+               required="true" />
+            <syn:input value="#{createBacking.contact.email}" label="Email" required="true" />
+            <syn:input value="#{createBacking.contact.phone}" label="Phone" />
+            <syn:input value="#{createBacking.contact.streetAddress}" label="Street Address" />
+            <syn:input value="#{createBacking.contact.city}" label="City" />
+            <syn:input value="#{createBacking.contact.state}" label="State" />
+            <syn:input value="#{createBacking.contact.zipCode}" label="Zip" />
+
+            <h:panelGroup id="btnPanel" layout="block">
+               <h:commandButton id="svBtn" value="Create" action="#{createBacking.save}"
+                  styleClass="tab" />
+               <h:button id="rstBtn" value="Reset" styleClass="tab" />
+            </h:panelGroup>
+         </h:form>
+      </div>
+   </ui:define>
+</ui:composition>

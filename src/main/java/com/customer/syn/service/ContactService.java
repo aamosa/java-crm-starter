@@ -1,4 +1,4 @@
-package com.customer.syn.resource;
+package com.customer.syn.service;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -15,7 +15,7 @@ import com.customer.syn.resource.model.Contact;
  * 
  */
 @Stateless
-public class EntityOperations {
+public class ContactService {
 
     @PersistenceContext(unitName = "syn")
     private EntityManager em;

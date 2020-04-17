@@ -8,8 +8,8 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-import com.customer.syn.resource.EntityOperations;
 import com.customer.syn.resource.model.Contact;
+import com.customer.syn.service.ContactService;
 
 /**
  * Custom {@link Converter} implementation for working with
@@ -20,7 +20,7 @@ import com.customer.syn.resource.model.Contact;
 public class ContactConverter implements Converter {
 
     @Inject
-    private EntityOperations entityoperations;
+    private ContactService contactService;
 
     @Override
     public Object getAsObject(FacesContext facescontext, UIComponent component, String value) {
@@ -28,7 +28,7 @@ public class ContactConverter implements Converter {
             return null;
 
         try {
-            return entityoperations.findByID(Long.valueOf(value));
+            return contactService.findByID(Long.valueOf(value));
         } catch (NumberFormatException nfe) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "invalid Id", "invalid Id"));

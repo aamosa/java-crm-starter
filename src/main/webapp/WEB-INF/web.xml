@@ -1,40 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app 
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
                        http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
    version="4.0">
-   
+
    <context-param>
-    <param-name>javax.faces.PROJECT_STAGE</param-name>
-    <param-value>Development</param-value>
+      <param-name>javax.faces.PROJECT_STAGE</param-name>
+      <param-value>Development</param-value>
    </context-param>
    <context-param>
-    <param-name>primefaces.THEME</param-name>
-    <param-value>none</param-value>
+      <param-name>primefaces.THEME</param-name>
+      <param-value>none</param-value>
    </context-param>
    <context-param>
-    <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
-    <param-value>/WEB-INF/syn.taglib.xml</param-value>
-    </context-param>
+      <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+      <param-value>/WEB-INF/syn.taglib.xml</param-value>
+   </context-param>
+
    <servlet>
-	<servlet-name>Faces Servlet</servlet-name>
-	<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-	<load-on-startup>1</load-on-startup>
+      <servlet-name>Faces Servlet</servlet-name>
+      <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
    </servlet>
+
    <servlet-mapping>
-	 <servlet-name>Faces Servlet</servlet-name>
-	 <url-pattern>*.xhtml</url-pattern>
+      <servlet-name>Faces Servlet</servlet-name>
+      <url-pattern>*.xhtml</url-pattern>
    </servlet-mapping>
-   
+
    <session-config>
-      <session-timeout>
-         30
-      </session-timeout>
+      <session-timeout>30</session-timeout>
    </session-config>
-   
+
    <welcome-file-list>
-	<welcome-file>index.xhtml</welcome-file>
+      <welcome-file>login.xhtml</welcome-file>
    </welcome-file-list>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>resources dir</web-resource-name>
+         <url-pattern>/resources/*</url-pattern>
+      </web-resource-collection>
+   </security-constraint>
+<!-- 
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>all</web-resource-name>
+         <url-pattern>/web/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>users</role-name>
+      </auth-constraint>
+   </security-constraint>
+ -->
+   <security-role>
+      <role-name>users</role-name>
+   </security-role>
 </web-app>

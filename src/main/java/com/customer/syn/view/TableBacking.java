@@ -8,8 +8,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.EntityOperations;
 import com.customer.syn.resource.model.Contact;
+import com.customer.syn.service.ContactService;
 
 @Named
 @RequestScoped
@@ -18,7 +18,7 @@ public class TableBacking implements Serializable {
     private static final long serialVersionUID = 22L;
 
     @Inject
-    private EntityOperations entityoperations;
+    private ContactService contactService;
     
 
     // ------------------------------------------------ constructors
@@ -27,7 +27,7 @@ public class TableBacking implements Serializable {
 
     /** Update the entity instance. */
     public String update(Contact ce) {
-        entityoperations.mergeEntity(ce);
+        contactService.mergeEntity(ce);
         ce.setEditable(false);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("ID#: " + ce.getId() + " updated."));
@@ -36,7 +36,7 @@ public class TableBacking implements Serializable {
 
     /** Delete the entity instance */
     public String delete(Contact ce) {
-        entityoperations.deleteEntity(ce.getId());
+        contactService.deleteEntity(ce.getId());
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("ID#: " + ce.getId() + " deleted."));
         

@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence 
    http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
-	version="2.2">
+   version="2.2">
 
-	<persistence-unit name="syn" transaction-type="JTA">
-		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		<jta-data-source>jdbc/h2_datasource</jta-data-source>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+   <persistence-unit name="syn" transaction-type="JTA">
+      <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+      <jta-data-source>jdbc/h2_datasource</jta-data-source>
+      <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
-		<properties>
-            <property name="tomee.jpa.factory.lazy" value="true" />
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="true" />
-			<property name="hibernate.hbm2ddl.auto" value="create" />
-			<property name="hibernate.use_sql_comments" value="true" />
-			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create" />
- 			<property name="javax.persistence.sql-load-script-source" value="/sql/import.sql" />
-		</properties>
-	</persistence-unit>
+      <properties>
+         <property name="tomee.jpa.factory.lazy" value="true" />
+         <property name="hibernate.show_sql" value="true" />
+         <property name="hibernate.format_sql" value="true" />
+         <property name="hibernate.hbm2ddl.auto" value="create" />
+         <property name="hibernate.use_sql_comments" value="true" />
+         <property name="javax.persistence.schema-generation.database.action"
+            value="drop-and-create" />
+         <property name="javax.persistence.sql-load-script-source"
+            value="/sql/import.sql" />
+      </properties>
+   </persistence-unit>
 </persistence>

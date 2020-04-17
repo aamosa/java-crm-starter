@@ -6,15 +6,15 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.EntityOperations;
 import com.customer.syn.resource.model.Contact;
+import com.customer.syn.service.ContactService;
 
 @Named
 @RequestScoped
 public class CreateBacking {
 
     @Inject
-    private EntityOperations entityOperations;
+    private ContactService entityOperations;
 
     private String createWhat;
 

@@ -16,8 +16,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.EntityOperations;
 import com.customer.syn.resource.model.Contact;
+import com.customer.syn.service.ContactService;
 
 @FacesConfig(version = JSF_2_3) // Activates CDI build-in beans
 @Named("search")
@@ -37,7 +37,7 @@ public class SearchBacking implements Serializable {
     private List<Contact> entities;
 
     @Inject
-    private EntityOperations entityoperations;
+    private ContactService contactService;
 
     // ---------------------------------------------- constructors
 
@@ -53,26 +53,26 @@ public class SearchBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-        entities = entityoperations.findAll();
+        entities = contactService.findAll();
     }
 
     public void search() {
         switch (searchOption) {
         case "searchByName":
             if (!firstName.trim().isEmpty() && !lastName.trim().isEmpty())
-                values = entityoperations.findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
+                values = contactService.findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
             else
-                values = entityoperations.findByLastName(lastName.toUpperCase());
+                values = contactService.findByLastName(lastName.toUpperCase());
             break;
         case "searchByID":
-            Contact ce = entityoperations.findByID(contactId);
+            Contact ce = contactService.findByID(contactId);
             values = ce != null ? Arrays.asList(ce) : null;
             break;
         case "fetchAll":
             values = entities;
             break;
         case "searchByDate":
-            values = entityoperations.findByDateRange(searchDateFrom, searchDateTo);
+            values = contactService.findByDateRange(searchDateFrom, searchDateTo);
         case "search":
             return;
         default:
