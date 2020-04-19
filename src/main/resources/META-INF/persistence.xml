@@ -11,11 +11,11 @@
       <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
       <properties>
-         <property name="tomee.jpa.factory.lazy" value="true" />
          <property name="hibernate.show_sql" value="true" />
          <property name="hibernate.format_sql" value="true" />
          <property name="hibernate.hbm2ddl.auto" value="create" />
          <property name="hibernate.use_sql_comments" value="true" />
+         <property name="tomee.jpa.factory.lazy" value="true" />
          <property name="javax.persistence.schema-generation.database.action"
             value="drop-and-create" />
          <property name="javax.persistence.sql-load-script-source"

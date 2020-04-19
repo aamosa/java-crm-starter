@@ -12,7 +12,6 @@ import com.customer.syn.resource.model.Contact;
 
 /**
  * EJB class for managing entities.
- * 
  */
 @Stateless
 public class ContactService {
