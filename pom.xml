@@ -2,20 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
    <modelVersion>4.0.0</modelVersion>
+
    <groupId>com.customer.syn</groupId>
    <artifactId>crm-starter</artifactId>
    <version>0.0.1</version>
    <packaging>war</packaging>
 
    <properties>
-      <tomee.webapp>c:\\devtools\\tomee\\apache-tomee-8.0.0\\webapps</tomee.webapp>
       <javaee.api.version>8.0</javaee.api.version>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
       <failOnMissingWebXml>false</failOnMissingWebXml>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <tomee.webapp>c:\\devtools\\tomee\\apache-tomee-8.0.1\\webapps</tomee.webapp>
    </properties>
 
    <dependencies>
@@ -32,6 +32,14 @@
          <version>8.0</version>
          <scope>provided</scope>
       </dependency>
+
+      <!--
+      <dependency>
+         <groupId>org.apache.tomee</groupId>
+         <artifactId>tomee-security</artifactId>
+         <version>8.0.1</version>
+      </dependency>
+      -->
 
       <dependency>
          <groupId>org.hibernate</groupId>
@@ -56,6 +64,7 @@
          <groupId>org.glassfish.soteria</groupId>
          <artifactId>jakarta.security.enterprise</artifactId>
          <version>1.0.1</version>
+        <!--<scope>provided</scope>-->
       </dependency>
    </dependencies>
 

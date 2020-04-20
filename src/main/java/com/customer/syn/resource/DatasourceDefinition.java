@@ -8,7 +8,10 @@ import javax.annotation.Resource;
 import javax.annotation.sql.DataSourceDefinition;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.security.enterprise.authentication.mechanism.http.CustomFormAuthenticationMechanismDefinition;
+import javax.security.enterprise.authentication.mechanism.http.LoginToContinue;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.sql.DataSource;
 
@@ -18,23 +21,21 @@ import com.customer.syn.service.UserService;
 
 @Singleton
 @Startup
-@DataSourceDefinition(
-        name = "jdbc/h2_datasource",
-        className = "org.h2.jdbcx.JdbcDataSource",
-        url = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
-        user = "sa",
-        password = ""
-)
+@DataSourceDefinition(name = "java:app/jdbc/h2_datasource",
+                      className = "org.h2.jdbcx.JdbcDataSource",
+                      url = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+                      user = "sa",
+                      password = "")
 public class DatasourceDefinition {
 
-    @Resource(lookup = "jdbc/h2_datasource")
+    @Resource(lookup = "java:app/jdbc/h2_datasource")
     private DataSource dataSource;
-    
+
     @Inject
     UserService userService;
 
-//    @Inject
-//    private Pbkdf2PasswordHash hash;
+    @Inject
+    private Pbkdf2PasswordHash hash;
 
     @PostConstruct
     public void init() {
@@ -44,13 +45,13 @@ public class DatasourceDefinition {
         user.addRole(new Role("CAN_VIEW"));
         userService.save(user);
     }
-    
-//    private void initHashParams() {
-//        Map<String, String> params = new HashMap<>();
-//        params.put("Pbkdf2PasswordHash.Iterations", "3072");
-//        params.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
-//        params.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
-//        hash.initialize(params);
-//    }
+
+    private void initHashParams() {
+        Map<String, String> params = new HashMap<>();
+        params.put("Pbkdf2PasswordHash.Iterations", "3072");
+        params.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
+        params.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
+        hash.initialize(params);
+    }
 
 }

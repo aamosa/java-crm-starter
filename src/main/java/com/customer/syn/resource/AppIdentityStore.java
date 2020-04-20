@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.faces.annotation.FacesConfig;
 import javax.inject.Inject;
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.credential.Password;
@@ -15,7 +16,7 @@ import com.customer.syn.resource.model.Role;
 import com.customer.syn.resource.model.User;
 import com.customer.syn.service.UserService;
 
-@ApplicationScoped
+@FacesConfig @ApplicationScoped
 public class AppIdentityStore implements IdentityStore {
 
     @Inject

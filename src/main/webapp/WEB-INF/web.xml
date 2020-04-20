@@ -42,6 +42,7 @@
          <web-resource-name>resources dir</web-resource-name>
          <url-pattern>/resources/*</url-pattern>
       </web-resource-collection>
+      <auth-constraint />
    </security-constraint>
 
    <security-constraint>
@@ -55,6 +56,6 @@
    </security-constraint>
 
    <security-role>
-      <role-name>users</role-name>
+      <role-name>CAN_VIEW</role-name>
    </security-role>
 </web-app>

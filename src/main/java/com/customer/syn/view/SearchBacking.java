@@ -1,14 +1,11 @@
 package com.customer.syn.view;
 
-import static javax.faces.annotation.FacesConfig.Version.JSF_2_3;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.annotation.FacesConfig;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -19,7 +16,7 @@ import javax.inject.Named;
 import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.ContactService;
 
-@FacesConfig(version = JSF_2_3) // Activates CDI build-in beans
+//@FacesConfig(version = JSF_2_3) // Activates CDI build-in beans
 @Named("search")
 @ViewScoped
 public class SearchBacking implements Serializable {
