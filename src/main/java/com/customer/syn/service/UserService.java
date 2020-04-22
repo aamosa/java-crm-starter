@@ -20,7 +20,7 @@ public class UserService {
         return user != null ? Optional.of(user) : Optional.empty();
     }
 
-    // find by username
+    // find by username and password
     public Optional<User> findByUserandPassword(String username, String password) {
         try {
             User user = entityManager
@@ -34,7 +34,8 @@ public class UserService {
         }
         return Optional.empty();
     }
-
+    
+    // save
     public void save(User user) {
         try {
             entityManager.persist(user);
@@ -45,7 +46,8 @@ public class UserService {
 
     public List<User> fetchAll() {
         try {
-            return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+            return entityManager.createQuery("SELECT u FROM User u", User.class)
+                    .getResultList();
         } catch (Exception e) {
             // :TODO
         }

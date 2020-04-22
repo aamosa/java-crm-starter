@@ -16,6 +16,7 @@
       <failOnMissingWebXml>false</failOnMissingWebXml>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <tomee.webapp>c:\\devtools\\tomee\\apache-tomee-8.0.1\\webapps</tomee.webapp>
+      <payara.autodeploy>c:\\devtools\\payara5\\glassfish\\domains\\domain1\\autodeploy</payara.autodeploy>
    </properties>
 
    <dependencies>
@@ -96,7 +97,7 @@
                <artifactId>maven-war-plugin</artifactId>
                <version>3.2.2</version>
                <configuration>
-                  <outputDirectory>${tomee.webapp}</outputDirectory>
+                  <outputDirectory>${payara.autodeploy}</outputDirectory>
                </configuration>
             </plugin>
 

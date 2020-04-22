@@ -18,6 +18,7 @@ import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -46,18 +47,26 @@ public class LoginBacking implements Serializable {
     public void login() throws IOException {
         AuthenticationStatus authStatus = securityContext.authenticate(
                 (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(),
-                AuthenticationParameters.withParams().credential(new UsernamePasswordCredential(user, pass)));
+                AuthenticationParameters.withParams().newAuthentication(true)
+                        .credential(new UsernamePasswordCredential(user, pass)));
 
         if (authStatus == SEND_CONTINUE) {
             facesContext.responseComplete();
         } else if (authStatus == SEND_FAILURE) {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Authentication Failed", null));
         } else if (authStatus == SUCCESS) {
-            facesContext.addMessage(null, new FacesMessage("Login Sucessful"));
-            externalContext.redirect("web/index.xhtml");
+            externalContext.redirect(externalContext.getRequestContextPath() + "/web/index.xhtml");
         } else if (authStatus == NOT_DONE) {
-            // TODO:
+            // do nothing here
         }
+    }
+
+    // logout
+    public void logout() throws ServletException, IOException {
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        request.logout();
+        request.getSession().invalidate();
+        externalContext.redirect("login.xhtml");
     }
 
     
