@@ -23,7 +23,7 @@ public class User extends BaseEntity<Integer> {
     private String lastName;
 
     @Column(columnDefinition = "CHAR(1) default 'A'")
-    private String status;
+    private String status= "A";
 
     @NotNull
     @Column(nullable = false,

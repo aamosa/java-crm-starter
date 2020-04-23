@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
         @NamedQuery(name = "Contact.getByLastName", query = "SELECT c FROM Contact c WHERE c.lastName LIKE :lastName"),
         @NamedQuery(name = "Contact.getByFullName", query = "SELECT c FROM Contact c WHERE c.firstName LIKE :firstName AND c.lastName LIKE :lastName"),
         @NamedQuery(name = "Contact.getByDateRange", query = "SELECT c FROM Contact c WHERE c.createdAt between :from AND :to") })
-@Table(name = "contacts")
+@Table
 @Entity
 public class Contact extends BaseEntity<Long> {
 
@@ -37,7 +37,7 @@ public class Contact extends BaseEntity<Long> {
 
     @Basic
     @Column(columnDefinition = "CHAR(1) default 'A'")
-    private String statusCode;
+    private String statusCode = "A";
 
     
     // ----------------------------------------------------- setters and getters

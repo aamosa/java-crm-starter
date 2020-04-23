@@ -9,10 +9,12 @@
       <param-name>javax.faces.PROJECT_STAGE</param-name>
       <param-value>Development</param-value>
    </context-param>
+   
    <context-param>
       <param-name>primefaces.THEME</param-name>
       <param-value>none</param-value>
    </context-param>
+   
    <context-param>
       <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
       <param-value>/WEB-INF/syn.taglib.xml</param-value>
@@ -23,6 +25,18 @@
       <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
       <load-on-startup>1</load-on-startup>
    </servlet>
+
+   <!-- H2 Console Servlet -->
+   <servlet>
+      <servlet-name>H2Console</servlet-name>
+      <servlet-class>org.h2.server.web.WebServlet</servlet-class>
+      <load-on-startup>2</load-on-startup>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>H2Console</servlet-name>
+      <url-pattern>/console/*</url-pattern>
+   </servlet-mapping>
 
    <servlet-mapping>
       <servlet-name>Faces Servlet</servlet-name>

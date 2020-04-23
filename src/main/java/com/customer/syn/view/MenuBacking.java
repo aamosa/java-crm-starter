@@ -32,6 +32,7 @@ public class MenuBacking implements Serializable {
         menu = new ArrayList<>();
         menu.add(new ValueLabelHolder<>("Dashboard", "index.xhtml"));
         menu.add(new ValueLabelHolder<>("Create", "create.xhtml"));
+        menu.add(new ValueLabelHolder<>("Settings", "setting.xhtml"));
         initSearchOptions();
     }
 
@@ -43,6 +44,7 @@ public class MenuBacking implements Serializable {
         searchOptions.add(new ValueLabelHolder<>("Display All", "fetchAll"));
     }
 
+    
     // -------------------------------------------------- setters and getters
 
     public List<ValueLabelHolder<String>> getMenu() {
