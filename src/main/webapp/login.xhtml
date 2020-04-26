@@ -6,11 +6,12 @@
     xmlns:syn="http://syn.customer.com/jsf">
 
    <ui:define name="content-stuff">
-      <div class="create-form">
+      <div class="afrm">
          <h1>Please Login</h1>
          <h:form id="lgnForm">
             <syn:input value="#{login.user}" label="Username" required="true" />
-            <syn:input value="#{login.pass}" label="Password" required="true" />
+            <label>Password</label>
+            <h:inputSecret value="#{login.pass}" label="Password" required="true" />
 
             <h:panelGroup id="btnPanel" layout="block">
                <h:commandButton id="svBtn" value="Login" action="#{login.login}"

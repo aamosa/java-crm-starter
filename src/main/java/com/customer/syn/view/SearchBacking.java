@@ -16,29 +16,29 @@ import javax.inject.Named;
 import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.ContactService;
 
-//@FacesConfig(version = JSF_2_3) // Activates CDI build-in beans
 @Named("search")
 @ViewScoped
-public class SearchBacking implements Serializable {
+public class SearchBacking extends BaseSearchBean<Contact> implements Serializable {
 
     private static final long serialVersionUID = 12L;
 
     private Long contactId;
-    private String firstName;
-    private String lastName;
-    private String searchOption;
+//    private String firstName;
+//    private String lastName;
+//    private String searchOption;
     private LocalDate searchDateTo;
     private LocalDate searchDateFrom;
-
     private List<Contact> values;
     private List<Contact> entities;
 
     @Inject
     private ContactService contactService;
 
+    
     // ---------------------------------------------- constructors
 
     public SearchBacking() {}
+    
     
     /**
      * Don't do extensive business logic in getter methods, getters are called by
@@ -52,7 +52,8 @@ public class SearchBacking implements Serializable {
     public void init() {
         entities = contactService.findAll();
     }
-
+    
+    /** Search */
     public void search() {
         switch (searchOption) {
         case "searchByName":
@@ -108,29 +109,29 @@ public class SearchBacking implements Serializable {
         this.contactId = contactId;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getSearchOption() {
-        return searchOption;
-    }
-
-    public void setSearchOption(String search) {
-        searchOption = search;
-    }
+//    public String getFirstName() {
+//        return firstName;
+//    }
+//
+//    public void setFirstName(String firstName) {
+//        this.firstName = firstName;
+//    }
+//
+//    public String getLastName() {
+//        return lastName;
+//    }
+//
+//    public void setLastName(String lastName) {
+//        this.lastName = lastName;
+//    }
+//
+//    public String getSearchOption() {
+//        return searchOption;
+//    }
+//
+//    public void setSearchOption(String search) {
+//        searchOption = search;
+//    }
 
     public LocalDate getSearchDateTo() {
         return searchDateTo;

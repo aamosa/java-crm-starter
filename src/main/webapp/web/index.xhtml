@@ -19,7 +19,6 @@
                   <f:selectItems value="#{menuBacking.searchOptions}" var="s"
                      itemValue="#{s.value}" itemLabel="#{s.label}" />
                   <f:ajax event="change" execute="@this" render="searchPnl" />
-                  <f:ajax listener="#{search.refresh}" />
                </h:selectOneMenu>
             </div>
 

@@ -6,9 +6,11 @@
 	http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/web-facelettaglibrary_2_3.xsd"
 	version="2.3">
 
-	<namespace>http://syn.customer.com/jsf</namespace>
-	<tag>
-		<tag-name>input</tag-name>
-		<source>tags/form-input.xhtml</source>
-	</tag>
+   <namespace>http://syn.customer.com/jsf</namespace>
+   <composite-library-name>components</composite-library-name>
+   
+   <tag>
+      <tag-name>input</tag-name>
+      <source>tags/form-input.xhtml</source>
+   </tag>
 </facelet-taglib>

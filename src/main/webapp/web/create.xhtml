@@ -9,11 +9,12 @@
       <div class="fields">
          <h:form id="createForm">
             <div class="header-dropdown selector">
-               <h:outputLabel for="cOption" value="Create:" />
+               <h:outputLabel for="cOption" value="Create" />
                <h:selectOneMenu id="cOption" value="#{createBacking.createWhat}">
                   <f:selectItem itemValue="null" itemLabel="Select create option" />
                   <f:selectItem itemValue="createContact" itemLabel="Create new Contact" />
                   <f:selectItem itemValue="createTask" itemLabel="Create new Task" />
+                  <f:selectItem itemValue="createComment" itemLabel="Create new Comment" />
                </h:selectOneMenu>
             </div>
          </h:form>
@@ -21,7 +22,7 @@
    </ui:define>
 
    <ui:define name="content-stuff">
-      <div class="create-form">
+      <div class="afrm">
          <h:form id="cInputForm">
             <syn:input value="#{createBacking.contact.firstName}" label="First Name"
                required="true" />
