@@ -10,19 +10,18 @@
    <ui:define name="title">Dashboard</ui:define>
 
    <ui:define name="header-stuff">
-      <div class="fields">
+      <div id="xform">
          <h:form id="indexForm">
-            <div class="header-dropdown selector">
-               <label>Search Option</label>
+            <div class="selector">
+               <label>Select Search Option</label>
                <h:selectOneMenu id="srchOtn" value="#{search.searchOption}">
-                  <f:selectItem itemValue="#{null}" itemLabel="Select Search Option" />
                   <f:selectItems value="#{menuBacking.searchOptions}" var="s"
                      itemValue="#{s.value}" itemLabel="#{s.label}" />
                   <f:ajax event="change" execute="@this" render="searchPnl" />
                </h:selectOneMenu>
             </div>
 
-            <h:panelGroup layout="block" styleClass="header-dropdown" id="searchPnl">
+            <h:panelGroup layout="block" id="searchPnl">
                <syn:input label="First Name" value="#{search.firstName}"
                   rendered="#{search.searchOption eq 'searchByName'}" />
 
@@ -47,12 +46,11 @@
                </syn:input>
             </h:panelGroup>
 
-            <h:panelGroup layout="block" styleClass="header-dropdown search" id="srchBtnPnl">
-               <h:commandButton styleClass="header-search tab" id="submitBtn" value="Search"
-                  action="#{search.search}">
+            <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
+               <h:commandButton id="submitBtn" value="Search" action="#{search.search}">
                   <f:ajax execute="@form" render="@form :somePanel grwl" />
                </h:commandButton>
-               <h:button id="rsetBtn" value="Refresh" styleClass="header-search tab" />
+               <h:button id="rsetBtn" value="Refresh" />
             </h:panelGroup>
          </h:form>
       </div>
