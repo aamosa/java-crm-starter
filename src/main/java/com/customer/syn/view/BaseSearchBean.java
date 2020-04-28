@@ -1,26 +1,47 @@
 package com.customer.syn.view;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
-import javax.faces.annotation.ManagedProperty;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+
+import com.customer.syn.resource.model.Contact;
 
 
 public abstract class BaseSearchBean<T> {
 
     protected long id;
-    
     protected String firstName;
     protected String lastName;
     protected String searchOption;
-    // protected List<T> entities;
     
+    @Inject
+    private FacesContext facesContext;
     
 
     @PostConstruct
     public void init() {
-        // TODO
+        // :TODO
     }
+    
+    
+//    /** Update the entity instance. */
+//    public String update(Contact ce) {
+//        contactService.mergeEntity(ce);
+//        ce.setEditable(false);
+//        facesContext.addMessage(null, new FacesMessage("Id #: " + ce.getId() + " Updated."));
+//        return null;
+//    }
+//
+//    /** Delete the entity instance */
+//    public String delete(Contact c) {
+//        contactService.deleteEntity(c.getId());
+//        facesContext.getExternalContext().getFlash().setKeepMessages(true);
+//        facesContext.addMessage(null, new FacesMessage("Id #: " + c.getId() + " Deleted."));
+//        return null;
+////        return "index?faces-redirect=true";
+//    }
+    
 
     public long getId() {
         return id;

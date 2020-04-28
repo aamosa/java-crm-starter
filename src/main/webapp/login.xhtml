@@ -6,20 +6,22 @@
     xmlns:syn="http://syn.customer.com/jsf">
 
    <ui:define name="content-stuff">
-      <div class="afrm">
-         <h1>Please Login</h1>
-         <h:form id="lgnForm">
-            <syn:input value="#{login.user}" label="Username" required="true" />
-            <label>Password</label>
-            <h:inputSecret value="#{login.pass}" label="Password" required="true" />
+      <f:view transient="true">
+         <div class="afrm">
+            <h1>Please Login</h1>
+            <h:form id="lgnForm">
+               <syn:input value="#{login.user}" label="Username" required="true" />
+               <label>Password</label>
+               <h:inputSecret value="#{login.pass}" label="Password" required="true" />
 
-            <h:panelGroup id="btnPanel" layout="block">
-               <h:commandButton id="svBtn" value="Login" action="#{login.login}"
-                  styleClass="tab" />
-               <h:button id="rstBtn" value="Reset" styleClass="tab" />
-            </h:panelGroup>
-         </h:form>
-      </div>
+               <h:panelGroup id="btnPanel" layout="block">
+                  <h:commandButton id="svBtn" value="Login" action="#{login.login}"
+                     styleClass="tab" />
+                  <h:button id="rstBtn" value="Reset" styleClass="tab" />
+               </h:panelGroup>
+            </h:form>
+         </div>
+      </f:view>
    </ui:define>
 
 </ui:composition>

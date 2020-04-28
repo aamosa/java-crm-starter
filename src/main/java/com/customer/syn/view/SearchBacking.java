@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -15,6 +17,7 @@ import javax.inject.Named;
 
 import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.ContactService;
+import com.customer.syn.service.TestContactService;
 
 @Named("search")
 @ViewScoped
@@ -22,17 +25,28 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
 
     private static final long serialVersionUID = 12L;
 
-    private Long contactId;
 //    private String firstName;
 //    private String lastName;
 //    private String searchOption;
+    
+    private Long contactId;
     private LocalDate searchDateTo;
     private LocalDate searchDateFrom;
+    
+    @Inject
+    private TableBacking table;
+    
     private List<Contact> values;
     private List<Contact> entities;
 
     @Inject
     private ContactService contactService;
+    
+    @Inject
+    private TestContactService testContactService;
+    
+    @Inject
+    private FacesContext facesContext;
 
     
     // ---------------------------------------------- constructors
@@ -63,8 +77,14 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
                 values = contactService.findByLastName(lastName.toUpperCase());
             break;
         case "searchByID":
-            Contact ce = contactService.findByID(contactId);
-            values = ce != null ? Arrays.asList(ce) : null;
+//            Contact ce = contactService.findByID(contactId);
+//            values = ce != null ? Arrays.asList(ce) : null;
+            Optional<Contact> contact = testContactService.findByID(contactId);
+            if (contact.isPresent()) {
+                values = Arrays.asList(contact.get());
+            } else {
+                values = null;
+            }
             break;
         case "fetchAll":
             values = entities;
@@ -78,8 +98,7 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
         }
 
         if (values == null || values.size() < 1) {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage("No records found."));
+            addMsg("No records found.");
         }
     }
     
@@ -89,11 +108,24 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
         return null;
     }
 
+    /** Delete */
+    public void delete(Contact contact) {
+        table.delete(contact);
+        values.remove(contact);
+    }
+    
     /** Refresh */
     public void refresh(AjaxBehaviorEvent e) {
         this.values = null;
     }
-   
+    
+    
+    public void addMsg(String msg) {
+        facesContext.getExternalContext().getFlash().setKeepMessages(true);
+        FacesMessage message = new FacesMessage(msg);
+        facesContext.addMessage(null, message);
+    }
+    
 
     // ---------------------------------------------- setters and getters
 

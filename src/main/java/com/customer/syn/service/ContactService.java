@@ -15,7 +15,7 @@ import com.customer.syn.resource.model.Contact;
  */
 @Stateless
 public class ContactService {
-
+    
     @PersistenceContext(unitName = "syn")
     private EntityManager em;
 

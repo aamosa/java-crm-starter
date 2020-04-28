@@ -20,29 +20,30 @@ public class TableBacking implements Serializable {
     @Inject
     private ContactService contactService;
     
+    @Inject
+    private FacesContext facesContext;
+    
 
     // ------------------------------------------------ constructors
 
     public TableBacking() {}
+    
 
     /** Update the entity instance. */
     public String update(Contact ce) {
         contactService.mergeEntity(ce);
         ce.setEditable(false);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("ID#: " + ce.getId() + " updated."));
+        facesContext.addMessage(null, new FacesMessage("Id #: " + ce.getId() + " Updated."));
         return null;
     }
 
     /** Delete the entity instance */
-    public String delete(Contact ce) {
-        contactService.deleteEntity(ce.getId());
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("ID#: " + ce.getId() + " deleted."));
-        
-        FacesContext.getCurrentInstance().getExternalContext().getFlash()
-        .setKeepMessages(true);
-        return "index?faces-redirect=true";
+    public String delete(Contact c) {
+        contactService.deleteEntity(c.getId());
+        facesContext.getExternalContext().getFlash().setKeepMessages(true);
+        facesContext.addMessage(null, new FacesMessage("Id #: " + c.getId() + " Deleted."));
+        return null;
+//        return "index?faces-redirect=true";
     }
 
 }

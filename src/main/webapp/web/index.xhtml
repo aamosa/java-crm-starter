@@ -61,14 +61,15 @@
          <h:form id="editTable">
             <p:dataTable id="someTable" value="#{search.values}" var="c"
                rendered="#{!empty search.values}" paginator="true" rows="10">
-
                <p:column>
                   <h:commandLink value="Edit" action="#{search.edit(c)}"
                      styleClass="tab skinny" />
                   <h:commandLink value="Save" action="#{tableBacking.update(c)}"
                      rendered="#{c.editable}" styleClass="tab skinny" />
-                  <h:commandLink value="Delete" action="#{tableBacking.delete(c)}"
-                     rendered="#{c.editable}" styleClass="tab skinny" />
+                  <h:commandLink value="Delete" action="#{search.delete(c)}"
+                     rendered="#{c.editable}" styleClass="tab skinny">
+                     <f:ajax render="@namingcontainer :grwl" />
+                  </h:commandLink>
                </p:column>
 
                <p:column headerText="ID">#{c.id}</p:column>
