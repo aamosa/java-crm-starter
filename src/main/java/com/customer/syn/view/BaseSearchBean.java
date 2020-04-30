@@ -23,25 +23,6 @@ public abstract class BaseSearchBean<T> {
     public void init() {
         // :TODO
     }
-    
-    
-//    /** Update the entity instance. */
-//    public String update(Contact ce) {
-//        contactService.mergeEntity(ce);
-//        ce.setEditable(false);
-//        facesContext.addMessage(null, new FacesMessage("Id #: " + ce.getId() + " Updated."));
-//        return null;
-//    }
-//
-//    /** Delete the entity instance */
-//    public String delete(Contact c) {
-//        contactService.deleteEntity(c.getId());
-//        facesContext.getExternalContext().getFlash().setKeepMessages(true);
-//        facesContext.addMessage(null, new FacesMessage("Id #: " + c.getId() + " Deleted."));
-//        return null;
-////        return "index?faces-redirect=true";
-//    }
-    
 
     public long getId() {
         return id;

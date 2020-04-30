@@ -1,19 +1,20 @@
 package com.customer.syn.service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface BasicRepository<T extends Serializable, I> {
+public interface BasicRepository<E, I> {
     
-    public Optional<T> findByID(I id);
+    public Optional<E> findByID(I id);
     
-    public List<T> fetchAll();
+    public List<E> fetchAll();
 
-    public void save(T entity);
+    public void save(E entity);
     
-    public void delete(T entity);
+    public void delete(E entity);
     
-    public void update(T entity);
+    public void deleteById(I id);
+    
+    public void update(E entity);
 
 }

@@ -11,71 +11,41 @@ import javax.persistence.PersistenceContext;
 import com.customer.syn.resource.model.Contact;
 
 /**
- * EJB class for managing entities.
+ * EJB class for managing Contact JPA entities.
  */
 @Stateless
-public class ContactService {
+public class ContactService extends BaseRepositoryImpl<Contact, Long> {
     
     @PersistenceContext(unitName = "syn")
     private EntityManager em;
-
-    /**
-     * Find entity by the specified primary key.
-     * 
-     * @param id the <code>Id</code> primary key.
-     * @return the entity associated with the <code>Id</code>; otherwise
-     *         <code>null</code>.
-     */
-    public Contact findByID(Long id) {
-        return em.find(Contact.class, id);
-    }
-
-    /**
-     * Fetch all entities.
-     * 
-     * @return a <code>List&lt;Contact&gt;</code> of all the managed entities.
-     */
-    @SuppressWarnings("unchecked")
-    public List<Contact> findAll() {
-        return em.createNamedQuery("Contact.getAll").getResultList();
-    }
-
-    /**
-     * Save the specified entity.
-     * 
-     * @param ce the <code>Contact</code> entity to save.
-     */
-    public void save(Contact ce) {
-        em.persist(ce);
-    }
-
-    /**
-     * Delete the specified entity.
-     * 
-     * @param id the primary key associated with the entity.
-     */
-    public void deleteEntity(Long id) {
-        em.remove(findByID(id));
-    }
-
-    /**
-     * Update the specified entity in the current persistence context.
-     * 
-     * @param ce the <code>Contact</code> entity to update.
-     */
-    public void mergeEntity(Contact ce) {
-        em.merge(ce);
+    
+    public ContactService() {
+        super();
     }
 
     /**
      * @param lastName string representing the last name to lookup.
      * @return a <code>List&lt;Contact&gt;</code> of entities.
      */
-    @SuppressWarnings("unchecked")
     public List<Contact> findByLastName(String lastName) {
-        return em.createNamedQuery("Contact.getByLastName").setParameter("lastName", lastName)
+        return em.createNamedQuery("Contact.getByLastName", Contact.class)
+                .setParameter("lastName", lastName)
                 .getResultList();
     }
+    
+
+    /**
+     * @param firstName string representing the first name.
+     * @param lastName  string representing the last name.
+     * @return a <code>list&lt;Contact&gt;</code> of entities.
+     */
+    public List<Contact> findByFullName(String firstName, String lastName) {
+        return em.createNamedQuery("Contact.getByFullName", Contact.class)
+                .setParameter("fistName", firstName)
+                .setParameter("lastName", lastName)
+                .getResultList();
+    }
+    
 
     /**
      * Fetch entities created in the specified date range.
@@ -88,20 +58,11 @@ public class ContactService {
      */
     @SuppressWarnings("unchecked")
     public List<Contact> findByDateRange(LocalDate from, LocalDate to) {
-        return em.createNamedQuery("Contact.getByDateRange").setParameter("from", from.atStartOfDay().toInstant(ZoneOffset.UTC))
+        return em.createNamedQuery("Contact.getByDateRange")
+                .setParameter("from", from.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .setParameter("to", to.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .getResultList();
     }
 
-    /**
-     * @param firstName string representing the first name.
-     * @param lastName  string representing the last name.
-     * @return a <code>list&lt;Contact&gt;</code> of entities.
-     */
-    @SuppressWarnings("unchecked")
-    public List<Contact> findByFullName(String firstName, String lastName) {
-        return em.createNamedQuery("Contact.getByFullName").setParameter("firstName", firstName)
-                .setParameter("lastName", lastName).getResultList();
-    }
 
 }
