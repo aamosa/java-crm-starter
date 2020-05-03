@@ -3,34 +3,41 @@
    xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 
    <cc:interface componentType="xform">
-      <cc:attribute name="" type=""></cc:attribute>
-      <cc:attribute name="" type=""></cc:attribute>
+      <cc:attribute name="value" type=""></cc:attribute>
+      <cc:attribute name="action" type=""></cc:attribute>
+      <cc:attribute name="action" type=""></cc:attribute>
    </cc:interface>
 
    <cc:implementation>
    
       <div id="xform">
          <h:form id="indexForm">
+         
             <div class="selector">
+            
                <label>Select Search Option</label>
                <h:selectOneMenu id="srchOtn" value="#{search.searchOption}">
-                  <f:selectItems value="#{menuBacking.searchOptions}" var="s"
-                     itemValue="#{s.value}" itemLabel="#{s.label}" />
+                  <f:selectItems value="#{menuBacking.searchOptions}" var="s" itemValue="#{s.value}" itemLabel="#{s.label}" />
+                  
                   <f:ajax event="change" execute="@this" render="searchPnl" />
+                  
                </h:selectOneMenu>
+               
             </div>
 
             <h:panelGroup layout="block" id="searchPnl">
+            
                <syn:input label="First Name" value="#{search.firstName}"
                   rendered="#{search.searchOption eq 'searchByName'}" />
 
                <syn:input label="Last Name" value="#{search.lastName}"
                   rendered="#{search.searchOption eq 'searchByName'}" required="true" />
 
-               <syn:input label="Search Date From" value="#{search.searchDateFrom}"
-                  rendered="#{search.searchOption eq 'searchByDate'}" required="true"
-                  requiredMessage="#{msg['req.date']}">
+               <syn:input label="Search Date From" value="#{search.searchDateFrom}" rendered="#{search.searchOption eq 'searchByDate'}" required="true"
+                    requiredMessage="#{msg['req.date']}">
+                    
                   <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+                  
                </syn:input>
 
                <syn:input label="Search Date To" value="#{search.searchDateTo}"
@@ -43,14 +50,18 @@
                   rendered="#{search.searchOption eq 'searchByID'}" required="true">
                   <f:validateLongRange minimum="1" maximum="1000000000" />
                </syn:input>
+               
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
+            
                <h:commandButton id="submitBtn" value="Search" action="#{search.search}">
                   <f:ajax execute="@form" render="@form :somePanel grwl" />
                </h:commandButton>
                <h:button id="rsetBtn" value="Refresh" />
+               
             </h:panelGroup>
+            
          </h:form>
       </div>
 

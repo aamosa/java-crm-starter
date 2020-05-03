@@ -67,9 +67,7 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
                 values = contactService.findByLastName(lastName.toUpperCase());
             break;
         case "searchByID":
-            Contact contact = contactService.findByID(contactId).isPresent() ? contactService.findByID(contactId).get()
-                    : null;
-            
+            Contact contact = contactService.findByID(contactId).isPresent() ? contactService.findByID(contactId).get() : null;
             if (values.size() > 0 ) values.clear();
             if (contact != null) values.add(contact);
             break;
@@ -78,8 +76,7 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
             break;
         case "searchByDate":
             values = contactService.findByDateRange(searchDateFrom, searchDateTo);
-        case "search":
-            return;
+            break;
         default:
             return;
         }
@@ -125,7 +122,6 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
         FacesMessage message = new FacesMessage(msg);
         facesContext.addMessage(null, message);
     }
-
     
     public static Contact findInList(final List<Contact> list, final Long Id) {
         return list.stream().filter(i -> i.getId().equals(Id)).findFirst().orElse(null);

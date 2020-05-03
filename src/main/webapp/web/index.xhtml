@@ -1,25 +1,17 @@
-<ui:composition template="/WEB-INF/template.xhtml" 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core" 
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:syn="http://syn.customer.com/jsf" 
-    xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:syn="http://syn.customer.com/jsf" xmlns:p="http://primefaces.org/ui">
 
    <ui:define name="title">Dashboard</ui:define>
 
    <ui:define name="header-stuff">
-      <div id="xform">
-         <h:form id="indexForm">
-            <div class="selector">
-               <label>Select Search Option</label>
-               <h:selectOneMenu id="srchOtn" value="#{search.searchOption}">
-                  <f:selectItems value="#{menuBacking.searchOptions}" var="s"
-                     itemValue="#{s.value}" itemLabel="#{s.label}" />
-                  <f:ajax event="change" execute="@this" render="searchPnl" />
-               </h:selectOneMenu>
-            </div>
+      <h:form id="sform">
+         <div id="xform">
+            <syn:selector selectModel="#{search.searchOption}"
+               itemModel="#{menuBacking.searchOptions}">
+               <f:ajax event="change" execute="this" render=":sform:searchPnl" />
+            </syn:selector>
 
             <h:panelGroup layout="block" id="searchPnl">
                <syn:input label="First Name" value="#{search.firstName}"
@@ -52,15 +44,16 @@
                </h:commandButton>
                <h:button id="rsetBtn" value="Refresh" />
             </h:panelGroup>
-         </h:form>
-      </div>
+         </div>
+      </h:form>
    </ui:define>
 
    <ui:define name="content-stuff">
       <h:panelGroup id="somePanel" layout="block">
-         <h:form id="editTable">
+         <h:form id="eform">
             <p:dataTable id="someTable" value="#{search.values}" var="c"
-               rendered="#{!empty search.values and search.values.size() > 0}" paginator="true" rows="10">
+               rendered="#{!empty search.values and search.values.size() > 0}" paginator="true"
+               rows="10">
                <p:column>
                   <h:commandLink value="Edit" action="#{search.edit(c)}"
                      styleClass="tab skinny" />

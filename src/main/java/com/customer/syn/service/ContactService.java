@@ -19,9 +19,6 @@ public class ContactService extends BaseRepositoryImpl<Contact, Long> {
     @PersistenceContext(unitName = "syn")
     private EntityManager em;
     
-    public ContactService() {
-        super();
-    }
 
     /**
      * @param lastName string representing the last name to lookup.
@@ -41,7 +38,7 @@ public class ContactService extends BaseRepositoryImpl<Contact, Long> {
      */
     public List<Contact> findByFullName(String firstName, String lastName) {
         return em.createNamedQuery("Contact.getByFullName", Contact.class)
-                .setParameter("fistName", firstName)
+                .setParameter("firstName", firstName)
                 .setParameter("lastName", lastName)
                 .getResultList();
     }
@@ -56,9 +53,8 @@ public class ContactService extends BaseRepositoryImpl<Contact, Long> {
      *             ending at midnight.
      * @return a <code>List&lt;Contact&gt;</code> of entities.
      */
-    @SuppressWarnings("unchecked")
     public List<Contact> findByDateRange(LocalDate from, LocalDate to) {
-        return em.createNamedQuery("Contact.getByDateRange")
+        return em.createNamedQuery("Contact.getByDateRange", Contact.class)
                 .setParameter("from", from.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .setParameter("to", to.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .getResultList();

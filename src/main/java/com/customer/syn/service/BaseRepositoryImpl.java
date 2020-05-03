@@ -35,28 +35,24 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
         }
     }
 
-    @Override
+    
     public Optional<E> findByID(I id) {
         return Optional.ofNullable(em.find(clazz, id)); 
     }
 
-    @Override
     public List<E> fetchAll() {
         return em.createQuery("from " + clazz.getSimpleName(), clazz)
                 .getResultList();
     }
 
-    @Override
     public void save(E entity) {
         em.persist(entity);
     }
 
-    @Override
     public void delete(E entity) {
         em.remove(entity);
     }
     
-    @Override
     public void deleteById(I id) {
         Optional<E> entity = findByID(id);
         if (entity.isPresent()) {
@@ -64,7 +60,6 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
         }
     }
 
-    @Override
     public void update(E entity) {
         em.merge(entity);
     }
