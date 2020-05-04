@@ -10,7 +10,7 @@
          <div id="xform">
             <syn:selector selectModel="#{search.searchOption}"
                itemModel="#{menuBacking.searchOptions}">
-               <f:ajax event="change" execute="this" render=":sform:searchPnl" />
+               <f:ajax event="change" execute="this" render=":sform:searchPnl"/>
             </syn:selector>
 
             <h:panelGroup layout="block" id="searchPnl">
@@ -42,7 +42,6 @@
                <h:commandButton id="submitBtn" value="Search" action="#{search.search}">
                   <f:ajax execute="@form" render="@form :somePanel grwl" />
                </h:commandButton>
-               <h:button id="rsetBtn" value="Refresh" />
             </h:panelGroup>
          </div>
       </h:form>
@@ -52,7 +51,7 @@
       <h:panelGroup id="somePanel" layout="block">
          <h:form id="eform">
             <p:dataTable id="someTable" value="#{search.values}" var="c"
-               rendered="#{!empty search.values and search.values.size() > 0}" paginator="true"
+               rendered="#{!empty search.values}" paginator="true"
                rows="10">
                <p:column>
                   <h:commandLink value="Edit" action="#{search.edit(c)}"
@@ -123,7 +122,6 @@
                   </h:outputText>
                </p:column>
             </p:dataTable>
-
          </h:form>
       </h:panelGroup>
    </ui:define>

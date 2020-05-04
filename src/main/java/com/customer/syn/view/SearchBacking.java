@@ -3,6 +3,7 @@ package com.customer.syn.view;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -67,9 +68,9 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
                 values = contactService.findByLastName(lastName.toUpperCase());
             break;
         case "searchByID":
+            values = null;
             Contact contact = contactService.findByID(contactId).isPresent() ? contactService.findByID(contactId).get() : null;
-            if (values.size() > 0 ) values.clear();
-            if (contact != null) values.add(contact);
+            if (contact != null) values = new ArrayList<Contact>(Arrays.asList(contact));
             break;
         case "fetchAll":
             values = entities;
@@ -77,13 +78,11 @@ public class SearchBacking extends BaseSearchBean<Contact> implements Serializab
         case "searchByDate":
             values = contactService.findByDateRange(searchDateFrom, searchDateTo);
             break;
-        default:
-            return;
         }
-
-        if (values == null || values.size() < 1) {
+        
+        if (values == null || values.size() < 1 )
             addMsg("No records found.");
-        }
+        
     }
     
     /** Update */

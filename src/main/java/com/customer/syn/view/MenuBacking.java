@@ -6,11 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.annotation.ManagedProperty;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 import com.customer.syn.util.ValueLabelHolder;
 
@@ -20,8 +16,9 @@ public class MenuBacking implements Serializable {
 
     private static final long serialVersionUID = 54L;
 
-    private List<ValueLabelHolder<String>> menu;
-    private List<ValueLabelHolder<String>> searchOptions;
+    private static List<ValueLabelHolder<String>> menu;
+    private static List<ValueLabelHolder<String>> searchOptions;
+    private static List<ValueLabelHolder<String>> createOptions;
 
     public MenuBacking() {
     }
@@ -34,6 +31,7 @@ public class MenuBacking implements Serializable {
         menu.add(new ValueLabelHolder<>("Create", "create.xhtml"));
         menu.add(new ValueLabelHolder<>("Settings", "setting.xhtml"));
         initSearchOptions();
+        initCreateOptions();
     }
 
     private void initSearchOptions() {
@@ -42,6 +40,13 @@ public class MenuBacking implements Serializable {
         searchOptions.add(new ValueLabelHolder<>("Search By Date Range", "searchByDate"));
         searchOptions.add(new ValueLabelHolder<>("Search By Id", "searchByID"));
         searchOptions.add(new ValueLabelHolder<>("Display All", "fetchAll"));
+    }
+    
+    private void initCreateOptions() {
+        createOptions = new ArrayList<>();
+        createOptions.add(new ValueLabelHolder<>("Create new Contact", "createContact"));
+        createOptions.add(new ValueLabelHolder<>("Create new Task", "createTask"));
+        createOptions.add(new ValueLabelHolder<>("Create new Comment", "createComment"));
     }
 
     
@@ -53,6 +58,10 @@ public class MenuBacking implements Serializable {
 
     public List<ValueLabelHolder<String>> getSearchOptions() {
         return searchOptions;
+    }
+
+    public List<ValueLabelHolder<String>> getCreateOptions() {
+        return createOptions;
     }
 
 }
