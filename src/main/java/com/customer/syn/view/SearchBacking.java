@@ -22,7 +22,7 @@ import com.customer.syn.service.ContactService;
 
 @Named("search")
 @ViewScoped
-public class SearchBacking extends BaseSearchBean<Contact> implements Serializable {
+public class SearchBacking extends BaseRepoBean<Contact> implements Serializable {
 
     private static final long serialVersionUID = 12L;
     

@@ -14,15 +14,16 @@ import com.customer.syn.service.ContactService;
 public class CreateBacking {
 
     @Inject
-    private ContactService entityOperations;
+    private ContactService contactService;
 
     private String createWhat;
 
     private Contact contact = new Contact();
 
-    /** Persist new entity instance */
+    
+    /** Save */
     public String save() {
-        entityOperations.save(this.contact);
+        contactService.save(this.contact);
         FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage("New entry created."));
 
@@ -34,7 +35,8 @@ public class CreateBacking {
         return "create?faces-redirect=true&includeViewParams=true";
     }
 
-    // ---------------------------------------------- setters and getters
+    
+    // ------------------------------------------------- setters and getters
 
     public Contact getContact() {
         return contact;
@@ -47,9 +49,6 @@ public class CreateBacking {
     public String getCreateWhat() {
         return createWhat;
     }
-
-    public void setCreateWhat(String createWhat) {
-        this.createWhat = createWhat;
-    }
+   
 
 }

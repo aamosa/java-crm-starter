@@ -5,29 +5,21 @@
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:syn="http://syn.customer.com/jsf">
 
-   <ui:define name="title">Create Menu</ui:define>
+   <ui:define name="title">Users</ui:define>
 
    <ui:define name="header-stuff">
-      <h:form id="cform">
-         <div id="xform">
-            <syn:selector selectModel="#{createBacking.createWhat}"
-               itemModel="#{menuBacking.createOptions}" />
-         </div>
-      </h:form>
+      
    </ui:define>
 
    <ui:define name="content-stuff">
-      <div class="afrm">
+       <div class="afrm">
          <h:form id="ciform">
             <syn:input value="#{createBacking.contact.firstName}" label="First Name" required="true" />
             <syn:input value="#{createBacking.contact.lastName}" label="Last Name" required="true" />
+            <syn:input value="#{createBacking.contact.lastName}" label="User Name" required="true" />
             <syn:input value="#{createBacking.contact.email}" label="Email" required="true" />
-            <syn:input value="#{createBacking.contact.phone}" label="Phone" />
-            <syn:input value="#{createBacking.contact.streetAddress}" label="Street Address" />
-            <syn:input value="#{createBacking.contact.city}" label="City" />
-            <syn:input value="#{createBacking.contact.state}" label="State" />
-            <syn:input value="#{createBacking.contact.zipCode}" label="Zip" />
-
+            <syn:input value="#{createBacking.contact.email}" label="Password" required="true" />
+            
             <h:panelGroup id="btnPanel" layout="block">
                <h:commandButton id="svBtn" value="Create" action="#{createBacking.save}"
                   styleClass="tab" />

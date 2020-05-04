@@ -15,7 +15,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public abstract class BaseEntity<T> implements Serializable {
+public abstract class BaseEntity<T extends Number> implements Serializable {
 
     private static final long serialVersionUID = -3L;
 

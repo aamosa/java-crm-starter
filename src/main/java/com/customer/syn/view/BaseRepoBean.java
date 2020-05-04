@@ -5,15 +5,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import com.customer.syn.resource.model.BaseEntity;
 import com.customer.syn.resource.model.Contact;
 
 
-public abstract class BaseSearchBean<T> {
+public abstract class BaseRepoBean<E extends BaseEntity<Long>> {
 
-    protected long id;
-    protected String firstName;
-    protected String lastName;
-    protected String searchOption;
+    private long id;
+    private String firstName;
+    private String lastName;
+    private String searchOption;
     
     @Inject
     private FacesContext facesContext;
