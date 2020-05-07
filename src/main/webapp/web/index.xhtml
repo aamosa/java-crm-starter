@@ -32,7 +32,7 @@
                   <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
                </syn:input>
 
-               <syn:input value="#{search.contactId}" label="ID"
+               <syn:input value="#{search.id}" label="ID"
                   rendered="#{search.searchOption eq 'searchByID'}" required="true">
                   <f:validateLongRange minimum="1" maximum="1000000000" />
                </syn:input>

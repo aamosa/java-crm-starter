@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -17,22 +15,20 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.customer.syn.resource.model.Contact;
+import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 
 
 @Named("search")
 @ViewScoped
-public class SearchBacking extends BaseRepoBean<Contact> implements Serializable {
+public class SearchBacking extends BaseRepoBean<Contact, Long> implements Serializable {
 
     private static final long serialVersionUID = 12L;
     
-    private static final Logger log = Logger.getLogger(SearchBacking.class.getName());
-    
-    private Long contactId;
+    private String firstName;
+    private String lastName;
     private LocalDate searchDateTo;
     private LocalDate searchDateFrom;
-    
-    private List<Contact> entities;
     private List<Contact> values = new ArrayList<>();
 
     @Inject
@@ -43,20 +39,21 @@ public class SearchBacking extends BaseRepoBean<Contact> implements Serializable
 
     
     // ---------------------------------------------- constructors
+    
+    public SearchBacking() { }
 
-    public SearchBacking() {}
     
-    
-    /**
-     * Don't do extensive business logic in getter methods, getters are called by
-     * JSF multiple times during the life-cycle events.
-     * 
-     */
     @PostConstruct
     public void init() {
-        // :TODO lazy loading and pagnation
-        entities = contactService.fetchAll();
+        getService();
     }
+
+    
+    @Override
+    protected BaseRepositoryImpl<Contact, Long> getService() {
+        return contactService;
+    }
+ 
     
     /** Search */
     public void search() {
@@ -69,8 +66,8 @@ public class SearchBacking extends BaseRepoBean<Contact> implements Serializable
             break;
         case "searchByID":
             values = null;
-            Contact contact = contactService.findByID(contactId).isPresent() ? contactService.findByID(contactId).get() : null;
-            if (contact != null) values = new ArrayList<Contact>(Arrays.asList(contact));
+            Contact contact = contactService.findByID(Id).isPresent() ? contactService.findByID(Id).get() : null;
+            if (contact != null) values = new ArrayList<>(Arrays.asList(contact));
             break;
         case "fetchAll":
             values = entities;
@@ -82,7 +79,6 @@ public class SearchBacking extends BaseRepoBean<Contact> implements Serializable
         
         if (values == null || values.size() < 1 )
             addMsg("No records found.");
-        
     }
     
     /** Update */
@@ -133,12 +129,20 @@ public class SearchBacking extends BaseRepoBean<Contact> implements Serializable
         return values;
     }
 
-    public Long getContactId() {
-        return contactId;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setContactId(Long contactId) {
-        this.contactId = contactId;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public LocalDate getSearchDateTo() {

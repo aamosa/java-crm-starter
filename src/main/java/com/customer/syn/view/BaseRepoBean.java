@@ -1,52 +1,43 @@
 package com.customer.syn.view;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 import com.customer.syn.resource.model.BaseEntity;
-import com.customer.syn.resource.model.Contact;
+import com.customer.syn.service.BaseRepositoryImpl;
 
 
-public abstract class BaseRepoBean<E extends BaseEntity<Long>> {
+public abstract class BaseRepoBean<E extends BaseEntity<T>, T extends Number> {
 
-    private long id;
-    private String firstName;
-    private String lastName;
-    private String searchOption;
+    protected T Id;
+    protected String searchOption;
+    protected List<E> entities;
     
-    @Inject
-    private FacesContext facesContext;
     
-
+    // ---------------------------------------------- constructors
+    
+    public BaseRepoBean() {}
+    
     @PostConstruct
-    public void init() {
-        // :TODO
+    public void setup () {
+        entities = getService().fetchAll();
+    }
+            
+    
+    // ---------------------------------------------- abstract methods
+    
+    protected abstract BaseRepositoryImpl<E, T> getService();
+    
+    
+    // ---------------------------------------------- setters and getters
+    
+    public T getId() {
+        return Id;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setId(T Id) {
+        this.Id = Id;   
     }
 
     public String getSearchOption() {
@@ -57,12 +48,8 @@ public abstract class BaseRepoBean<E extends BaseEntity<Long>> {
         this.searchOption = searchOption;
     }
 
-//    public List<T> getEntities() {
-//        return entities;
-//    }
-//
-//    public void setEntities(List<T> entities) {
-//        this.entities = entities;
-//    }
-
+    public List<E> getEntities() {
+        return entities;
+    }
+    
 }

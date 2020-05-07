@@ -10,9 +10,6 @@ import javax.persistence.PersistenceContext;
 
 import com.customer.syn.resource.model.Contact;
 
-/**
- * EJB class for managing Contact JPA entities.
- */
 @Stateless
 public class ContactService extends BaseRepositoryImpl<Contact, Long> {
     

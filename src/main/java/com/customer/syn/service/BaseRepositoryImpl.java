@@ -4,15 +4,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-
 public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> {
-    
-    private static final Logger log = Logger.getLogger(BaseRepositoryImpl.class.getName());
     
     @PersistenceContext(name = "syn")
     private EntityManager em;
@@ -34,7 +30,7 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
             this.clazz = (Class<E>) ((ParameterizedType) type).getActualTypeArguments()[0];
         }
     }
-
+    
     
     public Optional<E> findByID(I id) {
         return Optional.ofNullable(em.find(clazz, id)); 

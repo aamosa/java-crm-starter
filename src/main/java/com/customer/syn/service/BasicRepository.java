@@ -5,16 +5,16 @@ import java.util.Optional;
 
 public interface BasicRepository<E, I> {
     
-    public Optional<E> findByID(I id);
+    Optional<E> findByID(I id);
     
-    public List<E> fetchAll();
+    List<E> fetchAll();
 
-    public void save(E entity);
+    void save(E entity);
     
-    public void delete(E entity);
+    void delete(E entity);
     
-    public void deleteById(I id);
+    void deleteById(I id);
     
-    public void update(E entity);
+    void update(E entity);
 
 }

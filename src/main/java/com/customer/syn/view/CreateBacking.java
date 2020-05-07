@@ -1,16 +1,14 @@
 package com.customer.syn.view;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.ContactService;
 
-@Named
-@RequestScoped
+@Model
 public class CreateBacking {
 
     @Inject
