@@ -27,8 +27,9 @@ public class MenuBacking implements Serializable {
     public void init() {
         // :TODO load from property file or DB here
         menu = new ArrayList<>();
-        menu.add(new ValueLabelHolder<>("Dashboard", "index.xhtml"));
-        menu.add(new ValueLabelHolder<>("Create", "create.xhtml"));
+        menu.add(new ValueLabelHolder<>("Contacts", "index.xhtml"));
+        menu.add(new ValueLabelHolder<>("Users", "user.xhtml"));
+        menu.add(new ValueLabelHolder<>("Tasks", "task.xhtml"));
         menu.add(new ValueLabelHolder<>("Settings", "setting.xhtml"));
         initSearchOptions();
         initCreateOptions();
@@ -36,9 +37,9 @@ public class MenuBacking implements Serializable {
 
     private void initSearchOptions() {
         searchOptions = new ArrayList<>();
-        searchOptions.add(new ValueLabelHolder<>("Search By Name", "searchByName"));
-        searchOptions.add(new ValueLabelHolder<>("Search By Date Range", "searchByDate"));
-        searchOptions.add(new ValueLabelHolder<>("Search By Id", "searchByID"));
+        searchOptions.add(new ValueLabelHolder<>("Name", "searchByName"));
+        searchOptions.add(new ValueLabelHolder<>("Date", "searchByDate"));
+        searchOptions.add(new ValueLabelHolder<>("ID", "searchByID"));
         searchOptions.add(new ValueLabelHolder<>("Display All", "fetchAll"));
     }
     

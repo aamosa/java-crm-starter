@@ -1,4 +1,4 @@
-package com.customer.syn.view;
+package com.customer.syn.view.contact;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -17,22 +15,21 @@ import javax.inject.Named;
 import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
+import com.customer.syn.view.AbstractBacking;
 
 
-@Named("search")
+@Named("contact")
 @ViewScoped
-public class SearchBacking extends BaseRepoBean<Contact, Long> implements Serializable {
+public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
 
     private static final long serialVersionUID = 12L;
     
     private String firstName;
     private String lastName;
+    private String searchOption;
     private LocalDate searchDateTo;
     private LocalDate searchDateFrom;
     private List<Contact> values = new ArrayList<>();
-
-    @Inject
-    private FacesContext facesContext;
     
     @Inject
     private ContactService contactService;
@@ -40,7 +37,7 @@ public class SearchBacking extends BaseRepoBean<Contact, Long> implements Serial
     
     // ---------------------------------------------- constructors
     
-    public SearchBacking() { }
+    public ContactBacking() { }
 
     
     @PostConstruct
@@ -66,7 +63,7 @@ public class SearchBacking extends BaseRepoBean<Contact, Long> implements Serial
             break;
         case "searchByID":
             values = null;
-            Contact contact = contactService.findByID(Id).isPresent() ? contactService.findByID(Id).get() : null;
+            Contact contact = findById(Id).isPresent() ? findById(Id).get() : null;
             if (contact != null) values = new ArrayList<>(Arrays.asList(contact));
             break;
         case "fetchAll":
@@ -112,12 +109,6 @@ public class SearchBacking extends BaseRepoBean<Contact, Long> implements Serial
         this.values = null;
     }
     
-    public void addMsg(String msg) {
-        facesContext.getExternalContext().getFlash().setKeepMessages(true);
-        FacesMessage message = new FacesMessage(msg);
-        facesContext.addMessage(null, message);
-    }
-    
     public static Contact findInList(final List<Contact> list, final Long Id) {
         return list.stream().filter(i -> i.getId().equals(Id)).findFirst().orElse(null);
     }
@@ -143,6 +134,14 @@ public class SearchBacking extends BaseRepoBean<Contact, Long> implements Serial
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getSearchOption() {
+        return searchOption;
+    }
+
+    public void setSearchOption(String searchOption) {
+        this.searchOption = searchOption;
     }
 
     public LocalDate getSearchDateTo() {

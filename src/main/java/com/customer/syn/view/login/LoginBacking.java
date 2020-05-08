@@ -1,4 +1,4 @@
-package com.customer.syn.view;
+package com.customer.syn.view.login;
 
 import static javax.security.enterprise.AuthenticationStatus.NOT_DONE;
 import static javax.security.enterprise.AuthenticationStatus.SEND_CONTINUE;

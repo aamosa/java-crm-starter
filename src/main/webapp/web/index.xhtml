@@ -8,38 +8,45 @@
    <ui:define name="header-stuff">
       <h:form id="sform">
          <div id="xform">
-            <syn:selector selectModel="#{search.searchOption}"
+            <syn:selector selectModel="#{contact.searchOption}"
                itemModel="#{menuBacking.searchOptions}">
-               <f:ajax event="change" execute="this" render=":sform:searchPnl"/>
+               <f:ajax event="change" execute="this" render=":sform:searchPnl" />
             </syn:selector>
 
             <h:panelGroup layout="block" id="searchPnl">
-               <syn:input label="First Name" value="#{search.firstName}"
-                  rendered="#{search.searchOption eq 'searchByName'}" />
+               <h:panelGroup layout="block" id="fnp"
+                  rendered="#{contact.searchOption eq 'searchByName' or empty contact.searchOption}">
+                  <syn:input label="First Name" value="#{contact.firstName}" />
+               </h:panelGroup>
+               <h:panelGroup layout="block" id="lnp"
+                  rendered="#{contact.searchOption eq 'searchByName' or empty contact.searchOption}">
+                  <syn:input label="Last Name" value="#{contact.lastName}" required="true" />
+               </h:panelGroup>
 
-               <syn:input label="Last Name" value="#{search.lastName}"
-                  rendered="#{search.searchOption eq 'searchByName'}" required="true" />
+               <h:panelGroup layout="block" id="sdf"
+                  rendered="#{contact.searchOption eq'searchByDate'}">
+                  <syn:input label="From" value="#{contact.searchDateFrom}" required="true"
+                     requiredMessage="#{msg['req.date']}">
+                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+                  </syn:input>
+               </h:panelGroup>
 
-               <syn:input label="Search Date From" value="#{search.searchDateFrom}"
-                  rendered="#{search.searchOption eq 'searchByDate'}" required="true"
-                  requiredMessage="#{msg['req.date']}">
-                  <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
-               </syn:input>
+               <h:panelGroup layout="block" id="sdt"
+                  rendered="#{contact.searchOption eq'searchByDate'}">
+                  <syn:input label="To" value="#{contact.searchDateTo}" required="true"
+                     requiredMessage="#{msg['req.date']}">
+                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+                  </syn:input>
+               </h:panelGroup>
 
-               <syn:input label="Search Date To" value="#{search.searchDateTo}"
-                  rendered="#{search.searchOption eq 'searchByDate'}" required="true"
-                  requiredMessage="#{msg['req.date']}">
-                  <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
-               </syn:input>
-
-               <syn:input value="#{search.id}" label="ID"
-                  rendered="#{search.searchOption eq 'searchByID'}" required="true">
+               <syn:input value="#{contact.id}" label="ID"
+                  rendered="#{contact.searchOption eq 'searchByID'}" required="true">
                   <f:validateLongRange minimum="1" maximum="1000000000" />
                </syn:input>
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
-               <h:commandButton id="submitBtn" value="Search" action="#{search.search}">
+               <h:commandButton id="submitBtn" value="Search" action="#{contact.search}">
                   <f:ajax execute="@form" render="@form :somePanel grwl" />
                </h:commandButton>
             </h:panelGroup>
@@ -50,15 +57,14 @@
    <ui:define name="content-stuff">
       <h:panelGroup id="somePanel" layout="block">
          <h:form id="eform">
-            <p:dataTable id="someTable" value="#{search.values}" var="c"
-               rendered="#{!empty search.values}" paginator="true"
-               rows="10">
+            <p:dataTable id="someTable" value="#{contact.values}" var="c"
+               rendered="#{!empty contact.values}" paginator="true" rows="10">
                <p:column>
-                  <h:commandLink value="Edit" action="#{search.edit(c)}"
+                  <h:commandLink value="Edit" action="#{contact.edit(c)}"
                      styleClass="tab skinny" />
-                  <h:commandLink value="Save" action="#{search.update(c)}"
+                  <h:commandLink value="Save" action="#{contact.update(c)}"
                      rendered="#{c.editable}" styleClass="tab skinny" />
-                  <h:commandLink value="Delete" action="#{search.delete(c)}"
+                  <h:commandLink value="Delete" action="#{contact.delete(c)}"
                      rendered="#{c.editable}" styleClass="tab skinny">
                      <f:ajax render="@namingcontainer :grwl" />
                   </h:commandLink>

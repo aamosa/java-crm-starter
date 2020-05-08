@@ -13,7 +13,7 @@
    <cc:implementation>
 
       <div id="#{cc.clientId}" class="selector">
-         <label>Select Search Option:</label>
+         <label>Search By:</label>
          <h:selectOneMenu id="search-options" value="#{cc.attrs.selectModel}">
             <f:selectItems value="#{cc.attrs.itemModel}" var="s" itemValue="#{s.value}"
                itemLabel="#{s.label}" />
