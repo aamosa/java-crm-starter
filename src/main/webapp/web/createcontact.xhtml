@@ -1,0 +1,27 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:syn="http://syn.customer.com/jsf"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+      <div class="afrm">
+         <h:form id="ciform">
+            <syn:input value="#{contactBacking.contact.firstName}" label="First Name" required="true" />
+            <syn:input value="#{contactBacking.contact.lastName}" label="Last Name" required="true" />
+            <syn:input value="#{contactBacking.contact.email}" label="Email" required="true" />
+            <syn:input value="#{contactBacking.contact.phone}" label="Phone" />
+            <syn:input value="#{contactBacking.contact.streetAddress}" label="Street Address" />
+            <syn:input value="#{contactBacking.contact.city}" label="City" />
+            <syn:input value="#{contactBacking.contact.state}" label="State" />
+            <syn:input value="#{contactBacking.contact.zipCode}" label="Zip" />
+
+            <h:panelGroup id="btnPanel" layout="block">
+               <h:commandButton id="svBtn" value="Create" action="#{contactBacking.create}"
+                  styleClass="tab" />
+               <h:button id="rstBtn" value="Reset" styleClass="tab" />
+            </h:panelGroup>
+         </h:form>
+      </div>
+      
+</ui:composition>

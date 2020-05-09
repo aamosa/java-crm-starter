@@ -3,50 +3,51 @@
    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
    xmlns:syn="http://syn.customer.com/jsf" xmlns:p="http://primefaces.org/ui">
 
-   <ui:define name="title">Dashboard</ui:define>
+   <ui:define name="title">Contacts</ui:define>
 
    <ui:define name="header-stuff">
       <h:form id="sform">
          <div id="xform">
-            <syn:selector selectModel="#{contact.searchOption}"
+            <syn:selector selectModel="#{contactBacking.searchOption}"
                itemModel="#{menuBacking.searchOptions}">
                <f:ajax event="change" execute="this" render=":sform:searchPnl" />
             </syn:selector>
 
             <h:panelGroup layout="block" id="searchPnl">
                <h:panelGroup layout="block" id="fnp"
-                  rendered="#{contact.searchOption eq 'searchByName' or empty contact.searchOption}">
-                  <syn:input label="First Name" value="#{contact.firstName}" />
+                  rendered="#{contactBacking.searchOption eq 'searchByName' or empty contactBacking.searchOption}">
+                  <syn:input label="First Name" value="#{contactBacking.firstName}" />
                </h:panelGroup>
                <h:panelGroup layout="block" id="lnp"
-                  rendered="#{contact.searchOption eq 'searchByName' or empty contact.searchOption}">
-                  <syn:input label="Last Name" value="#{contact.lastName}" required="true" />
+                  rendered="#{contactBacking.searchOption eq 'searchByName' or empty contactBacking.searchOption}">
+                  <syn:input label="Last Name" value="#{contactBacking.lastName}"
+                     required="true" />
                </h:panelGroup>
 
                <h:panelGroup layout="block" id="sdf"
-                  rendered="#{contact.searchOption eq'searchByDate'}">
-                  <syn:input label="From" value="#{contact.searchDateFrom}" required="true"
-                     requiredMessage="#{msg['req.date']}">
+                  rendered="#{contactBacking.searchOption eq'searchByDate'}">
+                  <syn:input label="From" value="#{contactBacking.searchDateFrom}"
+                     required="true" requiredMessage="#{msg['req.date']}">
                      <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
                   </syn:input>
                </h:panelGroup>
 
                <h:panelGroup layout="block" id="sdt"
-                  rendered="#{contact.searchOption eq'searchByDate'}">
-                  <syn:input label="To" value="#{contact.searchDateTo}" required="true"
+                  rendered="#{contactBacking.searchOption eq'searchByDate'}">
+                  <syn:input label="To" value="#{contactBacking.searchDateTo}" required="true"
                      requiredMessage="#{msg['req.date']}">
                      <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
                   </syn:input>
                </h:panelGroup>
 
-               <syn:input value="#{contact.id}" label="ID"
-                  rendered="#{contact.searchOption eq 'searchByID'}" required="true">
+               <syn:input value="#{contactBacking.id}" label="ID"
+                  rendered="#{contactBacking.searchOption eq 'searchByID'}" required="true">
                   <f:validateLongRange minimum="1" maximum="1000000000" />
                </syn:input>
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
-               <h:commandButton id="submitBtn" value="Search" action="#{contact.search}">
+               <h:commandButton id="submitBtn" value="Search" action="#{contactBacking.search}">
                   <f:ajax execute="@form" render="@form :somePanel grwl" />
                </h:commandButton>
             </h:panelGroup>
@@ -55,16 +56,19 @@
    </ui:define>
 
    <ui:define name="content-stuff">
+
+      <ui:include src="createcontact.xhtml" />
+
       <h:panelGroup id="somePanel" layout="block">
          <h:form id="eform">
-            <p:dataTable id="someTable" value="#{contact.values}" var="c"
-               rendered="#{!empty contact.values}" paginator="true" rows="10">
+            <p:dataTable id="someTable" value="#{contactBacking.values}" var="c"
+               rendered="#{!empty contactBacking.values}" paginator="true" rows="10">
                <p:column>
-                  <h:commandLink value="Edit" action="#{contact.edit(c)}"
+                  <h:commandLink value="Edit" action="#{contactBacking.edit(c)}"
                      styleClass="tab skinny" />
-                  <h:commandLink value="Save" action="#{contact.update(c)}"
+                  <h:commandLink value="Save" action="#{contactBacking.update(c)}"
                      rendered="#{c.editable}" styleClass="tab skinny" />
-                  <h:commandLink value="Delete" action="#{contact.delete(c)}"
+                  <h:commandLink value="Delete" action="#{contactBacking.delete(c)}"
                      rendered="#{c.editable}" styleClass="tab skinny">
                      <f:ajax render="@namingcontainer :grwl" />
                   </h:commandLink>

@@ -38,6 +38,15 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         return getService().findByID(id);
     }
     
+    /** Save */
+    protected void save(E entity) {
+        try {
+            getService().save(entity);
+        } catch (Exception e) {
+            // :TODO
+        }
+    }
+    
     
     /** :TODO move to utility class */
     public void addMsg(String msg) {

@@ -17,18 +17,19 @@ import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
 
-
-@Named("contact")
+@Named
 @ViewScoped
 public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
 
     private static final long serialVersionUID = 12L;
     
+    private Contact contact = new Contact();
     private String firstName;
     private String lastName;
     private String searchOption;
     private LocalDate searchDateTo;
     private LocalDate searchDateFrom;
+    
     private List<Contact> values = new ArrayList<>();
     
     @Inject
@@ -44,7 +45,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     public void init() {
         getService();
     }
-
     
     @Override
     protected BaseRepositoryImpl<Contact, Long> getService() {
@@ -78,6 +78,11 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
             addMsg("No records found.");
     }
     
+    /** Edit */ 
+    public void edit(Contact c) {
+        c.setEditable(true);
+    }
+    
     /** Update */
     public void update(Contact c) {
         contactService.update(c);
@@ -96,9 +101,12 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         return null;
     }
     
-    /** Edit */ 
-    public void edit(Contact ce) {
-        ce.setEditable(true);
+    
+    /** Create :TODO */
+    public String create() {
+        save(contact);
+        addMsg("New contact created!");
+        return "index?faces-redirect=true&includeViewParams=true";
     }
     
     
@@ -115,6 +123,16 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
 
     // ---------------------------------------------- setters and getters
+
+    
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
 
     public List<Contact> getValues() {
         return values;
