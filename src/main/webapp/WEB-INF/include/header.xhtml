@@ -27,6 +27,11 @@
          <div id="header-container">
             <ui:insert name="header-stuff"></ui:insert>
          </div>
+         <div>
+            <h:form>
+               <h:commandButton id="nbtn" value="Create New" action="#{contactBacking.create}" styleClass="tab"/>
+            </h:form>
+         </div>
       </div>
    </div>
 </ui:composition>
