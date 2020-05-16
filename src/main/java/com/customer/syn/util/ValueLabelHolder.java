@@ -4,11 +4,21 @@ public class ValueLabelHolder<T> {
     
     private String label;
     private T value;
+    private boolean display;
+    
+    
+    // ------------------------------------------------------ constructors
     
     public ValueLabelHolder(String label, T value) {
+        this(label, value, false);
+    }
+    
+    public ValueLabelHolder(String label, T value, boolean display) {
         this.label = label;
         this.value = value;
+        this.display = display;
     }
+    
 
     public String getLabel() {
         return label;
@@ -26,35 +36,12 @@ public class ValueLabelHolder<T> {
         this.value = value;
     }
     
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((label == null) ? 0 : label.hashCode());
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
-        return result;
+    public boolean isDisplay() {
+        return display;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ValueLabelHolder<?> other = (ValueLabelHolder<?>) obj;
-        if (label == null) {
-            if (other.label != null)
-                return false;
-        } else if (!label.equals(other.label))
-            return false;
-        if (value == null) {
-            if (other.value != null)
-                return false;
-        } else if (!value.equals(other.value))
-            return false;
-        return true;
+    
+    public void setDisplay(boolean display) {
+        this.display = display;
     }
 
 }

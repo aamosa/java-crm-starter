@@ -23,13 +23,16 @@
             <div class="fields right">Logged in as: #{request.userPrincipal.name}</div>
          </div>
       </div>
+      
       <div id="header-block">
          <div id="header-container">
+         
             <ui:insert name="header-stuff"></ui:insert>
+            
          </div>
          <div>
-            <h:form>
-               <h:commandButton id="nbtn" value="Create New" action="#{contactBacking.create}" styleClass="tab"/>
+            <h:form id="currentform">
+               <h:commandButton id="nbtn" value="Create New" actionListener="{}" styleClass="tab" />
             </h:form>
          </div>
       </div>

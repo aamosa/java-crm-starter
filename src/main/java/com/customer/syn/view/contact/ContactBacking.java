@@ -5,8 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.faces.annotation.ManagedProperty;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -16,10 +20,13 @@ import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
+import com.customer.syn.view.MenuBacking;
 
 @Named
 @ViewScoped
 public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
+    
+    private static final Logger log = Logger.getLogger(ContactBacking.class.getName());
 
     private static final long serialVersionUID = 12L;
     
@@ -32,9 +39,12 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     private List<Contact> values = new ArrayList<>();
     
+    private String page;
+    
+    
     @Inject
     private ContactService contactService;
-
+   
     
     // ---------------------------------------------- constructors
     
@@ -50,7 +60,18 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     protected BaseRepositoryImpl<Contact, Long> getService() {
         return contactService;
     }
- 
+    
+    
+    public void setCurrent(String page) {
+        setPage(page);
+    }
+    
+    public void reset() {
+//        UIComponent comp = FacesContext.getCurrentInstance().getViewRoot().findComponent("ciform");
+//        comp.setRendered(false);
+        setPage(null);
+    }
+   
     
     /** Search */
     public void search() {
@@ -74,8 +95,9 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
             break;
         }
         
-        if (values == null || values.size() < 1 )
+        if (values == null || values.size() < 1 ) {
             addMsg("No records found.");
+        }
     }
     
     /** Edit */ 
@@ -176,6 +198,14 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     public void setSearchDateFrom(LocalDate searchDateFrom) {
         this.searchDateFrom = searchDateFrom;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
     }
 
 }

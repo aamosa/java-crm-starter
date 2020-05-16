@@ -2,7 +2,10 @@ package com.customer.syn.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -20,9 +23,12 @@ public class MenuBacking implements Serializable {
     private static List<ValueLabelHolder<String>> searchOptions;
     private static List<ValueLabelHolder<String>> createOptions;
 
-    public MenuBacking() {
-    }
+    
+    // -------------------------------------------------- constructors
+    
+    public MenuBacking() {}
 
+    
     @PostConstruct
     public void init() {
         // :TODO load from property file or DB here
@@ -32,7 +38,6 @@ public class MenuBacking implements Serializable {
         menu.add(new ValueLabelHolder<>("Tasks", "task.xhtml"));
         menu.add(new ValueLabelHolder<>("Settings", "setting.xhtml"));
         initSearchOptions();
-        initCreateOptions();
     }
 
     private void initSearchOptions() {
@@ -41,13 +46,6 @@ public class MenuBacking implements Serializable {
         searchOptions.add(new ValueLabelHolder<>("Date", "searchByDate"));
         searchOptions.add(new ValueLabelHolder<>("ID", "searchByID"));
         searchOptions.add(new ValueLabelHolder<>("Display All", "fetchAll"));
-    }
-    
-    private void initCreateOptions() {
-        createOptions = new ArrayList<>();
-        createOptions.add(new ValueLabelHolder<>("Create new Contact", "createContact"));
-        createOptions.add(new ValueLabelHolder<>("Create new Task", "createTask"));
-        createOptions.add(new ValueLabelHolder<>("Create new Comment", "createComment"));
     }
 
     
