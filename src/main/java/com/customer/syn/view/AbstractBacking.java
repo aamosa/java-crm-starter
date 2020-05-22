@@ -5,12 +5,13 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.customer.syn.resource.model.BaseEntity;
 import com.customer.syn.service.BaseRepositoryImpl;
-
 
 public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number> {
 
@@ -20,17 +21,22 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     @Inject
     private FacesContext facesContext;
     
+    @Inject
+    private ExternalContext ec;
+    
     
     // ---------------------------------------------- constructors
     
-    public AbstractBacking() {}
-
-    protected abstract BaseRepositoryImpl<E, T> getService();
+    public AbstractBacking() {
+    }
+    
     
     @PostConstruct
-    public void setup () {
+    public void setup() {
         entities = getService().fetchAll();
     }
+
+    protected abstract BaseRepositoryImpl<E, T> getService();
     
     
     /** Find by Id */
@@ -50,7 +56,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     /** :TODO move to utility class */
     public void addMsg(String msg) {
-        facesContext.getExternalContext().getFlash().setKeepMessages(true);
+        ec.getFlash().setKeepMessages(true);
         FacesMessage message = new FacesMessage(msg);
         facesContext.addMessage(null, message);
     }

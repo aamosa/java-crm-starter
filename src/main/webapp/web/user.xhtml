@@ -4,28 +4,14 @@
     xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:syn="http://syn.customer.com/jsf">
+    
+    <ui:param name="bean" value="#{userBacking}" />
 
    <ui:define name="title">Users</ui:define>
 
-   <ui:define name="header-stuff">
-      
-   </ui:define>
+   <ui:define name="header-stuff"></ui:define>
 
    <ui:define name="content-stuff">
-       <div class="afrm">
-         <h:form id="ciform">
-            <syn:input value="#{createBacking.contact.firstName}" label="First Name" required="true" />
-            <syn:input value="#{createBacking.contact.lastName}" label="Last Name" required="true" />
-            <syn:input value="#{createBacking.contact.lastName}" label="User Name" required="true" />
-            <syn:input value="#{createBacking.contact.email}" label="Email" required="true" />
-            <syn:input value="#{createBacking.contact.email}" label="Password" required="true" />
-            
-            <h:panelGroup id="btnPanel" layout="block">
-               <h:commandButton id="svBtn" value="Create" action="#{createBacking.save}"
-                  styleClass="tab" />
-               <h:button id="rstBtn" value="Reset" styleClass="tab" />
-            </h:panelGroup>
-         </h:form>
-      </div>
+      <ui:include src="createuser.xhtml" />
    </ui:define>
 </ui:composition>

@@ -4,13 +4,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.faces.annotation.ManagedProperty;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -20,7 +19,6 @@ import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
-import com.customer.syn.view.MenuBacking;
 
 @Named
 @ViewScoped
@@ -30,7 +28,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     private static final long serialVersionUID = 12L;
     
-    private Contact contact = new Contact();
+    private Contact contact;
     private String firstName;
     private String lastName;
     private String searchOption;
@@ -38,6 +36,8 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     private LocalDate searchDateFrom;
     
     private List<Contact> values = new ArrayList<>();
+    
+    private List<Map<String, String>> columns = new ArrayList<>();
     
     private String page;
     
@@ -48,17 +48,38 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     // ---------------------------------------------- constructors
     
-    public ContactBacking() { }
+    public ContactBacking() { 
+    }
 
-    
     @PostConstruct
     public void init() {
         getService();
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//        Map m = facesContext.getExternalContext().getRequestMap();
+//        Map<String, Object> pMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+//        String val = (String) pMap.get("bean");
+//        log.info("request map : " + val);
     }
     
     @Override
     protected BaseRepositoryImpl<Contact, Long> getService() {
         return contactService;
+    }
+    
+/**    
+    public void getBeanFromEL() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ContactBacking bean = facesContext.getApplication().evaluateExpressionGet(facesContext, "#{contactBacking}", ContactBacking.class);
+        log.info("Bean is: " + bean);
+        Map map = facesContext.getExternalContext().getRequestMap();
+        log.info("Contains key: " + map.containsKey("bb"));
+        Map map = facesContext.getViewRoot().getViewMap();
+        map.forEach((k, v) -> log.info("key: " + k + " value: " + v));
+    }
+*/
+    // static 
+    public void populateColumns() {
+        Map<String, String> map = new HashMap<>();
     }
     
     
@@ -98,6 +119,12 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         if (values == null || values.size() < 1 ) {
             addMsg("No records found.");
         }
+    }
+    
+    public void initialize() {
+        log.info("new Contact created");
+        contact = new Contact();
+        setCurrent("createcontact");
     }
     
     /** Edit */ 
