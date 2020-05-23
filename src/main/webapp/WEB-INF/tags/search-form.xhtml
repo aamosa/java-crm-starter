@@ -1,0 +1,64 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:syn="http://syn.customer.com/jsf"
+    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
+    
+    <c:set var="id" value="${not empty id ? id : fn:replace(label,' ','')}" />
+
+   <h:form id="sform">
+      <div id="xform">
+         <div class="selector">
+            <label>Search By</label>
+            <h:selectOneMenu id="search-options" value="#{bean.searchOption}">
+               <f:selectItems value="#{menuBacking.searchOptions}" var="s" itemValue="#{s.value}"
+                  itemLabel="#{s.label}" />
+                  <f:ajax event="change" execute="this" render=":sform:searchPnl" />
+            </h:selectOneMenu>
+         </div>
+         
+         <h:panelGroup layout="block" id="searchPnl">
+            <ui:fragment
+               rendered="#{bean.searchOption eq 'searchByName' or empty bean.searchOption}">
+               <h:panelGroup layout="block" id="fnp">
+                  <syn:input label="First Name" value="#{bean.firstName}" />
+               </h:panelGroup>
+               <h:panelGroup layout="block" id="lnp">
+                  <syn:input label="Last Name" value="#{bean.lastName}" required="true" />
+               </h:panelGroup>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{bean.searchOption eq'searchByDate'}">
+               <h:panelGroup layout="block" id="sdf">
+                  <syn:input label="From" value="#{bean.searchDateFrom}" required="true"
+                     requiredMessage="#{msg['req.date']}">
+                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+                  </syn:input>
+               </h:panelGroup>
+               <h:panelGroup layout="block" id="sdt">
+                  <syn:input label="To" value="#{bean.searchDateTo}" required="true"
+                     requiredMessage="#{msg['req.date']}">
+                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+                  </syn:input>
+               </h:panelGroup>
+            </ui:fragment>
+
+            <syn:input value="#{bean.id}" label="ID"
+               rendered="#{bean.searchOption eq 'searchByID'}" required="true">
+               <f:validateLongRange minimum="1" maximum="1000000000" />
+            </syn:input>
+         </h:panelGroup>
+
+         <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
+            <h:commandButton id="submitBtn" value="Search" action="#{bean.search}"
+               actionListener="#{bean.reset()}">
+               <f:ajax execute="@form" render="@form :gform :somePanel grwl" />
+            </h:commandButton>
+         </h:panelGroup>
+      </div>
+   </h:form>
+
+</ui:composition>

@@ -36,23 +36,23 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
         return userService;
     }
     
+    
     public void initialize() {
-        log.info("new User created");
+        log.info("New User created.");
         user = new User();
+        setCurrent("createuser");
     }
     
     
-    
-    // ---------------------------------------------- setters and getters
-    
-    /** Create :TODO */
-    public String create() {
-        save(user);
+    public String save() {
+        super.save(user);
         addMsg("New User created!");
         return "user?faces-redirect=true&includeViewParams=true";
     }
     
     
+    
+    // ---------------------------------------------- setters and getters
 
     public User getUser() {
         return user;

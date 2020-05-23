@@ -3,7 +3,6 @@ package com.customer.syn.view.contact;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,18 +28,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
-    private String firstName;
-    private String lastName;
-    private String searchOption;
-    private LocalDate searchDateTo;
-    private LocalDate searchDateFrom;
-    
-    private List<Contact> values = new ArrayList<>();
-    
     private List<Map<String, String>> columns = new ArrayList<>();
-    
-    private String page;
-    
     
     @Inject
     private ContactService contactService;
@@ -48,78 +36,25 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     // ---------------------------------------------- constructors
     
-    public ContactBacking() { 
-    }
+    public ContactBacking() {}
 
+    
     @PostConstruct
     public void init() {
         getService();
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        Map m = facesContext.getExternalContext().getRequestMap();
-//        Map<String, Object> pMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-//        String val = (String) pMap.get("bean");
-//        log.info("request map : " + val);
     }
+    
     
     @Override
     protected BaseRepositoryImpl<Contact, Long> getService() {
         return contactService;
     }
+
     
-/**    
-    public void getBeanFromEL() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ContactBacking bean = facesContext.getApplication().evaluateExpressionGet(facesContext, "#{contactBacking}", ContactBacking.class);
-        log.info("Bean is: " + bean);
-        Map map = facesContext.getExternalContext().getRequestMap();
-        log.info("Contains key: " + map.containsKey("bb"));
-        Map map = facesContext.getViewRoot().getViewMap();
-        map.forEach((k, v) -> log.info("key: " + k + " value: " + v));
-    }
-*/
-    // static 
     public void populateColumns() {
         Map<String, String> map = new HashMap<>();
     }
     
-    
-    public void setCurrent(String page) {
-        setPage(page);
-    }
-    
-    public void reset() {
-//        UIComponent comp = FacesContext.getCurrentInstance().getViewRoot().findComponent("ciform");
-//        comp.setRendered(false);
-        setPage(null);
-    }
-   
-    
-    /** Search */
-    public void search() {
-        switch (searchOption) {
-        case "searchByName":
-            if (!firstName.trim().isEmpty() && !lastName.trim().isEmpty())
-                values = contactService.findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
-            else
-                values = contactService.findByLastName(lastName.toUpperCase());
-            break;
-        case "searchByID":
-            values = null;
-            Contact contact = findById(Id).isPresent() ? findById(Id).get() : null;
-            if (contact != null) values = new ArrayList<>(Arrays.asList(contact));
-            break;
-        case "fetchAll":
-            values = entities;
-            break;
-        case "searchByDate":
-            values = contactService.findByDateRange(searchDateFrom, searchDateTo);
-            break;
-        }
-        
-        if (values == null || values.size() < 1 ) {
-            addMsg("No records found.");
-        }
-    }
     
     public void initialize() {
         log.info("new Contact created");
@@ -132,28 +67,20 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         c.setEditable(true);
     }
     
-    /** Update */
+    
+    @Override
     public void update(Contact c) {
-        contactService.update(c);
+        super.update(c);
         c.setEditable(false);
-        addMsg("Contact Id #: " + c.getId() + " has been updated.");
-    }
-    
-    /** Delete */
-    public String delete(Contact c) {
-        values.remove(c);
-        contactService.deleteById(c.getId());
-        addMsg("Contact Id #: " + c.getId() + " has been deleted!");
-        if (values.size() == 0) {
-            return "index?faces-redirect=true";
-        }
-        return null;
     }
     
     
-    /** Create :TODO */
-    public String create() {
-        save(contact);
+    public void delete() {
+    }
+     
+    
+    public String save() {
+        super.save(contact);
         addMsg("New contact created!");
         return "index?faces-redirect=true&includeViewParams=true";
     }
@@ -163,7 +90,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     /** Refresh */
     public void refresh(AjaxBehaviorEvent e) {
-        this.values = null;
+       values = null;
     }
     
     public static Contact findInList(final List<Contact> list, final Long Id) {
@@ -180,59 +107,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     public void setContact(Contact contact) {
         this.contact = contact;
-    }
-
-
-    public List<Contact> getValues() {
-        return values;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getSearchOption() {
-        return searchOption;
-    }
-
-    public void setSearchOption(String searchOption) {
-        this.searchOption = searchOption;
-    }
-
-    public LocalDate getSearchDateTo() {
-        return searchDateTo;
-    }
-
-    public void setSearchDateTo(LocalDate searchDateTo) {
-        this.searchDateTo = searchDateTo;
-    }
-
-    public LocalDate getSearchDateFrom() {
-        return searchDateFrom;
-    }
-
-    public void setSearchDateFrom(LocalDate searchDateFrom) {
-        this.searchDateFrom = searchDateFrom;
-    }
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
     }
 
 }

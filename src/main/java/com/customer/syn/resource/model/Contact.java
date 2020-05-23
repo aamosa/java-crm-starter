@@ -9,10 +9,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-@NamedQueries({ @NamedQuery(name = "Contact.getAll", query = "SELECT c FROM Contact c"),
-        @NamedQuery(name = "Contact.getByLastName", query = "SELECT c FROM Contact c WHERE c.lastName LIKE :lastName"),
-        @NamedQuery(name = "Contact.getByFullName", query = "SELECT c FROM Contact c WHERE c.firstName LIKE :firstName AND c.lastName LIKE :lastName"),
-        @NamedQuery(name = "Contact.getByDateRange", query = "SELECT c FROM Contact c WHERE c.createdAt between :from AND :to") })
+@NamedQueries({ 
+        @NamedQuery(name = "Contact.getByDateRange", query = "SELECT c FROM Contact c WHERE c.createdAt between :from AND :to") 
+})
 @Table
 @Entity
 public class Contact extends BaseEntity<Long> {

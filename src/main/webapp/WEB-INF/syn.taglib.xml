@@ -13,4 +13,9 @@
       <tag-name>input</tag-name>
       <source>tags/form-input.xhtml</source>
    </tag>
+   
+   <tag>
+      <tag-name>search-form</tag-name>
+      <source>tags/search-form.xhtml</source>
+   </tag>
 </facelet-taglib>

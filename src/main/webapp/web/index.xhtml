@@ -12,54 +12,9 @@
    <ui:define name="title">Contacts</ui:define>
 
    <ui:define name="header-stuff">
-      <h:form id="sform">
-         <div id="xform">
-            <syn:selector selectModel="#{contactBacking.searchOption}"
-               itemModel="#{menuBacking.searchOptions}">
-               <f:ajax event="change" execute="this" render=":sform:searchPnl" />
-            </syn:selector>
-
-            <h:panelGroup layout="block" id="searchPnl">
-               <ui:fragment
-                  rendered="#{contactBacking.searchOption eq 'searchByName' or empty contactBacking.searchOption}">
-                  <h:panelGroup layout="block" id="fnp">
-                     <syn:input label="First Name" value="#{contactBacking.firstName}" />
-                  </h:panelGroup>
-                  <h:panelGroup layout="block" id="lnp">
-                     <syn:input label="Last Name" value="#{contactBacking.lastName}"
-                        required="true" />
-                  </h:panelGroup>
-               </ui:fragment>
-
-               <ui:fragment rendered="#{contactBacking.searchOption eq'searchByDate'}">
-                  <h:panelGroup layout="block" id="sdf">
-                     <syn:input label="From" value="#{contactBacking.searchDateFrom}"
-                        required="true" requiredMessage="#{msg['req.date']}">
-                        <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
-                     </syn:input>
-                  </h:panelGroup>
-                  <h:panelGroup layout="block" id="sdt">
-                     <syn:input label="To" value="#{contactBacking.searchDateTo}"
-                        required="true" requiredMessage="#{msg['req.date']}">
-                        <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
-                     </syn:input>
-                  </h:panelGroup>
-               </ui:fragment>
-
-               <syn:input value="#{contactBacking.id}" label="ID"
-                  rendered="#{contactBacking.searchOption eq 'searchByID'}" required="true">
-                  <f:validateLongRange minimum="1" maximum="1000000000" />
-               </syn:input>
-            </h:panelGroup>
-
-            <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
-               <h:commandButton id="submitBtn" value="Search" action="#{contactBacking.search}"
-                  actionListener="#{contactBacking.reset()}">
-                  <f:ajax execute="@form" render="@form :gform :somePanel grwl" />
-               </h:commandButton>
-            </h:panelGroup>
-         </div>
-      </h:form>
+   
+      <syn:search-form bean="#{contactBacking}" />
+      
    </ui:define>
 
    <ui:define name="content-stuff">

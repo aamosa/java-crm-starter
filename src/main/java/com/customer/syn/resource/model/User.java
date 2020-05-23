@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -21,6 +22,9 @@ public class User extends BaseEntity<Integer> {
     private String email;
     private String firstName;
     private String lastName;
+    
+    @Transient
+    private boolean editable;
 
     @Column(columnDefinition = "CHAR(1) default 'A'")
     private String status= "A";
@@ -120,6 +124,14 @@ public class User extends BaseEntity<Integer> {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
 }
