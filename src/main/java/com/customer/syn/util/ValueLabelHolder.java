@@ -4,19 +4,13 @@ public class ValueLabelHolder<T> {
     
     private String label;
     private T value;
-    private boolean display;
     
     
     // ------------------------------------------------------ constructors
     
     public ValueLabelHolder(String label, T value) {
-        this(label, value, false);
-    }
-    
-    public ValueLabelHolder(String label, T value, boolean display) {
         this.label = label;
         this.value = value;
-        this.display = display;
     }
     
 
@@ -34,14 +28,6 @@ public class ValueLabelHolder<T> {
 
     public void setValue(T value) {
         this.value = value;
-    }
-    
-    public boolean isDisplay() {
-        return display;
-    }
-    
-    public void setDisplay(boolean display) {
-        this.display = display;
     }
 
 }

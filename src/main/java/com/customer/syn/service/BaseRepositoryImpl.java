@@ -10,8 +10,6 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.customer.syn.resource.model.Contact;
-
 public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> {
     
     @PersistenceContext(name = "syn")

@@ -1,7 +1,6 @@
 package com.customer.syn.view.contact;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,15 +66,10 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         c.setEditable(true);
     }
     
-    
     @Override
     public void update(Contact c) {
         super.update(c);
         c.setEditable(false);
-    }
-    
-    
-    public void delete() {
     }
      
     

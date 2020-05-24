@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
+import com.customer.syn.util.Field;
 import com.customer.syn.util.ValueLabelHolder;
 
 @Named
@@ -19,6 +20,7 @@ public class MenuBacking implements Serializable {
     private static List<ValueLabelHolder<String>> menu;
     private static List<ValueLabelHolder<String>> searchOptions;
     private static List<ValueLabelHolder<String>> createOptions;
+    private List<Field> fields;
 
     
     // -------------------------------------------------- constructors
@@ -35,6 +37,7 @@ public class MenuBacking implements Serializable {
         menu.add(new ValueLabelHolder<>("Tasks", "task.xhtml"));
         menu.add(new ValueLabelHolder<>("Settings", "setting.xhtml"));
         initSearchOptions();
+        initSearchFields();
     }
 
     private void initSearchOptions() {
@@ -44,7 +47,14 @@ public class MenuBacking implements Serializable {
         searchOptions.add(new ValueLabelHolder<>("ID", "searchByID"));
         searchOptions.add(new ValueLabelHolder<>("Display All", "fetchAll"));
     }
+    
+    
+    private void initSearchFields() {
+        fields = new ArrayList<Field>();
+        
+    }
 
+    
     
     // -------------------------------------------------- setters and getters
 
@@ -60,4 +70,11 @@ public class MenuBacking implements Serializable {
         return createOptions;
     }
 
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
+    }
 }

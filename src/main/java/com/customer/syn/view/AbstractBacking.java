@@ -25,9 +25,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     protected LocalDate searchDateTo;
     protected LocalDate searchDateFrom;
     
-//    private Class<E> clazz; 
     protected List<E> values;
-    
     protected List<E> entities;
     
     @Inject
@@ -39,17 +37,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     // ---------------------------------------------- constructors
     
-    public AbstractBacking() {
-//        Type type = this.getClass().getGenericSuperclass();  
-//
-//        if (type instanceof ParameterizedType) {
-//            ParameterizedType p = (ParameterizedType) this.getClass().getGenericSuperclass();
-//            this.clazz = (Class<E>) p.getActualTypeArguments()[0];
-//        } else {
-//            type = ((Class<?>) type).getGenericSuperclass();
-//            this.clazz = (Class<E>) ((ParameterizedType) type).getActualTypeArguments()[0];
-//        }
-    }
+    public AbstractBacking() { }
     
     
     @PostConstruct
