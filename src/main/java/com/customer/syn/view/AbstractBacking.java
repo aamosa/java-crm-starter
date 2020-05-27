@@ -12,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import com.customer.syn.resource.model.BaseEntity;
-import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.BaseRepositoryImpl;
 
 public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number> {

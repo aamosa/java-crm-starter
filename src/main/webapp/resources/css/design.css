@@ -150,10 +150,6 @@ body {
     -moz-appearance: none;
 }
 
-.selector select {
-    
-}
-
 .fields label, .afrm label, #xform label {
     display: block;
     margin: 0.4rem 0 0 0;
