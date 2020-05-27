@@ -12,9 +12,10 @@
    <ui:define name="title">Contacts</ui:define>
 
    <ui:define name="header-stuff">
-   
-      <syn:search-form bean="#{contactBacking}" />
-      
+      <syn:search-form backingBean="#{contactBacking}"
+         selectValue="#{contactBacking.searchOption}"
+         selectModel="#{menuBacking.searchOptions}" fieldModel="#{menuBacking.searchFields}"
+         fieldValues="#{menuBacking.searchFieldValues}" />
    </ui:define>
 
    <ui:define name="content-stuff">

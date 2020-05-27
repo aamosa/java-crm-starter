@@ -11,48 +11,39 @@
       <div id="xform">
          <div class="selector">
             <label>Search By</label>
-            <h:selectOneMenu id="search-options" value="#{bean.searchOption}">
-               <f:selectItems value="#{menuBacking.searchOptions}" var="s" itemValue="#{s.value}"
-                  itemLabel="#{s.label}" />
-                  <f:ajax event="change" execute="this" render=":sform:searchPnl" />
+            <h:selectOneMenu id="search-menu" value="#{selectValue}">
+               <f:selectItems value="#{selectModel}" var="s"
+                  itemValue="#{s.value}" itemLabel="#{s.label}" />
+               <f:ajax event="change" execute="this" render=":sform:searchPnl" />
             </h:selectOneMenu>
          </div>
-         
+
          <h:panelGroup layout="block" id="searchPnl">
-         
-            <ui:fragment
-               rendered="#{bean.searchOption eq 'searchByName' or empty bean.searchOption}">
-               
-               <h:panelGroup layout="block" id="fnp">
-                  <syn:input label="First Name" value="#{bean.firstName}" />
-               </h:panelGroup>
-               <h:panelGroup layout="block" id="lnp">
-                  <syn:input label="Last Name" value="#{bean.lastName}" required="true" />
-               </h:panelGroup>
-               
-            </ui:fragment>
 
-            <ui:fragment rendered="#{bean.searchOption eq'searchByDate'}">
-               <h:panelGroup layout="block" id="sdf">
-                  <syn:input label="From" value="#{bean.searchDateFrom}" required="true"
-                     requiredMessage="#{msg['req.date']}">
-                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+            <c:forEach items="#{fieldModel}" var="f">
+               <c:set var="fieldKey" value="#{fieldValues[f.fieldName]}" />
+
+               <h:panelGroup layout="block" id="#{f.fieldName}_pg">
+                  <syn:input id="#{f.fieldName}" label="#{f.label}" value="#{backingBean[fieldKey]}"
+                     rendered="#{f.rendered eq selectValue or (empty selectValue and f.defaultDisplay)}"
+                     required="#{f.type != 'text'}" requiredMessage="#{msg['req.field']}">
+                     
+                     <c:choose>
+                        <c:when test="#{f.type eq 'date'}">
+                           <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
+                        </c:when>
+                        <c:when test="#{f.type eq 'number'}">
+                           <f:validateLongRange minimum="1" maximum="1000000000" />
+                        </c:when>
+                        <c:otherwise>
+                           <ui:insert name="other" />
+                        </c:otherwise>
+                     </c:choose>
+
                   </syn:input>
                </h:panelGroup>
-               
-               <h:panelGroup layout="block" id="sdt">
-                  <syn:input label="To" value="#{bean.searchDateTo}" required="true"
-                     requiredMessage="#{msg['req.date']}">
-                     <f:convertDateTime type="localDate" pattern="MM/dd/yyyy" />
-                  </syn:input>
-               </h:panelGroup>
-            </ui:fragment>
+            </c:forEach>
 
-            <syn:input value="#{bean.id}" label="ID"
-               rendered="#{bean.searchOption eq 'searchByID'}" required="true">
-               <f:validateLongRange minimum="1" maximum="1000000000" />
-            </syn:input>
-            
          </h:panelGroup>
 
          <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">

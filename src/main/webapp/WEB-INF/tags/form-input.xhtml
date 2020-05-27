@@ -11,7 +11,7 @@
   <h:outputLabel for="#{id}" rendered="#{empty rendered ? true : rendered}" value="#{label}" />
 
   <h:inputText id="#{id}" label="#{label}" value="#{value}" rendered="#{empty rendered ? true : rendered}" 
-    required="#{empty required ? false : required}" styleClass="#{styleClass}">
+    required="#{empty required ? false : required}" styleClass="#{component.valid ? styleClass : 'invalid'}">
     <c:if test="${not empty required}">
       <f:attribute name="requiredMessage" value="#{requiredMessage}" />
     </c:if>

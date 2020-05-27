@@ -1,19 +1,24 @@
 package com.customer.syn.util;
 
-import java.util.Map;
 
 public class Field {
     
     private String label;
-    private String field;
+    private String fieldName;
     private String type;
-    private String renderStr;
+    private String rendered;
+    private boolean defaultDisplay;
     
-    public Field(String label, String field, String type, String renderStr) {
+    public Field(String label, String fieldName, String type, String rendered, boolean defaultDisplay) {
         this.label = label;
-        this.field = field;
+        this.fieldName = fieldName;
         this.type = type;
-        this.renderStr = renderStr;
+        this.rendered = rendered;
+        this.defaultDisplay = defaultDisplay;
+    }
+    
+    public Field(String label, String fieldName, String type, String rendered) {
+        this(label, fieldName, type, rendered, false);
     }
 
     public String getLabel() {
@@ -24,12 +29,12 @@ public class Field {
         this.label = label;
     }
 
-    public String getField() {
-        return field;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public void setField(String field) {
-        this.field = field;
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     public String getType() {
@@ -40,13 +45,20 @@ public class Field {
         this.type = type;
     }
 
-    public String getRenderStr() {
-        return renderStr;
+    public String getRendered() {
+        return rendered;
     }
 
-    public void setRenderStr(String renderStr) {
-        this.renderStr = renderStr;
+    public void setRendered(String rendered) {
+        this.rendered = rendered;
     }
 
-  
+    public boolean isDefaultDisplay() {
+        return defaultDisplay;
+    }
+
+    public void setDefaultDisplay(boolean defaultDisplay) {
+        this.defaultDisplay = defaultDisplay;
+    }
+
 }

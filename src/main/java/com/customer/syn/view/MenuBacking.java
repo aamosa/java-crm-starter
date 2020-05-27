@@ -2,7 +2,9 @@ package com.customer.syn.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -20,7 +22,8 @@ public class MenuBacking implements Serializable {
     private static List<ValueLabelHolder<String>> menu;
     private static List<ValueLabelHolder<String>> searchOptions;
     private static List<ValueLabelHolder<String>> createOptions;
-    private List<Field> fields;
+    private static List<Field> searchFields;
+    private static Map<String, Object> searchFieldValues;
 
     
     // -------------------------------------------------- constructors
@@ -50,8 +53,19 @@ public class MenuBacking implements Serializable {
     
     
     private void initSearchFields() {
-        fields = new ArrayList<Field>();
+        searchFields = new ArrayList<Field>();
+        searchFields.add(new Field("First Name", "firstName", "text", "searchByName", true));
+        searchFields.add(new Field("Last Name", "lastName", "text", "searchByName", true));
+        searchFields.add(new Field("From", "fromDate", "date", "searchByDate"));
+        searchFields.add(new Field("To", "toDate", "date", "searchByDate"));
+        searchFields.add(new Field("ID", "id", "number", "searchByID"));
         
+        searchFieldValues = new HashMap<>();
+        searchFieldValues.put("firstName", "firstName");
+        searchFieldValues.put("lastName", "lastName");
+        searchFieldValues.put("toDate", "searchDateTo");
+        searchFieldValues.put("fromDate", "searchDateFrom");
+        searchFieldValues.put("id", "id");
     }
 
     
@@ -70,11 +84,20 @@ public class MenuBacking implements Serializable {
         return createOptions;
     }
 
-    public List<Field> getFields() {
-        return fields;
+    public List<Field> getSearchFields() {
+        return searchFields;
     }
 
-    public void setFields(List<Field> fields) {
-        this.fields = fields;
+    public void setSearchFields(List<Field> searchFields) {
+        MenuBacking.searchFields = searchFields;
     }
+
+    public Map<String, Object> getSearchFieldValues() {
+        return searchFieldValues;
+    }
+
+    public void setSearchFieldValues(Map<String, Object> searchFieldValues) {
+        MenuBacking.searchFieldValues = searchFieldValues;
+    }
+    
 }
