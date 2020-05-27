@@ -2,7 +2,6 @@ package com.customer.syn.view.contact;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -27,7 +26,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
-    private List<Map<String, String>> columns = new ArrayList<>();
+    private List<Map<String, String>> columns = new ArrayList<>(); // TODO
     
     @Inject
     private ContactService contactService;
@@ -48,18 +47,14 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     protected BaseRepositoryImpl<Contact, Long> getService() {
         return contactService;
     }
-
-    
-    public void populateColumns() {
-        Map<String, String> map = new HashMap<>();
-    }
     
     
     public void initialize() {
         log.info("new Contact created");
         contact = new Contact();
-        setCurrent("createcontact");
+//        setCurrent("createcontact");
     }
+    
     
     /** Edit */ 
     public void edit(Contact c) {

@@ -47,10 +47,16 @@
          </h:panelGroup>
 
          <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
-            <h:commandButton id="submitBtn" value="Search" action="#{bean.search}"
-               actionListener="#{bean.reset()}">
-               <f:ajax execute="@form" render="@form :gform :somePanel grwl" />
+
+            <h:commandButton id="submitBtn" value="Search" action="#{bean.search}">
+               <ui:insert name="commandListener">
+                  <f:actionListener binding="" />
+               </ui:insert>
+               <ui:insert name="commandAjax">
+                  <f:ajax execute="@form" render="@form :gform :somePanel grwl" />
+               </ui:insert>
             </h:commandButton>
+
          </h:panelGroup>
       </div>
    </h:form>

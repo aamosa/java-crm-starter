@@ -19,7 +19,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     protected T Id;
     protected String firstName;
     protected String lastName;
-    protected String page;
+    protected String page = "list";
     protected String searchOption;
     protected LocalDate searchDateTo;
     protected LocalDate searchDateFrom;
@@ -48,13 +48,18 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     protected abstract BaseRepositoryImpl<E, T> getService();
     
     
-    public void setCurrent(String page) {
-        setPage(page);
+    public void setupPage() {
+        
     }
     
-    public void reset() {
-        setPage(null);
-    }
+    
+//    public void setCurrent(String page) {
+//        setPage(page);
+//    }
+    
+//    public void reset() {
+//        setPage(null);
+//    }
     
 
     /** Save */

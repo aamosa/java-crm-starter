@@ -19,9 +19,12 @@
    </ui:define>
 
    <ui:define name="content-stuff">
-
-      <ui:include src="createcontact.xhtml" />
-
-      
+      <h:panelGroup id="page">
+         
+         <ui:include src="#{contactBacking.page}.xhtml">
+         
+         </ui:include>
+         
+      </h:panelGroup>
    </ui:define>
 </ui:composition>
