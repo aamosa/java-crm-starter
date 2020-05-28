@@ -1,10 +1,12 @@
-<ui:composition 
+<ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:syn="http://syn.customer.com/jsf"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
+    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+    xmlns:p="http://primefaces.org/ui">
 
    <c:set var="p"
       value="${'/'+= fn:split(facesContext.externalContext.requestServletPath, '/')[0] += '/'}" />
@@ -13,6 +15,7 @@
       <div id="nav-container">
          <div id="user-bar">
             <div class="fields">
+            
                <ui:repeat value="#{menuBacking.menu}" var="m">
                   <h:link value="#{m.label}" outcome="#{m.value}"
                      styleClass="#{view.viewId eq p+=m.value ? 'selected tab' : 'tab'}" />

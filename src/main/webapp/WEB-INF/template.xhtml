@@ -22,9 +22,9 @@
   <div id="main-block">
       <c:if test="#{view.viewId != '/login.xhtml'}">
       
-         <ui:decorate template="/WEB-INF/include/header.xhtml">
+         <ui:include src="/WEB-INF/include/header.xhtml">
             <ui:param name="backingBean" value="#{bean}" />
-         </ui:decorate>
+         </ui:include>
          
       </c:if>
 
@@ -36,7 +36,7 @@
               rendered="#{not empty facesContext.messageList}" />
           </h:panelGroup>
           
-            <ui:insert name="content-stuff" />
+            <ui:insert name="content-stuff"></ui:insert>
             
         </div>
 
