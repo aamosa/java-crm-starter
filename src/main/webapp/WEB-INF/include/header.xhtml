@@ -17,11 +17,13 @@
                   <h:link value="#{m.label}" outcome="#{m.value}"
                      styleClass="#{view.viewId eq p+=m.value ? 'selected tab' : 'tab'}" />
                </ui:repeat>
+               
                <c:if test="#{not empty request.userPrincipal}">
                   <h:form>
                      <h:commandLink value="Logout" styleClass="tab" action="#{login.logout}" />
                   </h:form>
                </c:if>
+               
             </div>
             <div class="fields right">Logged in as: #{request.userPrincipal.name}</div>
          </div>
@@ -30,12 +32,16 @@
       <div id="header-block">
          <div id="header-container">
          
-            <ui:insert name="header-stuff" />
+            <ui:insert name="header-stuff"></ui:insert>
             
          </div>
          <div>
             <h:form id="currentform">
-               <h:commandButton id="nbtn" value="Create New" actionListener="#{backingBean.initialize()}" styleClass="tab" />
+               <h:commandButton id="nbt" value="Create New"
+                  actionListener="#{backingBean.initialize()}" styleClass="tab">
+                  <f:setPropertyActionListener target="#{backingBean.page}"
+                     value="createcontact" />
+               </h:commandButton>
             </h:form>
          </div>
       </div>

@@ -52,7 +52,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     public void initialize() {
         log.info("new Contact created");
         contact = new Contact();
-//        setCurrent("createcontact");
     }
     
     

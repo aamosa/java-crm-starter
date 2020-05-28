@@ -48,11 +48,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     protected abstract BaseRepositoryImpl<E, T> getService();
     
     
-    public void setupPage() {
-        
-    }
-    
-    
 //    public void setCurrent(String page) {
 //        setPage(page);
 //    }

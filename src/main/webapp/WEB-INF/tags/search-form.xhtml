@@ -50,10 +50,10 @@
 
             <h:commandButton id="submitBtn" value="Search" action="#{bean.search}">
                <ui:insert name="commandListener">
-                  <f:actionListener binding="" />
+                  <f:setPropertyActionListener target="#{bean.page}" value="list" />
                </ui:insert>
                <ui:insert name="commandAjax">
-                  <f:ajax execute="@form" render="@form :gform :somePanel grwl" />
+                  <f:ajax execute="@form" render="@form grwl :page" />
                </ui:insert>
             </h:commandButton>
 

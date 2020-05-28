@@ -40,7 +40,7 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     public void initialize() {
         log.info("New User created.");
         user = new User();
-        setCurrent("createuser");
+        // setCurrent("createuser");
     }
     
     

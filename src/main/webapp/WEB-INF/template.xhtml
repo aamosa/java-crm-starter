@@ -21,9 +21,11 @@
   <h:outputStylesheet name="/css/design.css" />
   <div id="main-block">
       <c:if test="#{view.viewId != '/login.xhtml'}">
+      
          <ui:decorate template="/WEB-INF/include/header.xhtml">
             <ui:param name="backingBean" value="#{bean}" />
          </ui:decorate>
+         
       </c:if>
 
       <div id="content-wrapper">
@@ -47,4 +49,7 @@
     </div>
   </div>
 </h:body>
+
+<ui:debug hotkey="k" />
+
 </html>

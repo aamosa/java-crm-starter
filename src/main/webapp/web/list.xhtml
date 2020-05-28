@@ -7,7 +7,6 @@
     xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
     xmlns:p="http://primefaces.org/ui">
 
-   <h:panelGroup id="somePanel" layout="block">
       <h:form id="eform">
          <p:dataTable id="someTable" value="#{contactBacking.values}" var="c"
             rendered="#{!empty contactBacking.values}" paginator="true" rows="10">
@@ -81,5 +80,5 @@
             </p:column>
          </p:dataTable>
       </h:form>
-   </h:panelGroup>
+      
 </ui:composition>
