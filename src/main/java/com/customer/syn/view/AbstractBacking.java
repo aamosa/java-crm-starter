@@ -47,15 +47,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     protected abstract BaseRepositoryImpl<E, T> getService();
     
-    
-//    public void setCurrent(String page) {
-//        setPage(page);
-//    }
-    
-//    public void reset() {
-//        setPage(null);
-//    }
-    
 
     /** Save */
     public String save(E entity) {
@@ -76,9 +67,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         getService().deleteById(e.getId());
         values.remove(e);
         addMsg("ID #: " + e.getId() + " has been Deleted.");
-//        if (values.size() == 0) {
-//            return "index?faces-redirect=true";
-//        }
     }
     
     
