@@ -103,14 +103,21 @@ body {
 }
 
 .canvas {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
     max-width: 800px;
-    margin: 0 auto;
-    padding: 1.25rem;
+    margin: 1rem auto;
+    padding: 1rem 2rem;
     border: solid 1px #e5e5e5;
 }
 
+.full-width {
+    width: 100%;
+}
+
 .swag {
-    display: flex;
+    flex-grow: 1;
     flex-direction: column;
     align-items: flex-start;
     padding: 0.75rem 0;
@@ -134,7 +141,7 @@ body {
 }
 
 .mid-fnt {
-    font-size: 0.90rem;
+    font-size: 1.15rem;
 }
 
 .pd-down {
@@ -142,7 +149,7 @@ body {
 }
 
 .og-fnt {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 .wht-bg {
@@ -154,12 +161,11 @@ body {
 }
 
 .gry {
-    color: #333;
+    color: #555;
 }
 
 .lt-gry-bg {
     background-color: #f9f9f9;
-    /* background-color: #f8f9fa; */
 }
 
 .lt-gry {
@@ -183,7 +189,7 @@ body {
 }
 
 .clst li {
-    padding: 0.75rem 0;
+    padding: 0.5rem 0;
 }
 
 .tab, #xform .searcher input[type=submit] {

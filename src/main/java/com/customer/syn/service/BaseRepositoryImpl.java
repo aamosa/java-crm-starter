@@ -4,11 +4,15 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.ManagedType;
+import javax.persistence.metamodel.Metamodel;
 
 public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> {
     
@@ -82,6 +86,18 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
                 .setParameter("from", from.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .setParameter("to", to.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .getResultList();
+    }
+    
+    
+    public ArrayList<String> fieldNamesList() {
+        ArrayList<String> list = new ArrayList<>();
+        Metamodel metamodel = em.getMetamodel();
+        ManagedType<E> type = metamodel.managedType(clazz);
+        
+        for (Attribute attr : type.getAttributes()) {
+            list.add(attr.getName());
+        }
+        return list;
     }
 
 }

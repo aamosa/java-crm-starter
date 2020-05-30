@@ -25,9 +25,6 @@ public abstract class BaseEntity<T extends Number> implements Serializable {
     @Basic(optional = false)
     protected T Id;
 
-//    @Version
-//    protected T version;
-
     @Column(nullable = false, updatable = false)
     protected Instant createdAt;
 
@@ -44,14 +41,13 @@ public abstract class BaseEntity<T extends Number> implements Serializable {
     public void onUpdate() {
         setUpdatedAt(Instant.now());
     }
-
-    public T getId() {
-        return Id;
-    }
-
-    protected void setId(T id) {
-        Id = id;
-    }
+    
+//    @Version
+//    protected T version;
+  
+    
+    
+    // ------------------------------------------------- getters and setters
 
 //    public T getVersion() {
 //        return this.version;
@@ -60,6 +56,14 @@ public abstract class BaseEntity<T extends Number> implements Serializable {
 //    protected void setVersion(T version) {
 //        this.version = version;
 //    }
+    
+    public T getId() {
+        return Id;
+    }
+
+    protected void setId(T id) {
+        Id = id;
+    }
 
     public LocalDateTime getCreatedAt() {
         return LocalDateTime.ofInstant(createdAt, ZoneOffset.UTC);

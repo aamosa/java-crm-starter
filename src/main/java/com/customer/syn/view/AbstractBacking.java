@@ -1,5 +1,6 @@
 package com.customer.syn.view;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import com.customer.syn.resource.model.BaseEntity;
+import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 
 public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number> {
@@ -26,6 +28,8 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     protected List<E> values;
     protected List<E> entities;
+    
+    protected String[] fieldNames;
     
     @Inject
     private FacesContext facesContext;
@@ -42,6 +46,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll();
+        fieldNames = getFieldNames(User.class);
     }
 
     
@@ -103,6 +108,25 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         ec.getFlash().setKeepMessages(true);
         FacesMessage message = new FacesMessage(msg);
         facesContext.addMessage(null, message);
+    }
+    
+    
+    public String[] getFieldNames(Class<?> bean) {
+        Field[] fields = bean.getFields();
+        String[] fieldNames = new String[fields.length];
+        int i = 0;
+        
+        for (Field field : fields) {
+            fieldNames[i] = field.getName();
+            i++;
+        }
+        
+        return fieldNames;
+    }
+    
+    
+    public ArrayList<String> getFields() {
+        return getService().fieldNamesList();
     }
     
     
@@ -171,6 +195,11 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
 
     public void setPage(String page) {
         this.page = page;
+    }
+
+
+    public String[] getFieldNames() {
+        return fieldNames;
     }
 
 }
