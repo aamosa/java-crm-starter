@@ -8,29 +8,78 @@
     xmlns:p="http://primefaces.org/ui">
 
    <ui:define name="content-stuff">
-      <h:panelGroup layout="block" id="detpnl">
-      
-         <div class="canvas box-shadow">
-            <h6 class="">Contact Details</h6>
-            <div class="card1">
-               <p class=" border-bottom border-gray">
-                  <strong class="d-block text-gray-dark">@username</strong>
-               </p>
-            </div>
-            <div class="card1">
-               <p class=" border-bottom border-gray">
-                  <strong class="d-block text-gray-dark">@username</strong> 
-               </p>
-            </div>
-            <div class="card1">
-               <p class=" border-bottom border-gray">
-                  <strong class="d-block text-gray-dark">@username</strong>
-               </p>
-            </div>
-            <small class="d-block text-right mt-3"> <a href="#">All updates</a>
-            </small>
+      <h:panelGroup layout="block" styleClass="canvas box-shadow lt-gry-bg">
+
+         <h6 class="border-bottom mid-fnt">Contact Details</h6>
+         <div class="swag og-fnt gry">
+            <p class="row">
+               <strong>First Name:</strong>
+               <span>Sheldon</span>
+            </p>
+            <p class="row">
+               <strong>Last Name:</strong>
+               <span>Cooper</span>
+            </p>
+            <p class="row">
+               <strong>Email:</strong>
+               <span>sheldon.cooper@gmail.com</span>
+            </p>
+            <p class="row">
+               <strong>Phone:</strong>
+               <span>918-887-4147</span>
+            </p>
+            <p class="row">
+               <strong>Street Address:</strong>
+               <span>1002 E. Google Way</span>
+            </p>
+            <p class="row">
+               <strong>City:</strong>
+               <span>San Jose</span>
+            </p>
+            <p class="row">
+               <strong>State:</strong>
+               <span>CA</span>
+            </p>
+            <p class="row">
+               <strong>Created Date:</strong>
+               <span>05/02/2019 15:16:33</span>
+            </p>
          </div>
          
+         <h6 class="border-bottom mid-fnt">Recent Activity</h6>
+         <div class="og-fnt">
+            <ul class="clst">
+               <li>
+                  <div class="row">
+                     <span class="push-right">
+                        <small class="sm-fnt lt-gry">10/11/2020 11:21pm</small>
+                     </span>
+                     <p class="strong pd-down">@Admin</p>
+                     <p class="lt-gry">Finished contract signing and updated task list with most recent comment and activity.</p>
+                  </div>
+               </li>
+               <li>
+                  <div class="row">
+                     <span class="push-right">
+                        <small class="lt-gry">07/01/2019 08:33am</small>
+                     </span>
+                     <p class="strong pd-down">@User1</p>
+                     <p class="lt-gry">New customer added and updated contact information.</p>
+                  </div>
+               </li>
+               <li>
+                  <div class="row">
+                     <span class="push-right">
+                        <small class="lt-gry">07/02/2019 10:02am</small>
+                     </span>
+                     <p class="strong pd-down">@TdkSmith</p>
+                     <p class="lt-gry">Finished contract signing and updated task list with most recent comment and activity.</p>
+                  </div>
+               </li>
+            </ul>
+         </div>
+
+
       </h:panelGroup>
    </ui:define>
 

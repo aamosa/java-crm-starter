@@ -11,7 +11,7 @@
    <c:set var="p"
       value="${'/'+= fn:split(facesContext.externalContext.requestServletPath, '/')[0] += '/'}" />
 
-   <div id="header-wrapper">
+   <div id="header-wrapper" class="box-shadow">
       <div id="nav-container">
          <div id="user-bar">
             <div class="fields">
@@ -32,7 +32,7 @@
          </div>
       </div>
       
-      <div id="header-block">
+      <div id="header-block" class="lite-bg">
          <div id="header-container">
          
             <ui:insert name="header-stuff"></ui:insert>
