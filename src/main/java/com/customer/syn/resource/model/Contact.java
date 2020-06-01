@@ -19,16 +19,29 @@ public class Contact extends BaseEntity<Long> {
     private static final long serialVersionUID = -14L;
     
     @NotNull
+    @Sort(1)
     private String firstName;
     
     @NotNull
+    @Sort(2)
     private String lastName;
     
+    @Sort(3)
     private String streetAddress;
+    
+    @Sort(4)
     private String city;
+    
+    @Sort(8)
     private String phone;
+    
+    @Sort(5)
     private String state;
+    
+    @Sort(6)
     private String zipCode;
+    
+    @Sort(7)
     private String email;
 
     @Transient
@@ -36,6 +49,7 @@ public class Contact extends BaseEntity<Long> {
 
     @Basic
     @Column(columnDefinition = "CHAR(1) default 'A'")
+    @Sort(9)
     private String statusCode = "A";
 
     
