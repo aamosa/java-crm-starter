@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +22,8 @@ import com.customer.syn.resource.model.Sort;
 import com.customer.syn.service.BaseRepositoryImpl;
 
 public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number> {
+    
+    private static final Logger log = Logger.getLogger(AbstractBacking.class.getName());
 
     protected T Id;
     protected String firstName;
@@ -33,8 +36,10 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     protected List<E> values;
     protected List<E> entities;
     
-    protected String[] fieldNames;
-    protected List<String> fNames;
+    protected List<String> attributeNames;
+    
+    protected E currentEntity;
+    
     
     @Inject
     private FacesContext facesContext;
@@ -51,7 +56,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll();
-        fNames = getAttributeNames(Contact.class);
+        attributeNames = getAttributeNames(Contact.class);
         setPage("list");
     }
 
@@ -115,6 +120,13 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     }
     
     
+    public void initDetail(E entity) {
+        log.info("initDetail invoked entity is: " + entity);
+        setPage("detail"); //:TODO
+        setCurrentEntity(entity);
+    }
+    
+    
     public List<String> getAttributeNames(Class<?> bean) {
         Class<?> node = bean;
         List<Field> fields = new ArrayList<>();
@@ -142,10 +154,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
                      .collect(Collectors.toList());
     }
     
-    
-    public ArrayList<String> getFields() {
-        return getService().fieldNamesList();
-    }
     
     
     // ---------------------------------------------- setters and getters
@@ -215,13 +223,18 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     }
 
 
-    public List<String> getfNames() {
-        return fNames;
+    public List<String> getAttributeNames() {
+        return attributeNames;
     }
 
 
-    public String[] getFieldNames() {
-        return fieldNames;
+    public E getCurrentEntity() {
+        return currentEntity;
+    }
+
+
+    public void setCurrentEntity(E currentEntity) {
+        this.currentEntity = currentEntity;
     }
 
 }

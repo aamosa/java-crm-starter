@@ -9,31 +9,15 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.ManagedType;
+import javax.persistence.metamodel.Metamodel;
+
 public final class Utils {
     
-    
+    /** prevent instantiation :p */
     private Utils() {}
-    
-/**    
-    public void getBeanFromEL() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ContactBacking bean = facesContext.getApplication().evaluateExpressionGet(facesContext, "#{contactBacking}", ContactBacking.class);
-        log.info("Bean is: " + bean);
-        Map map = facesContext.getExternalContext().getRequestMap();
-        log.info("Contains key: " + map.containsKey("bb"));
-        Map map = facesContext.getViewRoot().getViewMap();
-        map.forEach((k, v) -> log.info("key: " + k + " value: " + v));
-    }
-*/
-    
-//  FacesContext facesContext = FacesContext.getCurrentInstance();
-//  Map m = facesContext.getExternalContext().getRequestMap();
-//  Map<String, Object> pMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-//  String val = (String) pMap.get("bean");
-//  log.info("request map : " + val);
-    
-//  UIComponent comp = FacesContext.getCurrentInstance().getViewRoot().findComponent("ciform");
-//  comp.setRendered(false);
     
     public static List<String> fieldNames(Class<?> clazz) {
         List<String> fields = new ArrayList<>();
@@ -84,6 +68,39 @@ public final class Utils {
             }
         }
     }
+    
+    
+    public static ArrayList<String> fieldNamesList(Class<?> clazz, EntityManager em) {
+        ArrayList<String> list = new ArrayList<>();
+        Metamodel metamodel = em.getMetamodel();
+        ManagedType<?> type = metamodel.managedType(clazz);
+        
+        for (Attribute attr : type.getAttributes()) {
+            list.add(attr.getName());
+        }
+        return list;
+    }
+    
+    /**    
+        public void getBeanFromEL() {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ContactBacking bean = facesContext.getApplication().evaluateExpressionGet(facesContext, "#{contactBacking}", ContactBacking.class);
+            log.info("Bean is: " + bean);
+            Map map = facesContext.getExternalContext().getRequestMap();
+            log.info("Contains key: " + map.containsKey("bb"));
+            Map map = facesContext.getViewRoot().getViewMap();
+            map.forEach((k, v) -> log.info("key: " + k + " value: " + v));
+        }
+    */
+    
+//  FacesContext facesContext = FacesContext.getCurrentInstance();
+//  Map m = facesContext.getExternalContext().getRequestMap();
+//  Map<String, Object> pMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+//  String val = (String) pMap.get("bean");
+//  log.info("request map : " + val);
+    
+//  UIComponent comp = FacesContext.getCurrentInstance().getViewRoot().findComponent("ciform");
+//  comp.setRendered(false);
     
     
 }

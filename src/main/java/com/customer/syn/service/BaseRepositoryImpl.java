@@ -87,18 +87,6 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
                 .setParameter("to", to.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .getResultList();
     }
-    
-    
-    public ArrayList<String> fieldNamesList() {
-        ArrayList<String> list = new ArrayList<>();
-        Metamodel metamodel = em.getMetamodel();
-        ManagedType<E> type = metamodel.managedType(clazz);
-        
-        for (Attribute attr : type.getAttributes()) {
-            list.add(attr.getName());
-        }
-        return list;
-    }
 
 }
 

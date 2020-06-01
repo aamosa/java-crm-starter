@@ -22,7 +22,9 @@
                </h:commandLink>
             </p:column>
 
-            <p:column headerText="ID">#{c.id}</p:column>
+            <p:column headerText="ID">
+            <h:commandLink value="#{c.id}" actionListener="#{contactBacking.initDetail(c)}" />
+            </p:column>
 
             <p:column sortBy="#{c.statusCode}" headerText="Status">
                <h:outputText value="#{c.statusCode}" />

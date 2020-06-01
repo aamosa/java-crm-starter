@@ -22,7 +22,7 @@
       <h:panelGroup id="page" layout="block">
          
          <ui:include src="#{contactBacking.page}.xhtml">
-         
+            <ui:param name="entity" value="#{contactBacking.currentEntity}"/>
          </ui:include>
          
       </h:panelGroup>
