@@ -19,7 +19,7 @@ public class Contact extends BaseEntity<Long> {
     private static final long serialVersionUID = -14L;
     
     @NotNull
-    @Sort(1)
+    @Sort(9)
     private String firstName;
     
     @NotNull
@@ -49,7 +49,7 @@ public class Contact extends BaseEntity<Long> {
 
     @Basic
     @Column(columnDefinition = "CHAR(1) default 'A'")
-    @Sort(9)
+    @Sort(1)
     private String statusCode = "A";
 
     

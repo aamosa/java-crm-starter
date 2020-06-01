@@ -1,15 +1,13 @@
 package com.customer.syn.view;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -20,7 +18,6 @@ import javax.inject.Inject;
 import com.customer.syn.resource.model.BaseEntity;
 import com.customer.syn.resource.model.Contact;
 import com.customer.syn.resource.model.Sort;
-import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 
 public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number> {
@@ -54,8 +51,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll();
-        // fieldNames = getFieldNames(Contact.class); // TESTING :p
-        // fNames = fieldNames(Contact.class);
         fNames = getAttributeNames(Contact.class);
         setPage("list");
     }
@@ -108,13 +103,11 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
             break;
         }
         
-        if (values == null || values.size() < 1 ) {
+        if (values == null || values.size() < 1 )
             addMsg("No records found.");
-        }
     }
     
     
-    /** FacesMessae */
     public void addMsg(String msg) {
         ec.getFlash().setKeepMessages(true);
         FacesMessage message = new FacesMessage(msg);
@@ -122,64 +115,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     }
     
     
-    
-    public List<String> fieldNames(Class<?> clazz) {
-        // List<>
-        List<String> fields = new ArrayList<>();
-        try {
-            BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
-            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors(); 
-            
-            for (PropertyDescriptor pd : propertyDescriptors) {
-                if (pd.getName().equals("class")) continue;
-                if (pd.getReadMethod() != null) {
-                    Field field = getField(clazz, pd.getName());
-                    fields.add(field.getName());
-                }
-            }
-                // Field field = clazz.getDeclaredField(pd.getReadMethod().get);
-//                if (field.getAnnotation(Sort.class) != null) {
-//                    fields.add(pd.getReadMethod().getName());
-//                }
-            
-        } catch (IntrospectionException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        return fields;
-    }
-    
-    
-    public Field getField(Class<?> clazz, String name) throws NoSuchFieldException {
-        try {
-            return clazz.getDeclaredField(name);
-        } catch (NoSuchFieldException e) {
-            Class<?> superClass = clazz.getSuperclass();
-            if (superClass == null) {
-                throw e;
-            } else {
-                return superClass.getDeclaredField(name);
-            }
-        }
-    }
-    
-    
-    public List<String> sortFieldNames(final List<String> fields, Class<?> clazz) {
-        Class<?> start = clazz;
-        List<String> list = new ArrayList<>();
-        while(start.getSuperclass() != Object.class || start != null) {
-            start = start.getSuperclass();
-        }
-        return null;
-    }
-    
-    
-    
     public List<String> getAttributeNames(Class<?> bean) {
-        List<String> fieldNames = new ArrayList<>();
         Class<?> node = bean;
         List<Field> fields = new ArrayList<>();
         while(node != Object.class || node.getSuperclass() != null) {
@@ -187,35 +123,29 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
             node = node.getSuperclass();
         }
         
-        for (Field f : fields) {
-            if (f.getAnnotation(Sort.class) != null) {
-                fieldNames.add(f.getName());
-            }
-        }
-        return fieldNames;
-    }
-    
+        Collections.sort(fields, new Comparator<Field>() {
+            @Override
+            public int compare(Field o1, Field o2) {
+                Sort s1 = o1.getAnnotation(Sort.class);
+                Sort s2 = o2.getAnnotation(Sort.class);
 
-//    public String[] getFieldNames(Class<?> bean) {
-//        Field[] fields = bean.getDeclaredFields();
-//        String[] fieldNames = new String[fields.length];
-//        int i = 0;
-//        
-//        for (Field field : fields) {
-//            if (!Modifier.isFinal(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
-//                fieldNames[i] = field.getName();
-//                i++;
-//            }
-//        }
-//        return fieldNames;
-//    }
-    
+                if (s1 != null && s2 != null)
+                    return Integer.compare(s1.value(), s2.value());
+                else
+                    return 0;
+            }
+        });
+        
+        return fields.stream()
+                     .filter(f -> f.getAnnotation(Sort.class) != null)
+                     .map(f -> f.getName())
+                     .collect(Collectors.toList());
+    }
     
     
     public ArrayList<String> getFields() {
         return getService().fieldNamesList();
     }
-    
     
     
     // ---------------------------------------------- setters and getters
