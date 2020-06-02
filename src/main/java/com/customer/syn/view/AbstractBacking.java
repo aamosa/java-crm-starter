@@ -122,7 +122,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     public void initDetail(E entity) {
         log.info("initDetail invoked entity is: " + entity);
-        setPage("detail"); //:TODO
         setCurrentEntity(entity);
     }
     

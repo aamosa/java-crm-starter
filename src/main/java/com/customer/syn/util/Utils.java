@@ -15,7 +15,6 @@ import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
 import com.customer.syn.resource.model.BaseEntity;
-import com.customer.syn.resource.model.Contact;
 
 public final class Utils {
     

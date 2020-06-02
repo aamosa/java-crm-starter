@@ -82,6 +82,11 @@ body {
     height: 100%;
 }
 
+.mid-width {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .conwrap {
     padding: 0.75em;
 }
@@ -219,7 +224,6 @@ body {
 }
 
 #xform div {
-    padding: 0 0.05rem;
     position: relative;
     display: inline-block;
 }

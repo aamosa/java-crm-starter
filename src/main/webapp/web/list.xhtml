@@ -11,19 +11,23 @@
       
          <p:dataTable id="someTable" value="#{contactBacking.values}" var="c"
             rendered="#{!empty contactBacking.values}" paginator="true" rows="10">
+            
             <p:column>
-               <h:commandLink value="Edit" action="#{contactBacking.edit(c)}"
-                  styleClass="tab skinny" />
-               <h:commandLink value="Save" action="#{contactBacking.update(c)}"
-                  rendered="#{c.editable}" styleClass="tab skinny" />
-               <h:commandLink value="Delete" action="#{contactBacking.delete(c)}"
-                  rendered="#{c.editable}" styleClass="tab skinny">
-                  <f:ajax execute="@form" render="@namingcontainer :grwl" />
-               </h:commandLink>
-            </p:column>
+               <f:ajax execute="@form" render="someTable :eform :grwl">
+                  <h:commandLink value="Edit" action="#{contactBacking.edit(c)}"
+                     styleClass="tab skinny" />
+                  <h:commandLink value="Save" action="#{contactBacking.update(c)}"
+                     rendered="#{c.editable}" styleClass="tab skinny" />
+                  <h:commandLink value="Delete" action="#{contactBacking.delete(c)}"
+                     rendered="#{c.editable}" styleClass="tab skinny">
+                  </h:commandLink>
+               </f:ajax>
+         </p:column>
 
             <p:column headerText="ID">
-            <h:commandLink value="#{c.id}" actionListener="#{contactBacking.initDetail(c)}" />
+               <h:commandLink value="#{c.id}" actionListener="#{contactBacking.initDetail(c)}">
+                  <f:setPropertyActionListener target="#{contactBacking.page}" value="detail" />
+               </h:commandLink>
             </p:column>
 
             <p:column sortBy="#{c.statusCode}" headerText="Status">
@@ -82,6 +86,7 @@
                </h:outputText>
             </p:column>
          </p:dataTable>
+         
       </h:form>
       
 </ui:composition>
