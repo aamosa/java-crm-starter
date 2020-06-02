@@ -3,15 +3,10 @@ package com.customer.syn.resource.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-@NamedQueries({ 
-        @NamedQuery(name = "Contact.getByDateRange", query = "SELECT c FROM Contact c WHERE c.createdAt between :from AND :to") 
-})
 @Table
 @Entity
 public class Contact extends BaseEntity<Long> {
@@ -19,29 +14,29 @@ public class Contact extends BaseEntity<Long> {
     private static final long serialVersionUID = -14L;
     
     @NotNull
-    @Sort(1)
+    @ViewMeta(order = 1)
     private String firstName;
     
     @NotNull
-    @Sort(2)
+    @ViewMeta(order = 2)
     private String lastName;
     
-    @Sort(4)
+    @ViewMeta(order = 4)
     private String streetAddress;
     
-    @Sort(5)
+    @ViewMeta(order = 5)
     private String city;
     
-    @Sort(8)
+    @ViewMeta(order = 8)
     private String phone;
     
-    @Sort(6)
+    @ViewMeta(order = 6)
     private String state;
     
-    @Sort(7)
+    @ViewMeta(order = 7)
     private String zipCode;
     
-    @Sort(3)
+    @ViewMeta(order = 3)
     private String email;
 
     @Transient
@@ -49,9 +44,11 @@ public class Contact extends BaseEntity<Long> {
 
     @Basic
     @Column(columnDefinition = "CHAR(1) default 'A'")
-    @Sort(9)
+    @ViewMeta(order = 9,
+              formField = false)
     private String statusCode = "A";
 
+    
     
     // ----------------------------------------------------- setters and getters
 

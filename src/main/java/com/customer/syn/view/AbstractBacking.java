@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import com.customer.syn.resource.model.BaseEntity;
-import com.customer.syn.resource.model.Sort;
+import com.customer.syn.resource.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
 
 public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number> {
@@ -36,6 +36,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     protected List<E> values;
     protected List<E> entities;
     protected List<String> attributeNames;
+    protected List<String> formFields;
     protected List<ColumnModel> tableColumns; 
     
     protected E currentEntity;
@@ -58,9 +59,11 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     public void setup() {
         log.info("AbstractBacking PostConstruct invoked.");
         entities = getService().fetchAll();
-        attributeNames = getAttributeNames(getChildClass());
+        attributeNames = getViewMetaforTable(getChildClass());
+        formFields = getViewMetaforForm(getChildClass());
         createTableColumns(getChildClass());
         setPage("list");
+        log.info("formFields : " + formFields.toString());
     }
     
 
@@ -130,13 +133,36 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
  
     public void createTableColumns(final Class<?> bean) {
         tableColumns = new ArrayList<>();
-        for (String s : getAttributeNames(bean)) {
+        for (String s : getViewMetaforTable(bean)) {
             tableColumns.add(new ColumnModel(s.toUpperCase(), s));
         }
     }
     
     
-    public static List<String> getAttributeNames(final Class<?> bean) {
+    public static List<String> getViewMetaforTable(final Class<?> bean) {
+        List<Field> fields = getSortedFields(bean);        
+        
+        return fields.stream().filter(f -> f.getAnnotation(ViewMeta.class) != null)
+                     .map(f -> f.getName())
+                     .collect(Collectors.toList());
+    }
+    
+    
+    public static List<String> getViewMetaforForm(final Class<?> bean) {
+        List<Field> fields = getSortedFields(bean);
+        List<String> formFields = new ArrayList<>();
+        
+        for (Field f : fields) {
+            ViewMeta meta = f.getAnnotation(ViewMeta.class);
+            if (meta != null && meta.formField()) {
+                formFields.add(f.getName());
+            }
+        }
+        return formFields;
+    }
+    
+    
+    public static List<Field> getSortedFields(final Class<?> bean) {
         Class<?> node = bean;
         List<Field> fields = new ArrayList<>();
         while(node != Object.class || node.getSuperclass() != null) {
@@ -147,19 +173,16 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         Collections.sort(fields, new Comparator<Field>() {
             @Override
             public int compare(Field o1, Field o2) {
-                Sort s1 = o1.getAnnotation(Sort.class);
-                Sort s2 = o2.getAnnotation(Sort.class);
+                ViewMeta s1 = o1.getAnnotation(ViewMeta.class);
+                ViewMeta s2 = o2.getAnnotation(ViewMeta.class);
                 if (s1 != null && s2 != null)
-                    return Integer.compare(s1.value(), s2.value());
+                    return Integer.compare(s1.order(), s2.order());
                 else
                     return 0;
             }
         });
         
-        return fields.stream()
-                     .filter(f -> f.getAnnotation(Sort.class) != null)
-                     .map(f -> f.getName())
-                     .collect(Collectors.toList());
+        return fields;
     }
     
     
@@ -232,6 +255,10 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
 
     public List<ColumnModel> getTableColumns() {
         return tableColumns;
+    }
+
+    public List<String> getFormFields() {
+        return formFields;
     }
 
     public List<String> getAttributeNames() {

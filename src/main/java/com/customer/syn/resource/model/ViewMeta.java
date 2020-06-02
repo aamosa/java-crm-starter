@@ -7,6 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Sort {
-    public int value() default 100;
+public @interface ViewMeta {
+    
+    public int order() default 99;
+    
+    public boolean formField() default true;
 }

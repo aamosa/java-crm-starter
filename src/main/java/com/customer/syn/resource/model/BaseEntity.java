@@ -21,14 +21,15 @@ public abstract class BaseEntity<T extends Number> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
+    @Basic()
     protected T Id;
     
-    @Sort
-    @Column(nullable = false, updatable = false)
+    @ViewMeta(formField = false)
+    @Column(nullable = false,
+            updatable = false)
     protected Instant createdAt;
 
-    @Sort
+    @ViewMeta(formField = false)
     @Column(nullable = false)
     protected Instant updatedAt;
 
