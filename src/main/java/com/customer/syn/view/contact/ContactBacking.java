@@ -74,17 +74,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     }
     
     
-    // ---------------------------------------------- helper methods
-    
-    /** Refresh */
-    public void refresh(AjaxBehaviorEvent e) {
-       values = null;
-    }
-    
-    public static Contact findInList(final List<Contact> list, final Long Id) {
-        return list.stream().filter(i -> i.getId().equals(Id)).findFirst().orElse(null);
-    }
-    
 
     // ---------------------------------------------- setters and getters
 
