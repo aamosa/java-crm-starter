@@ -23,68 +23,11 @@
                   </h:commandLink>
                </f:ajax>
          </p:column>
-
-            <p:column headerText="ID">
-               <h:commandLink value="#{c.id}" actionListener="#{contactBacking.initDetail(c)}">
-                  <f:setPropertyActionListener target="#{contactBacking.page}" value="detail" />
-               </h:commandLink>
-            </p:column>
-
-            <p:column sortBy="#{c.statusCode}" headerText="Status">
-               <h:outputText value="#{c.statusCode}" />
-            </p:column>
-
-            <p:column headerText="First Name">
-               <h:outputText value="#{c.firstName}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.firstName}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="Last Name">
-               <h:outputText value="#{c.lastName}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.lastName}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="Street Address">
-               <h:outputText value="#{c.streetAddress}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.streetAddress}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="City">
-               <h:outputText value="#{c.city}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.city}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="State">
-               <h:outputText value="#{c.state}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.state}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="Zip">
-               <h:outputText value="#{c.zipCode}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.zipCode}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="Email">
-               <h:outputText value="#{c.email}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.email}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="Phone">
-               <h:outputText value="#{c.phone}" rendered="#{!c.editable}" />
-               <h:inputText value="#{c.phone}" rendered="#{c.editable}" />
-            </p:column>
-
-            <p:column headerText="Created On">
-               <h:outputText value="#{c.createdAt}">
-                  <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-               </h:outputText>
-            </p:column>
-
-            <p:column headerText="Last Updated">
-               <h:outputText value="#{c.updatedAt}">
-                  <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-               </h:outputText>
-            </p:column>
+         
+         <p:columns value="#{contactBacking.columns}" var="column" headerText="#{column.header}">
+            <h:outputText value="#{c[column.property]}" />
+         </p:columns>
+            
          </p:dataTable>
          
       </h:form>

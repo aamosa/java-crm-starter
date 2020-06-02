@@ -3,11 +3,9 @@ package com.customer.syn.view.contact;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,6 +14,7 @@ import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
+import com.customer.syn.view.ColumnModel;
 
 @Named
 @ViewScoped
@@ -26,7 +25,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
-    private List<Map<String, String>> columns = new ArrayList<>(); // TODO
+    private List<ColumnModel> columns; 
     
     @Inject
     private ContactService contactService;
@@ -40,6 +39,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     @PostConstruct
     public void init() {
         getService();
+        createTableColumns();
     }
     
     
@@ -54,11 +54,11 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         contact = new Contact();
     }
     
-    
-    /** Edit */ 
+     
     public void edit(Contact c) {
         c.setEditable(true);
     }
+    
     
     @Override
     public void update(Contact c) {
@@ -74,6 +74,14 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     }
     
     
+    public void createTableColumns() {
+        columns = new ArrayList<>();
+        for (String s : getAttributeNames()) {
+            columns.add(new ColumnModel(s.toUpperCase(), s));
+        }
+    }
+    
+    
 
     // ---------------------------------------------- setters and getters
 
@@ -84,6 +92,10 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public List<ColumnModel> getColumns() {
+        return columns;
     }
 
 }

@@ -259,8 +259,8 @@ body {
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
-    right: 10px;
-    top: 25px;
+    right: 8px;
+    top: 29px;
     padding: 0 0 2px;
     border-bottom: 1px solid #888;
     position: absolute;

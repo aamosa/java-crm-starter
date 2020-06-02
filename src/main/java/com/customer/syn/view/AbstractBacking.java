@@ -56,7 +56,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll();
-        attributeNames = getAttributeNames(Contact.class);
+        attributeNames = getAttributeNames(Contact.class); //:TODO
         setPage("list");
     }
 
@@ -221,16 +221,13 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         this.page = page;
     }
 
-
     public List<String> getAttributeNames() {
         return attributeNames;
     }
 
-
     public E getCurrentEntity() {
         return currentEntity;
     }
-
 
     public void setCurrentEntity(E currentEntity) {
         this.currentEntity = currentEntity;
