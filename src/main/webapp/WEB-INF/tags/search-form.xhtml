@@ -20,7 +20,6 @@
          </div>
 
          <h:panelGroup layout="block" id="searchPnl">
-
             <c:forEach items="#{fieldModel}" var="f">
                <c:set var="fieldKey" value="#{fieldValues[f.fieldName]}" />
 
@@ -44,14 +43,13 @@
                   </syn:input>
                </h:panelGroup>
             </c:forEach>
-
          </h:panelGroup>
 
          <h:panelGroup layout="block" styleClass="searcher" id="srchBtnPnl">
 
-            <h:commandButton id="submitBtn" value="Search" action="#{bean.search}">
+            <h:commandButton id="submitBtn" value="Search" action="#{backingBean.search}">
                <ui:insert name="commandListener">
-                  <f:setPropertyActionListener target="#{bean.page}" value="list" />
+                  <f:setPropertyActionListener target="#{backingBean.page}" value="list" />
                </ui:insert>
                <ui:insert name="commandAjax">
                   <f:ajax execute="@form" render="@form grwl :page" />
@@ -61,5 +59,4 @@
          </h:panelGroup>
       </div>
    </h:form>
-
 </ui:composition>

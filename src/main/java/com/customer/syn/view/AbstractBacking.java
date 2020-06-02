@@ -1,6 +1,7 @@
 package com.customer.syn.view;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import com.customer.syn.resource.model.BaseEntity;
-import com.customer.syn.resource.model.Contact;
 import com.customer.syn.resource.model.Sort;
 import com.customer.syn.service.BaseRepositoryImpl;
 
@@ -35,11 +35,10 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     protected List<E> values;
     protected List<E> entities;
-    
     protected List<String> attributeNames;
+    protected List<ColumnModel> tableColumns; 
     
     protected E currentEntity;
-    
     
     @Inject
     private FacesContext facesContext;
@@ -52,33 +51,31 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     public AbstractBacking() { }
     
+    protected abstract BaseRepositoryImpl<E, T> getService();
+
     
     @PostConstruct
     public void setup() {
+        log.info("AbstractBacking PostConstruct invoked.");
         entities = getService().fetchAll();
-        attributeNames = getAttributeNames(Contact.class); //:TODO
+        attributeNames = getAttributeNames(getChildClass());
+        createTableColumns(getChildClass());
         setPage("list");
     }
-
-    
-    protected abstract BaseRepositoryImpl<E, T> getService();
     
 
-    /** Save */
     public String save(E entity) {
         getService().save(entity);
         return null;
     }
     
     
-    /** Update */
     public void update(E e) {
         getService().update(e);
         addMsg("ID #: " + e.getId() + " has been Updated.");
     }
     
     
-    /** Delete */
     public void delete(E e) {
         getService().deleteById(e.getId());
         values.remove(e);
@@ -86,7 +83,25 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     }
     
     
-    /** Search */
+    public void addMsg(String msg) {
+        ec.getFlash().setKeepMessages(true);
+        FacesMessage message = new FacesMessage(msg);
+        facesContext.addMessage(null, message);
+    }
+    
+    
+    public void initDetail(E entity) {
+        log.info("initDetail invoked entity is: " + entity);
+        setCurrentEntity(entity);
+    }
+    
+    
+    public Class<?> getChildClass() {
+        ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
+        return (Class<?>) pt.getActualTypeArguments()[0];
+    }
+    
+    
     public void search() {
         switch (searchOption) {
         case "searchByName":
@@ -112,21 +127,16 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
             addMsg("No records found.");
     }
     
-    
-    public void addMsg(String msg) {
-        ec.getFlash().setKeepMessages(true);
-        FacesMessage message = new FacesMessage(msg);
-        facesContext.addMessage(null, message);
+ 
+    public void createTableColumns(final Class<?> bean) {
+        tableColumns = new ArrayList<>();
+        for (String s : getAttributeNames(bean)) {
+            tableColumns.add(new ColumnModel(s.toUpperCase(), s));
+        }
     }
     
     
-    public void initDetail(E entity) {
-        log.info("initDetail invoked entity is: " + entity);
-        setCurrentEntity(entity);
-    }
-    
-    
-    public List<String> getAttributeNames(Class<?> bean) {
+    public static List<String> getAttributeNames(final Class<?> bean) {
         Class<?> node = bean;
         List<Field> fields = new ArrayList<>();
         while(node != Object.class || node.getSuperclass() != null) {
@@ -139,7 +149,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
             public int compare(Field o1, Field o2) {
                 Sort s1 = o1.getAnnotation(Sort.class);
                 Sort s2 = o2.getAnnotation(Sort.class);
-
                 if (s1 != null && s2 != null)
                     return Integer.compare(s1.value(), s2.value());
                 else
@@ -219,6 +228,10 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
 
     public void setPage(String page) {
         this.page = page;
+    }
+
+    public List<ColumnModel> getTableColumns() {
+        return tableColumns;
     }
 
     public List<String> getAttributeNames() {

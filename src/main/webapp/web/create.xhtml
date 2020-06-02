@@ -1,0 +1,24 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:syn="http://syn.customer.com/jsf"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+   <h:panelGroup layout="block" id="gform" styleClass="afrm">
+   
+      <h:form id="cform">
+      
+        <ui:repeat value="#{backingBean.attributeNames}" var="attr" varStatus="loop">
+            <syn:input value="#{backingBean[entityName][attr]}" label="#{attr}" required="true" />
+        </ui:repeat>
+         
+         <h:panelGroup id="btnPanel" layout="block">
+            <h:commandButton id="svBtn" value="Create" action="#{backingBean.save}"
+               styleClass="tab" />
+            <h:button id="rstBtn" value="Reset" styleClass="tab" />
+         </h:panelGroup>
+      </h:form>
+      
+   </h:panelGroup>
+</ui:composition>

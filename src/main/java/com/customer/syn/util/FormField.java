@@ -1,15 +1,16 @@
 package com.customer.syn.util;
 
 
-public class Field {
+public class FormField {
     
     private String label;
     private String fieldName;
     private String type;
     private String rendered;
+    private boolean required;
     private boolean defaultDisplay;
     
-    public Field(String label, String fieldName, String type, String rendered, boolean defaultDisplay) {
+    public FormField(String label, String fieldName, String type, String rendered, boolean defaultDisplay) {
         this.label = label;
         this.fieldName = fieldName;
         this.type = type;
@@ -17,7 +18,7 @@ public class Field {
         this.defaultDisplay = defaultDisplay;
     }
     
-    public Field(String label, String fieldName, String type, String rendered) {
+    public FormField(String label, String fieldName, String type, String rendered) {
         this(label, fieldName, type, rendered, false);
     }
 
@@ -51,6 +52,14 @@ public class Field {
 
     public void setRendered(String rendered) {
         this.rendered = rendered;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     public boolean isDefaultDisplay() {

@@ -25,7 +25,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
-    private List<ColumnModel> columns; 
     
     @Inject
     private ContactService contactService;
@@ -38,8 +37,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     @PostConstruct
     public void init() {
-        getService();
-        createTableColumns();
+        log.info("type arg is : " + getChildClass().getSimpleName());
     }
     
     
@@ -74,14 +72,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     }
     
     
-    public void createTableColumns() {
-        columns = new ArrayList<>();
-        for (String s : getAttributeNames()) {
-            columns.add(new ColumnModel(s.toUpperCase(), s));
-        }
-    }
-    
-    
 
     // ---------------------------------------------- setters and getters
 
@@ -92,10 +82,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     public void setContact(Contact contact) {
         this.contact = contact;
-    }
-
-    public List<ColumnModel> getColumns() {
-        return columns;
     }
 
 }

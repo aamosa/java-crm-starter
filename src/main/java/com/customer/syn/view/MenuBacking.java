@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
-import com.customer.syn.util.Field;
+import com.customer.syn.util.FormField;
 import com.customer.syn.util.ValueLabelHolder;
 
 @Named
@@ -21,8 +21,8 @@ public class MenuBacking implements Serializable {
 
     private static List<ValueLabelHolder<String>> menu;
     private static List<ValueLabelHolder<String>> searchOptions;
-    private static List<ValueLabelHolder<String>> createOptions;
-    private static List<Field> searchFields;
+    
+    private static List<FormField> searchFields;
     private static Map<String, Object> searchFieldValues;
 
     
@@ -40,9 +40,10 @@ public class MenuBacking implements Serializable {
         menu.add(new ValueLabelHolder<>("Tasks", "task.xhtml"));
         menu.add(new ValueLabelHolder<>("Settings", "setting.xhtml"));
         initSearchOptions();
-        initSearchFields();
+        initSearchFieldsAndValues();
     }
 
+    
     private void initSearchOptions() {
         searchOptions = new ArrayList<>();
         searchOptions.add(new ValueLabelHolder<>("Name", "searchByName"));
@@ -52,13 +53,13 @@ public class MenuBacking implements Serializable {
     }
     
     
-    private void initSearchFields() {
-        searchFields = new ArrayList<Field>();
-        searchFields.add(new Field("First Name", "firstName", "text", "searchByName", true));
-        searchFields.add(new Field("Last Name", "lastName", "text", "searchByName", true));
-        searchFields.add(new Field("From", "fromDate", "date", "searchByDate"));
-        searchFields.add(new Field("To", "toDate", "date", "searchByDate"));
-        searchFields.add(new Field("ID", "id", "number", "searchByID"));
+    private void initSearchFieldsAndValues() {
+        searchFields = new ArrayList<FormField>();
+        searchFields.add(new FormField("First Name", "firstName", "text", "searchByName", true));
+        searchFields.add(new FormField("Last Name", "lastName", "text", "searchByName", true));
+        searchFields.add(new FormField("From", "fromDate", "date", "searchByDate"));
+        searchFields.add(new FormField("To", "toDate", "date", "searchByDate"));
+        searchFields.add(new FormField("ID", "id", "number", "searchByID"));
         
         searchFieldValues = new HashMap<>();
         searchFieldValues.put("firstName", "firstName");
@@ -67,8 +68,8 @@ public class MenuBacking implements Serializable {
         searchFieldValues.put("fromDate", "searchDateFrom");
         searchFieldValues.put("id", "id");
     }
-
     
+
     
     // -------------------------------------------------- setters and getters
 
@@ -80,15 +81,11 @@ public class MenuBacking implements Serializable {
         return searchOptions;
     }
 
-    public List<ValueLabelHolder<String>> getCreateOptions() {
-        return createOptions;
-    }
-
-    public List<Field> getSearchFields() {
+    public List<FormField> getSearchFields() {
         return searchFields;
     }
 
-    public void setSearchFields(List<Field> searchFields) {
+    public void setSearchFields(List<FormField> searchFields) {
         MenuBacking.searchFields = searchFields;
     }
 

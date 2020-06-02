@@ -9,22 +9,22 @@
 
       <h:form id="eform">
       
-         <p:dataTable id="someTable" value="#{contactBacking.values}" var="c"
-            rendered="#{!empty contactBacking.values}" paginator="true" rows="10">
+         <p:dataTable id="someTable" value="#{backingBean.values}" var="c"
+            rendered="#{!empty backingBean.values}" paginator="true" rows="10">
             
             <p:column>
                <f:ajax execute="@form" render="someTable :eform :grwl">
-                  <h:commandLink value="Edit" action="#{contactBacking.edit(c)}"
+                  <h:commandLink value="Edit" action="#{backingBean.edit(c)}"
                      styleClass="tab skinny" />
-                  <h:commandLink value="Save" action="#{contactBacking.update(c)}"
+                  <h:commandLink value="Save" action="#{backingBean.update(c)}"
                      rendered="#{c.editable}" styleClass="tab skinny" />
-                  <h:commandLink value="Delete" action="#{contactBacking.delete(c)}"
+                  <h:commandLink value="Delete" action="#{backingBean.delete(c)}"
                      rendered="#{c.editable}" styleClass="tab skinny">
                   </h:commandLink>
                </f:ajax>
          </p:column>
          
-         <p:columns value="#{contactBacking.columns}" var="column" headerText="#{column.header}">
+         <p:columns value="#{backingBean.tableColumns}" var="column" headerText="#{column.header}">
             <h:outputText value="#{c[column.property]}" />
          </p:columns>
             

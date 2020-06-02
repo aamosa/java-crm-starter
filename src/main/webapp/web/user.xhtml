@@ -7,78 +7,24 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-   <ui:param name="bean" value="#{userBacking}" />
+   <ui:param name="backingBean" value="#{userBacking}" />
 
    <ui:define name="title">Users</ui:define>
 
    <ui:define name="header-stuff">
-      <syn:search-form backingBean="#{userBacking}"
-         selectValue="#{userBacking.searchOption}"
+      <syn:search-form backingBean="#{userBacking}" selectValue="#{userBacking.searchOption}"
          selectModel="#{menuBacking.searchOptions}" fieldModel="#{menuBacking.searchFields}"
          fieldValues="#{menuBacking.searchFieldValues}" />
    </ui:define>
 
    <ui:define name="content-stuff">
-      
-      <ui:include src="createuser.xhtml" />
+      <h:panelGroup id="page" layout="block">
 
-      <h:panelGroup id="somePanel" layout="block">
-         <h:form id="eform">
-            <p:dataTable id="someTable" value="#{userBacking.values}" var="c"
-               rendered="#{!empty userBacking.values}" paginator="true" rows="10">
-               <p:column>
-                  <h:commandLink value="Edit" action="#{userBacking.edit(c)}"
-                     styleClass="tab skinny" />
-                  <h:commandLink value="Save" action="#{userBacking.update(c)}"
-                     rendered="#{c.editable}" styleClass="tab skinny" />
-                  <h:commandLink value="Delete" action="#{userBacking.delete(c)}"
-                     rendered="#{c.editable}" styleClass="tab skinny">
-                     <f:ajax render="@namingcontainer :grwl" />
-                  </h:commandLink>
-               </p:column>
+         <ui:include src="#{userBacking.page}.xhtml">
+            <ui:param name="entity" value="#{userBacking.currentEntity}" />
+         </ui:include>
 
-               <p:column headerText="ID">#{c.id}</p:column>
-
-               <p:column headerText="First Name">
-                  <h:outputText value="#{c.firstName}" rendered="#{!c.editable}" />
-                  <h:inputText value="#{c.firstName}" rendered="#{c.editable}" />
-               </p:column>
-
-               <p:column headerText="Last Name">
-                  <h:outputText value="#{c.lastName}" rendered="#{!c.editable}" />
-                  <h:inputText value="#{c.lastName}" rendered="#{c.editable}" />
-               </p:column>
-               
-               <p:column headerText="Username">
-                  <h:outputText value="#{c.userName}" rendered="#{!c.editable}" />
-                  <h:inputText value="#{c.userName}" rendered="#{c.editable}" />
-               </p:column>
-               
-               
-               <p:column headerText="Email">
-                  <h:outputText value="#{c.email}" rendered="#{!c.editable}" />
-                  <h:inputText value="#{c.email}" rendered="#{c.editable}" />
-               </p:column>
-               
-               <p:column headerText="Password">
-                  <h:outputText value="#{c.password}" rendered="#{!c.editable}" />
-                  <h:inputText value="#{c.password}" rendered="#{c.editable}" />
-               </p:column>
-
-               <p:column headerText="Created On">
-                  <h:outputText value="#{c.createdAt}">
-                     <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-                  </h:outputText>
-               </p:column>
-
-               <p:column headerText="Last Updated">
-                  <h:outputText value="#{c.updatedAt}">
-                     <f:convertDateTime type="localDateTime" pattern="MM/dd/yyyy HH:mm:ss" />
-                  </h:outputText>
-               </p:column>
-            </p:dataTable>
-         </h:form>
       </h:panelGroup>
-
    </ui:define>
+
 </ui:composition>

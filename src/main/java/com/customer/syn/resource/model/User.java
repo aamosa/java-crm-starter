@@ -19,6 +19,7 @@ public class User extends BaseEntity<Integer> {
 
     private static final long serialVersionUID = 92L;
 
+    
     private String email;
     private String firstName;
     private String lastName;
@@ -54,11 +55,13 @@ public class User extends BaseEntity<Integer> {
     public User() {}
     
     
+    
     public void addRole(Role role) {
         roles.add(role);
         role.getUsers().add(this);
     }
 
+    
     
     // ----------------------------------------------------- setters and getters
 

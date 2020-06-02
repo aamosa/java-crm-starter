@@ -6,9 +6,9 @@
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:syn="http://syn.customer.com/jsf"
     xmlns:p="http://primefaces.org/ui">
-   
-   <ui:param name="bean" value="#{contactBacking}" />
-    
+
+   <ui:param name="backingBean" value="#{contactBacking}" />
+
    <ui:define name="title">Contacts</ui:define>
 
    <ui:define name="header-stuff">
@@ -20,12 +20,13 @@
 
    <ui:define name="content-stuff">
       <h:panelGroup id="page" layout="block">
-         
+
          <ui:include src="#{contactBacking.page}.xhtml">
-            <ui:param name="entity" value="#{contactBacking.currentEntity}"/>
+            <ui:param name="entity" value="#{contactBacking.currentEntity}" />
+            <ui:param name="entityName" value="contact" />
          </ui:include>
-         
+
       </h:panelGroup>
    </ui:define>
-      
+
 </ui:composition>

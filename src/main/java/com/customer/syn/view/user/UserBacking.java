@@ -28,7 +28,9 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
 
     // ---------------------------------------------- constructors
 
-    public UserBacking() { }
+    public UserBacking() { 
+        log.info("type arg is : " + getChildClass().getSimpleName());
+    }
 
     
     @Override
