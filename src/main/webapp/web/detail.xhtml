@@ -12,23 +12,23 @@
       <h6 class="border-bottom mid-fnt full-width">Contact Details</h6>
 
       <div class="swag">
-         <ui:repeat value="#{contactBacking.attributeNames}" var="field" varStatus="loop">
+         <ui:repeat value="#{backingBean.attributeNames}" var="field" varStatus="loop">
             <ui:fragment rendered="#{loop.index le 7}">
                <p class="row">
-                  <strong>#{field}:</strong>
-                  <span>#{entity[field]}</span>
+                  <strong>#{field.value}:</strong>
+                  <span>#{entity[field.key]}</span>
                </p>
             </ui:fragment>
          </ui:repeat>
       </div>
       
-      <ui:fragment rendered="#{contactBacking.attributeNames.size() ge 8}">
+      <ui:fragment rendered="#{backingBean.attributeNames.size() ge 8}">
          <div class="swag">
-            <ui:repeat value="#{contactBacking.attributeNames}" var="field" varStatus="loop"
+            <ui:repeat value="#{backingBean.attributeNames}" var="field" varStatus="loop"
                offset="8">
                <p class="row">
-                  <strong>#{field}:</strong>
-                  <span>#{entity[field]}</span>
+                  <strong>#{field.value}:</strong>
+                  <span>#{entity[field.key]}</span>
                </p>
             </ui:repeat>
          </div>

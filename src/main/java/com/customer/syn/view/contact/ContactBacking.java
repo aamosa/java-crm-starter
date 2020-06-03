@@ -1,8 +1,6 @@
 package com.customer.syn.view.contact;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +12,6 @@ import com.customer.syn.resource.model.Contact;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
-import com.customer.syn.view.ColumnModel;
 
 @Named
 @ViewScoped
@@ -36,9 +33,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     
     @PostConstruct
-    public void init() {
-        log.info("type arg is : " + getChildClass().getSimpleName());
-    }
+    public void init() { }
     
     
     @Override
@@ -48,20 +43,8 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     
     public void initialize() {
-        log.info("new Contact created");
+        log.info("Contact object instantiated.");
         contact = new Contact();
-    }
-    
-     
-    public void edit(Contact c) {
-        c.setEditable(true);
-    }
-    
-    
-    @Override
-    public void update(Contact c) {
-        super.update(c);
-        c.setEditable(false);
     }
      
     
@@ -75,7 +58,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     // ---------------------------------------------- setters and getters
 
-    
     public Contact getContact() {
         return contact;
     }

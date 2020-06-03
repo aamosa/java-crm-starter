@@ -25,6 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import com.customer.syn.resource.model.BaseEntity;
+import com.customer.syn.resource.model.Contact;
 import com.customer.syn.resource.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
 
@@ -81,9 +82,15 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     }
     
     
-    public void update(E e) {
-        getService().update(e);
-        addMsg("ID #: " + e.getId() + " has been Updated.");
+    public void edit(E entity) {
+        log.info("edit invoked with entity: [ " + entity + " ]");
+        setCurrentEntity(entity);
+    }
+    
+    
+    public void update(E entity) {
+        getService().update(entity);
+        addMsg("ID #: " + entity.getId() + " has been Updated.");
     }
     
     
@@ -98,12 +105,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         ec.getFlash().setKeepMessages(true);
         FacesMessage message = new FacesMessage(msg);
         facesContext.addMessage(null, message);
-    }
-    
-    
-    public void initDetail(E entity) {
-        log.info("initDetail invoked entity is: " + entity);
-        setCurrentEntity(entity);
     }
     
     

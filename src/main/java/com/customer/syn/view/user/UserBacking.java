@@ -3,6 +3,7 @@ package com.customer.syn.view.user;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,9 +29,11 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
 
     // ---------------------------------------------- constructors
 
-    public UserBacking() { 
-        log.info("type arg is : " + getChildClass().getSimpleName());
-    }
+    public UserBacking() { }
+    
+    
+    @PostConstruct
+    public void init() { }
 
     
     @Override
@@ -40,7 +43,7 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     
     
     public void initialize() {
-        log.info("New User created.");
+        log.info("User object instantiated.");
         user = new User();
     }
     
