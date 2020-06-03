@@ -11,7 +11,7 @@
       <h:form id="cform">
       
         <c:forEach items="#{backingBean.formFields}" var="field" varStatus="loop">
-              <syn:input value="#{backingBean[entityName][field]}" label="#{field}" required="true" />
+              <syn:input value="#{backingBean[entityName][field.key]}" label="#{field.value}" required="true" />
         </c:forEach>
          
          <h:panelGroup id="btnPanel" layout="block">

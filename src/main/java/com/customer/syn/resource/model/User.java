@@ -19,9 +19,13 @@ public class User extends BaseEntity<Integer> {
 
     private static final long serialVersionUID = 92L;
 
-    
+    @ViewMeta(order = 3)
     private String email;
+    
+    @ViewMeta(order = 1)
     private String firstName;
+    
+    @ViewMeta(order = 2)
     private String lastName;
     
     @Transient
@@ -33,14 +37,17 @@ public class User extends BaseEntity<Integer> {
     @NotNull
     @Column(nullable = false,
             unique = true)
+    @ViewMeta(order = 4)
     private String userName;
 
     @NotNull
     @Column(nullable = false)
+    @ViewMeta(order = 5)
     private String password;
 
     @Column(updatable = false)
     private Instant lastLogin;
+    
 
     @ManyToMany(fetch = FetchType.EAGER,
                 cascade = { CascadeType.PERSIST, CascadeType.MERGE })

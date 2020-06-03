@@ -1,5 +1,9 @@
 package com.customer.syn.view;
 
+import static java.lang.String.join;
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
@@ -7,7 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -35,9 +42,10 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     protected List<E> values;
     protected List<E> entities;
-    protected List<String> attributeNames;
-    protected List<String> formFields;
-    protected List<ColumnModel> tableColumns; 
+    protected List<ColumnModel> tableColumns;
+    
+    protected Map<String, String> formFields;
+    protected Map<String, String> attributeNames;
     
     protected E currentEntity;
     
@@ -59,8 +67,8 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     public void setup() {
         log.info("AbstractBacking PostConstruct invoked.");
         entities = getService().fetchAll();
-        attributeNames = getViewMetaforTable(getChildClass());
-        formFields = getViewMetaforForm(getChildClass());
+        attributeNames = getViewMeta(getChildClass());
+        formFields = getFormFieldsMap(getChildClass()); 
         createTableColumns(getChildClass());
         setPage("list");
         log.info("formFields : " + formFields.toString());
@@ -133,22 +141,38 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
  
     public void createTableColumns(final Class<?> bean) {
         tableColumns = new ArrayList<>();
-        for (String s : getViewMetaforTable(bean)) {
-            tableColumns.add(new ColumnModel(s.toUpperCase(), s));
+        for (Map.Entry<String, String> e : getAttributeNames().entrySet()) {
+            tableColumns.add(new ColumnModel(e.getValue(), e.getKey()));
         }
     }
     
     
-    public static List<String> getViewMetaforTable(final Class<?> bean) {
-        List<Field> fields = getSortedFields(bean);        
-        
-        return fields.stream().filter(f -> f.getAnnotation(ViewMeta.class) != null)
-                     .map(f -> f.getName())
-                     .collect(Collectors.toList());
+    
+    // ---------------------------------------------- private methods
+    
+    private Map<String, String> getFormFieldsMap(final Class<?> bean) {
+        Map<String, String> map = attributeNames;
+        return getViewMetaforForm(bean).stream()
+                                       .filter(map::containsKey)
+                                       .collect(Collectors.toMap(Function.identity(), map::get, (u, v) -> {
+                                           throw new IllegalStateException();
+                                           }, LinkedHashMap::new));
     }
     
     
-    public static List<String> getViewMetaforForm(final Class<?> bean) {
+    private static Map<String, String> getViewMeta(final Class<?> bean) {
+        List<Field> fields = getSortedFields(bean);  
+        Map<String, String> map = new LinkedHashMap<>();
+        for (Field f : fields) {
+            if (f.getAnnotation(ViewMeta.class) != null) {
+                map.put(f.getName(), capitalize(join(" ", splitByCharacterTypeCamelCase(f.getName()))));
+            }
+        }
+        return map;
+    }
+    
+    
+    private static List<String> getViewMetaforForm(final Class<?> bean) {
         List<Field> fields = getSortedFields(bean);
         List<String> formFields = new ArrayList<>();
         
@@ -162,7 +186,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     }
     
     
-    public static List<Field> getSortedFields(final Class<?> bean) {
+    private static List<Field> getSortedFields(final Class<?> bean) {
         Class<?> node = bean;
         List<Field> fields = new ArrayList<>();
         while(node != Object.class || node.getSuperclass() != null) {
@@ -181,7 +205,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
                     return 0;
             }
         });
-        
         return fields;
     }
     
@@ -245,6 +268,10 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         return entities;
     }
 
+    public Map<String, String> getAttributeNames() {
+        return attributeNames;
+    }
+
     public String getPage() {
         return page;
     }
@@ -257,12 +284,8 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         return tableColumns;
     }
 
-    public List<String> getFormFields() {
+    public Map<String, String> getFormFields() {
         return formFields;
-    }
-
-    public List<String> getAttributeNames() {
-        return attributeNames;
     }
 
     public E getCurrentEntity() {
