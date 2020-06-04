@@ -19,32 +19,36 @@ public class User extends BaseEntity<Integer> {
 
     private static final long serialVersionUID = 92L;
 
-    @ViewMeta(order = 3)
+    @ViewMeta(order = 4)
     private String email;
     
-    @ViewMeta(order = 1)
+    @ViewMeta(order = 2)
     private String firstName;
     
-    @ViewMeta(order = 2)
+    @ViewMeta(order = 3)
     private String lastName;
     
     @Transient
     private boolean editable;
-
+    
+    @ViewMeta(order = 1,
+              formField = false)
     @Column(columnDefinition = "CHAR(1) default 'A'")
-    private String status= "A";
+    private String status = "A";
 
     @NotNull
     @Column(nullable = false,
             unique = true)
-    @ViewMeta(order = 4)
+    @ViewMeta(order = 5)
     private String userName;
 
     @NotNull
     @Column(nullable = false)
-    @ViewMeta(order = 5)
+    @ViewMeta(order = 6)
     private String password;
 
+    @ViewMeta(order = 7,
+              formField = false)
     @Column(updatable = false)
     private Instant lastLogin;
     
@@ -55,6 +59,7 @@ public class User extends BaseEntity<Integer> {
                joinColumns = @JoinColumn(name = "user_id"),
                inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+    
     
     
     // ----------------------------------------------------- constructors
