@@ -5,6 +5,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Table
@@ -33,9 +35,12 @@ public class Contact extends BaseEntity<Long> {
     @ViewMeta(order = 6)
     private String state;
     
+    @Digits(fraction = 0,
+            integer = 5)
     @ViewMeta(order = 7)
     private String zipCode;
     
+    @Email
     @ViewMeta(order = 3)
     private String email;
 

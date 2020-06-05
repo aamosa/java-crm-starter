@@ -23,9 +23,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
 import com.customer.syn.resource.model.BaseEntity;
-import com.customer.syn.resource.model.Contact;
 import com.customer.syn.resource.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
 
@@ -34,11 +35,18 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     private static final Logger log = Logger.getLogger(AbstractBacking.class.getName());
 
     protected T Id;
+    
     protected String firstName;
+    
+    @NotNull
     protected String lastName;
+    
     protected String page;
     protected String searchOption;
+    
     protected LocalDate searchDateTo;
+    
+    @PastOrPresent
     protected LocalDate searchDateFrom;
     
     protected List<E> values;
