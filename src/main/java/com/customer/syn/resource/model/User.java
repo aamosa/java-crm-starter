@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -19,6 +20,7 @@ public class User extends BaseEntity<Integer> {
 
     private static final long serialVersionUID = 92L;
 
+    @Email
     @ViewMeta(order = 4)
     private String email;
     
@@ -47,12 +49,14 @@ public class User extends BaseEntity<Integer> {
     @ViewMeta(order = 6)
     private String password;
 
-    @ViewMeta(order = 7,
+    @ViewMeta(order = 8,
               formField = false)
     @Column(updatable = false)
     private Instant lastLogin;
     
 
+    @ViewMeta(order = 7,
+              formField = false)
     @ManyToMany(fetch = FetchType.EAGER,
                 cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "users_roles",
@@ -71,6 +75,12 @@ public class User extends BaseEntity<Integer> {
     public void addRole(Role role) {
         roles.add(role);
         role.getUsers().add(this);
+    }
+    
+    
+    public void removeRole(Role role) {
+        roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     

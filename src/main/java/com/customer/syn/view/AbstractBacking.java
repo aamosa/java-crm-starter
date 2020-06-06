@@ -84,9 +84,8 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     }
     
 
-    public String save(E entity) {
+    public void save(E entity) {
         getService().save(entity);
-        return null;
     }
     
     
@@ -125,14 +124,14 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     public void search() {
         switch (searchOption) {
         case "searchByName":
-            if (!firstName.trim().isEmpty() && !lastName.trim().isEmpty())
+            if (firstName != null && !firstName.trim().isEmpty() && !lastName.trim().isEmpty())
                 values = getService().findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
             else
                 values = getService().findByLastName(lastName.toUpperCase());
             break;
         case "searchByID":
             values = null;
-            E entity = getService().findByID(Id).isPresent() ? getService().findByID(Id).get() : null;
+            E entity = getService().findByID(Id);
             if (entity != null) values = new ArrayList<>(Arrays.asList(entity));
             break;
         case "fetchAll":

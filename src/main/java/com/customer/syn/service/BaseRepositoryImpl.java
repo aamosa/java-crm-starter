@@ -14,7 +14,11 @@ import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.jboss.logging.Logger;
+
 public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> {
+    
+    private final static Logger log = Logger.getLogger(BaseRepositoryImpl.class);
     
     @PersistenceContext(name = "syn")
     private EntityManager em;
@@ -38,8 +42,8 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
     }
     
     
-    public Optional<E> findByID(I id) {
-        return Optional.ofNullable(em.find(clazz, id)); 
+    public E findByID(I id) {
+        return em.find(clazz, id); 
     }
 
     public List<E> fetchAll() {
@@ -56,9 +60,11 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
     }
     
     public void deleteById(I id) {
-        Optional<E> entity = findByID(id);
-        if (entity.isPresent()) {
-            em.remove(entity.get());
+        try {
+            em.remove(findByID(id));
+            log.info("removing entity");
+        } catch (Exception e) {
+            log.error(e, e);
         }
     }
 

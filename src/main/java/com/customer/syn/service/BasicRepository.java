@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface BasicRepository<E, I> {
     
-    Optional<E> findByID(I id);
+    E findByID(I id);
     
     List<E> fetchAll();
 

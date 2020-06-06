@@ -1,6 +1,8 @@
 package com.customer.syn.view.user;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -8,6 +10,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.customer.syn.resource.model.Role;
 import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.UserService;
@@ -22,6 +25,8 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     private static final Logger log = Logger.getLogger(UserBacking.class.getName());
     
     private User user;
+    private List<String> userRoles;
+    private List<String> availRoles;
 
     @Inject
     private UserService userService;
@@ -33,7 +38,9 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     
     
     @PostConstruct
-    public void init() { }
+    public void init() { 
+        availRoles = Arrays.asList("CAN_VIEW", "CAN_VIEW_EDIT", "CAN_DELETE");
+    }
 
     
     @Override
@@ -48,9 +55,21 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     }
     
     
+    @Override
+    public void delete(User user) {
+        log.info("delete user");
+        for (Role role : user.getRoles()) {
+            user.removeRole(role);
+        }
+        super.delete(user);
+    }
+    
+    
     public String save() {
+        user.addRole(new Role(userRoles.get(0)));
         super.save(user);
         addMsg("New User created!");
+        log.info("roles selected: " + getUserRoles().toString());
         return "user?faces-redirect=true&includeViewParams=true";
     }
     
@@ -64,6 +83,22 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<String> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<String> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    public List<String> getAvailRoles() {
+        return availRoles;
+    }
+
+    public void setAvailRoles(List<String> availRoles) {
+        this.availRoles = availRoles;
     }
 
 }

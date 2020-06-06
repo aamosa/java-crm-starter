@@ -13,7 +13,15 @@
         <c:forEach items="#{backingBean.formFields}" var="field" varStatus="loop">
               <syn:input value="#{backingBean[entityName][field.key]}" label="#{field.value}" />
         </c:forEach>
-         
+
+         <c:if test="#{entityName eq 'user'}">
+         <h:selectManyCheckbox id="u_roles" value="#{backingBean.userRoles}">
+            <f:selectItems value="#{backingBean.availRoles}" />
+         </h:selectManyCheckbox> 
+         </c:if>
+
+
+
          <h:panelGroup id="btnPanel" layout="block">
             <h:commandButton id="sve" value="Create" action="#{backingBean.save}"
                styleClass="tab" />

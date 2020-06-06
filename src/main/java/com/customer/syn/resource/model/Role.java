@@ -27,7 +27,6 @@ public class Role implements Serializable {
     private String roleName;
 
     @ManyToMany(mappedBy = "roles",
-                cascade = CascadeType.PERSIST,
                 fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
     
@@ -35,11 +34,17 @@ public class Role implements Serializable {
     // ------------------------------------------- constructors
 
     public Role() {}
-    
+   
+
     public Role(String roleName) {
         this.roleName = roleName;
     }
     
+    
+    @Override
+    public String toString() {
+        return roleName;
+    }
     
     // ------------------------------------------- setters and getters
     
@@ -58,8 +63,5 @@ public class Role implements Serializable {
     public Set<User> getUsers() {
         return users;
     }
-    
-    
-    
 
 }
