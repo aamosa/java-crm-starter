@@ -55,9 +55,9 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     }
     
     
+    //:TODO
     @Override
     public void delete(User user) {
-        log.info("delete user");
         for (Role role : user.getRoles()) {
             user.removeRole(role);
         }

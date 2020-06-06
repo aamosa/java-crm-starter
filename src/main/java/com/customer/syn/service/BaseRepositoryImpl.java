@@ -4,15 +4,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.Metamodel;
 
 import org.jboss.logging.Logger;
 
@@ -46,28 +41,32 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
         return em.find(clazz, id); 
     }
 
+    
     public List<E> fetchAll() {
         return em.createQuery("from " + clazz.getSimpleName(), clazz)
                 .getResultList();
     }
 
+    
     public void save(E entity) {
         em.persist(entity);
     }
 
+    
     public void delete(E entity) {
         em.remove(entity);
     }
     
+    
     public void deleteById(I id) {
         try {
             em.remove(findByID(id));
-            log.info("removing entity");
         } catch (Exception e) {
-            log.error(e, e);
+            log.error(e);
         }
     }
 
+    
     public void update(E entity) {
         em.merge(entity);
     }
@@ -81,11 +80,13 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
                 .getResultList();
     }
     
+    
     public List<E> findByLastName(String lastName) {
         return em.createQuery("select e from " + clazz.getSimpleName() + " e where e.lastName like :lastName", clazz)
                 .setParameter("lastName", lastName)
                 .getResultList();
     }
+    
     
     public List<E> findByDateRange(LocalDate from, LocalDate to) {
         return em.createQuery("select e from " + clazz.getSimpleName() + " e where e.createdAt between :from and :to", clazz)
