@@ -80,6 +80,7 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
         formFields = getFormFieldsMap(getChildClass()); 
         createTableColumns(getChildClass());
         setPage("list");
+        
         log.info("formFields : " + formFields.toString());
     }
     

@@ -1,8 +1,7 @@
 package com.customer.syn.util;
 
-
 public class FormField {
-    
+
     private String label;
     private String fieldName;
     private String type;
@@ -10,6 +9,9 @@ public class FormField {
     private boolean required;
     private boolean defaultDisplay;
     
+
+    // -------------------------------------------------------------- constructors
+
     public FormField(String label, String fieldName, String type, String rendered, boolean defaultDisplay) {
         this.label = label;
         this.fieldName = fieldName;
@@ -17,10 +19,14 @@ public class FormField {
         this.rendered = rendered;
         this.defaultDisplay = defaultDisplay;
     }
-    
+
     public FormField(String label, String fieldName, String type, String rendered) {
         this(label, fieldName, type, rendered, false);
     }
+    
+    
+    
+    // -------------------------------------------------------------- setters and getters
 
     public String getLabel() {
         return label;

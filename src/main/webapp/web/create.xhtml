@@ -15,9 +15,9 @@
         </c:forEach>
 
          <c:if test="#{entityName eq 'user'}">
-         <h:selectManyCheckbox id="u_roles" value="#{backingBean.userRoles}">
-            <f:selectItems value="#{backingBean.availRoles}" />
-         </h:selectManyCheckbox> 
+            <h:selectManyCheckbox id="u_roles" value="#{backingBean.userRoles}">
+               <f:selectItems value="#{backingBean.availRoles}" />
+            </h:selectManyCheckbox>
          </c:if>
 
          <h:panelGroup id="btnPanel" layout="block">
