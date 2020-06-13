@@ -10,7 +10,7 @@ public class Comment extends BaseEntity<Long> {
     private static final long serialVersionUID = 96L;
 
     @Basic
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String commentText;
 
 }

@@ -35,8 +35,9 @@ public class Role implements Serializable {
     public Role() {}
    
 
-    public Role(String roleName) {
+    public Role(String roleName, User user) {
         this.roleName = roleName;
+        this.getUsers().add(user);
     }
      
     

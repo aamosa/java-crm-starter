@@ -15,11 +15,15 @@ public class Task extends BaseEntity<Long> {
     
     private String description;
     
+
+    // ----------------------------------------------------- constructors
     
     public Task() {}
     
     
+    
     // ----------------------------------------------------- setters and getters
+
 
     public Contact getContact() {
         return contact;

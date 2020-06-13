@@ -66,7 +66,7 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     
     
     public String save() {
-        user.addRole(new Role(userRoles.get(0)));
+        user.addRole(new Role(userRoles.get(0), user));
         super.save(user);
         addMsg("New User created!");
         log.info("roles selected: " + getUserRoles().toString());

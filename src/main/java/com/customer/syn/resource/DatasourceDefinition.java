@@ -1,17 +1,11 @@
 package com.customer.syn.resource;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.annotation.sql.DataSourceDefinition;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.security.enterprise.authentication.mechanism.http.CustomFormAuthenticationMechanismDefinition;
-import javax.security.enterprise.authentication.mechanism.http.LoginToContinue;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.sql.DataSource;
 
@@ -42,7 +36,7 @@ public class DatasourceDefinition {
         User user = new User();
         user.setUserName("admin");
         user.setPassword("password");
-        user.addRole(new Role("CAN_VIEW"));
+        user.addRole(new Role("CAN_VIEW", user));
         userService.save(user);
     }
 
