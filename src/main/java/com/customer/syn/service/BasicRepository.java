@@ -7,6 +7,8 @@ public interface BasicRepository<E, I> {
     
     E findByID(I id);
     
+    E findReferenceByID(I id);
+    
     List<E> fetchAll();
 
     void save(E entity);

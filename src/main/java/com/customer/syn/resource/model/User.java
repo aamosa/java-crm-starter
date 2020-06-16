@@ -22,6 +22,7 @@ public class User extends BaseEntity<Integer> {
 
     @Email
     @ViewMeta(order = 4)
+    @Column(unique = true)
     private String email;
     
     @ViewMeta(order = 2)
@@ -45,7 +46,6 @@ public class User extends BaseEntity<Integer> {
     private String userName;
 
     @NotNull
-    @Column(nullable = false)
     @ViewMeta(order = 6)
     private String password;
 

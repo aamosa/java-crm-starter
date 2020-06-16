@@ -16,7 +16,7 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
     private final static Logger log = Logger.getLogger(BaseRepositoryImpl.class);
     
     @PersistenceContext(name = "syn")
-    private EntityManager em;
+    protected EntityManager em;
     
     private Class<E> clazz;
     
@@ -39,6 +39,11 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
     
     public E findByID(I id) {
         return em.find(clazz, id); 
+    }
+    
+    
+    public E findReferenceByID(I id) {
+        return em.getReference(clazz, id);
     }
 
     

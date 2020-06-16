@@ -11,12 +11,8 @@ import com.customer.syn.resource.model.User;
 
 @Stateless
 public class UserService extends BaseRepositoryImpl<User, Integer> {
+    
 
-    @PersistenceContext(name = "syn")
-    EntityManager em;
-
-
-    /** Find by username and password */
     public Optional<User> findByUserandPassword(String username, String password) {
         try {
             User user = em
@@ -32,7 +28,7 @@ public class UserService extends BaseRepositoryImpl<User, Integer> {
         return Optional.empty();
     }
     
-    /** Find by username */
+    
     public Optional<List<User>> findByUsername(String username) {
         return Optional.ofNullable(em.createQuery("select u from User u where upper(u.userName) = upper(:username)", User.class)
                         .setParameter("username", username)
