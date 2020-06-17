@@ -21,7 +21,6 @@ import com.customer.syn.view.AbstractBacking;
 public class UserBacking extends AbstractBacking<User, Integer> implements Serializable {
    
     private static final long serialVersionUID = 691L;
-
     private static final Logger log = Logger.getLogger(UserBacking.class.getName());
     
     private User user;
@@ -32,7 +31,7 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     private UserService userService;
     
 
-    // ---------------------------------------------- constructors
+    // ------------------------------------------------------ constructors
 
     public UserBacking() { }
     
@@ -55,7 +54,6 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     }
     
     
-    //:TODO
     @Override
     public void delete(User user) {
         for (Role role : user.getRoles()) {
@@ -75,7 +73,7 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     
     
     
-    // ---------------------------------------------- setters and getters
+    // ------------------------------------------------------ setters and getters
 
     public User getUser() {
         return user;

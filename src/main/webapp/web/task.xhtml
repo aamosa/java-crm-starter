@@ -20,9 +20,9 @@
    <ui:define name="content-stuff">
       <h:panelGroup id="page" layout="block">
 
-         <ui:include src="#{userBacking.page}.xhtml">
-            <ui:param name="entity" value="#{userBacking.currentEntity}" />
-            <ui:param name="entityName" value="user" />
+         <ui:include src="#{taskBacking.page}.xhtml">
+            <ui:param name="entity" value="#{taskBacking.currentEntity}" />
+            <ui:param name="entityName" value="task" />
          </ui:include>
 
       </h:panelGroup>

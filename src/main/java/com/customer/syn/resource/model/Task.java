@@ -1,29 +1,111 @@
 package com.customer.syn.resource.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Task extends BaseEntity<Long> {
 
     private static final long serialVersionUID = 149L;
+
+    @NotNull
+    @ViewMeta(order = 1)
+    private String note;
+
     
+    @ViewMeta(order = 4,
+              formField = false)
+    private LocalDateTime dueDate;
+    
+    
+    private LocalDateTime completedDate;
+    
+    
+    @NotNull
+    @ViewMeta(order = 2,
+              formField = false)
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.OPEN;
+    
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONTACT_ID")
     private Contact contact;
+
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CREATED_BY")
     private User createdUser;
     
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ASSIGNED_TO")
     private User assignedUser;
-    
-    private String description;
-    
 
+    
     // ----------------------------------------------------- constructors
+
+    public Task() { }
     
-    public Task() {}
     
+    public Task(String note, Contact contact, User createdUser, User assignedUser) {
+        this.note = note;
+        this.contact = contact;
+        this.createdUser = createdUser;
+        this.assignedUser = assignedUser;
+        this.status = Status.OPEN;
+    }
+    
+    
+    
+    public enum Status {
+        OPEN,
+        PENDING,
+        COMPLETED
+    }
+
     
     
     // ----------------------------------------------------- setters and getters
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public LocalDateTime getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(LocalDateTime completedDate) {
+        this.completedDate = completedDate;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public Contact getContact() {
         return contact;
@@ -48,14 +130,5 @@ public class Task extends BaseEntity<Long> {
     public void setAssignedUser(User assignedUser) {
         this.assignedUser = assignedUser;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
 
 }

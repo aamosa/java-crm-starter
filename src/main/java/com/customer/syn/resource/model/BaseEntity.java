@@ -24,14 +24,21 @@ public abstract class BaseEntity<T extends Number> implements Serializable {
     @Basic()
     protected T Id;
     
+
+//    @Version
+//    protected T version;
+    
+    
     @ViewMeta(formField = false)
     @Column(nullable = false,
             updatable = false)
     protected Instant createdAt;
 
+    
     @ViewMeta(formField = false)
     @Column(nullable = false)
     protected Instant updatedAt;
+    
 
     @PrePersist
     public void onPersist() {
@@ -44,10 +51,7 @@ public abstract class BaseEntity<T extends Number> implements Serializable {
         setUpdatedAt(Instant.now());
     }
     
-//    @Version
-//    protected T version;
   
-    
     
     // ------------------------------------------------- getters and setters
 
