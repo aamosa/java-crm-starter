@@ -4,20 +4,39 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
+    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
    <c:set var="id" value="${not empty id ? id : fn:replace(label,' ','')}" />
+   <c:set var="rendered" value="${empty rendered ? true : rendered}" />
+   <c:set var="required" value="${empty required ? false : required}" />
 
-   <h:outputLabel for="#{id}" rendered="#{empty rendered ? true : rendered}" value="#{label}" />
+   <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}" />
 
-   <h:inputText id="#{id}" label="#{label}" value="#{value}"
-      rendered="#{empty rendered ? true : rendered}"
-      required="#{empty required ? false : required}"
-      styleClass="#{component.valid ? styleClass : 'invalid'}">
-      <c:if test="${not empty required}">
-         <f:attribute name="requiredMessage" value="#{requiredMessage}" />
-      </c:if>
-      <ui:insert />
-   </h:inputText>
+   <c:choose>
+      <c:when test="#{type == 'date'}">
+         <h:inputText id="#{id}" label="#{label}" value="#{value}" rendered="#{rendered}"
+            required="#{required}" styleClass="#{component.valid ? styleClass : 'invalid'}"
+            a:type="date">
+            <c:if test="${required}">
+               <f:attribute name="requiredMessage" value="#{requiredMessage}" />
+            </c:if>
+
+            <ui:insert />
+
+         </h:inputText>
+      </c:when>
+      <c:otherwise>
+         <h:inputText id="#{id}" label="#{label}" value="#{value}" rendered="#{rendered}"
+            required="#{required}" styleClass="#{component.valid ? styleClass : 'invalid'}">
+            <c:if test="${required}">
+               <f:attribute name="requiredMessage" value="#{requiredMessage}" />
+            </c:if>
+
+            <ui:insert />
+
+         </h:inputText>
+      </c:otherwise>
+   </c:choose>
 
 </ui:composition>

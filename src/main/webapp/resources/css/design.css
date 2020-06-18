@@ -277,7 +277,7 @@ body {
 
 .fields select, .fields input[type=text], .ui-datatable input[type=text],
     .afrm input[type=text], .afrm input[type=password], #xform select,
-    #xform input[type=text] {
+    #xform input[type=text], #xform input[type=date] {
     padding: 0 0 0 8px;
     height: 35px;
     font-size: 12px;
@@ -382,7 +382,7 @@ div#grwl {
     background-color: #ffc476;
 }
 
-input[type=text].invalid {
+input[type=text].invalid, input[type=date].invalid {
     border: solid 1px red !important;
 }
 

@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -46,6 +47,7 @@ public class Contact extends BaseEntity<Long> {
     private String zipCode;
     
     @Email
+    @Column(unique = true)
     @ViewMeta(order = 3)
     private String email;
 
