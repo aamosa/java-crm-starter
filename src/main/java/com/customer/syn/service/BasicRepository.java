@@ -9,6 +9,8 @@ public interface BasicRepository<E, I> {
     
     E findReferenceByID(I id);
     
+    E update(E entity);
+    
     List<E> fetchAll();
 
     void save(E entity);
@@ -16,7 +18,5 @@ public interface BasicRepository<E, I> {
     void delete(E entity);
     
     void deleteById(I id);
-    
-    void update(E entity);
 
 }

@@ -41,7 +41,7 @@ public class Task extends BaseEntity<Long> {
 
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CREATED_BY")
+    @JoinColumn(name = "CREATED_BY", nullable = false)
     private User createdUser;
     
     

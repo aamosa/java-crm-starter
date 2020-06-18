@@ -5,20 +5,25 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.jboss.logging.Logger;
 
-public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> {
+
+import com.customer.syn.resource.model.BaseEntity;
+
+public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Number> implements BasicRepository<E, I> {
     
-    private final static Logger log = Logger.getLogger(BaseRepositoryImpl.class);
+    private final static Logger log = Logger.getLogger(BaseRepositoryImpl.class.getName());
     
-    @PersistenceContext(name = "syn")
+    @PersistenceContext
     protected EntityManager em;
     
     private Class<E> clazz;
+    
     
     
     // ---------------------------------------------------------------- constructors
@@ -37,6 +42,9 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
     }
     
     
+    
+    // ---------------------------------------------------------------- basic operations
+    
     public E findByID(I id) {
         return em.find(clazz, id); 
     }
@@ -54,7 +62,10 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
 
     
     public void save(E entity) {
-        em.persist(entity);
+        if (entity.getId() == null && !exists(entity)) {
+            em.persist(entity);
+            log.log(Level.INFO, () -> String.format("New entity with id %d persisted.", entity.getId()));
+        }
     }
 
     
@@ -67,13 +78,24 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
         try {
             em.remove(findByID(id));
         } catch (Exception e) {
-            log.error(e);
+            log.log(Level.WARNING, e.getMessage());
         }
     }
 
     
-    public void update(E entity) {
-        em.merge(entity);
+    public E update(E entity) {
+        if (entity.getId() == null && !exists(entity)) {
+            throw new IllegalArgumentException("Entity does not exist, yet.");
+        }
+        return em.merge(entity);
+        
+    }
+    
+    
+    protected boolean exists(E entity) {
+        return em.createQuery("select count(e) from " + clazz.getSimpleName() + " e where e.id = :id", Long.class)
+                .setParameter("id", entity.getId())
+                .getSingleResult() == 1;
     }
     
     
@@ -98,6 +120,14 @@ public abstract class BaseRepositoryImpl<E, I> implements BasicRepository<E, I> 
                 .setParameter("from", from.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .setParameter("to", to.atStartOfDay().toInstant(ZoneOffset.UTC))
                 .getResultList();
+    }
+    
+    
+    
+    // ---------------------------------------------------------------- getters
+    
+    protected EntityManager getEntityManager() {
+        return em;
     }
 
 }

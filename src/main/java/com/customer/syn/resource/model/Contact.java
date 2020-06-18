@@ -1,8 +1,13 @@
 package com.customer.syn.resource.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
@@ -52,6 +57,10 @@ public class Contact extends BaseEntity<Long> {
     @ViewMeta(order = 9,
               formField = false)
     private String statusCode = "A";
+    
+    
+    @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY)
+    private Set<Task> tasks = new HashSet<>();
 
     
     
@@ -135,5 +144,13 @@ public class Contact extends BaseEntity<Long> {
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
 }

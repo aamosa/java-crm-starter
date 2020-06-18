@@ -15,18 +15,18 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @MappedSuperclass
-public abstract class BaseEntity<T extends Number> implements Serializable {
+public abstract class BaseEntity<I extends Number> implements Serializable {
 
     private static final long serialVersionUID = -3L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic()
-    protected T Id;
+    protected I Id;
     
 
 //    @Version
-//    protected T version;
+//    protected I version;
     
     
     @ViewMeta(formField = false)
@@ -55,19 +55,19 @@ public abstract class BaseEntity<T extends Number> implements Serializable {
     
     // ------------------------------------------------- getters and setters
 
-//    public T getVersion() {
+//    public I getVersion() {
 //        return this.version;
 //    }
 //
-//    protected void setVersion(T version) {
+//    protected void setVersion(I version) {
 //        this.version = version;
 //    }
     
-    public T getId() {
+    public I getId() {
         return Id;
     }
 
-    protected void setId(T id) {
+    protected void setId(I id) {
         Id = id;
     }
 
