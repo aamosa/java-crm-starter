@@ -2,7 +2,9 @@ package com.customer.syn.view.user;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -64,7 +66,13 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
     
     
     public String save() {
-        user.addRole(new Role(userRoles.get(0), user));
+        Set<Role> selectedRoles = new HashSet<>();
+        for (String s : userRoles) {
+            Role role = new Role(s);
+            selectedRoles.add(role);
+        }
+        
+        user.addRoles(selectedRoles);
         super.save(user);
         addMsg("New User created!");
         log.info("roles selected: " + getUserRoles().toString());

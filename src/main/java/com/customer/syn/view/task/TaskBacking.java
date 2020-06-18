@@ -7,9 +7,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.model.Contact;
 import com.customer.syn.resource.model.Task;
-import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.TaskService;
 import com.customer.syn.view.AbstractBacking;

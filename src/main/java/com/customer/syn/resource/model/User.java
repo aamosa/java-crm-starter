@@ -67,26 +67,44 @@ public class User extends BaseEntity<Integer> {
     
     
     
-    // ----------------------------------------------------- constructors
+    // ------------------------------------------------------------- constructors
     
     public User() {}
     
     
+    public User(String firstName, String lastName, String userName, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+    }
+    
+    
+    
+    // ------------------------------------------------------------- utility methods
     
     public void addRole(Role role) {
-        roles.add(role);
+        getRoles().add(role);
         role.getUsers().add(this);
     }
     
     
+    public void addRoles(Set<Role> roles) {
+        setRoles(roles);
+        for (Role role : roles) {
+            role.getUsers().add(this);
+        }
+    }
+    
+    
     public void removeRole(Role role) {
-        roles.remove(role);
+        getRoles().remove(role);
         role.getUsers().remove(this);
     }
 
     
     
-    // ----------------------------------------------------- setters and getters
+    // ------------------------------------------------------------- setters and getters
 
     public String getFirstName() {
         return firstName;

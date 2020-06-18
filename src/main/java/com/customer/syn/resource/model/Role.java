@@ -33,13 +33,19 @@ public class Role implements Serializable {
     // ------------------------------------------- constructors
 
     public Role() {}
+    
    
+    public Role(String role) {
+        this.roleName = role;
+    }
 
+    
     public Role(String roleName, User user) {
         this.roleName = roleName;
         this.getUsers().add(user);
     }
      
+    
     
     @Override
     public String toString() {

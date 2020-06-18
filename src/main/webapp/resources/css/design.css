@@ -290,7 +290,7 @@ body {
     -moz-appearance: none;
 }
 
-.fields label, .afrm label, #xform label {
+.fields label, #xform label {
     display: block;
     margin: 0.4rem 0 0 0;
     color: #222;
@@ -334,20 +334,24 @@ body {
 }
 
 .afrm label {
-    margin: 0.75rem 0 0 0;
     font-size: 0.75rem;
-    font-weight: 600;
 }
 
-.afrm div {
+/* .afrm div {
     margin: 0.65rem 0;
-}
+} */
 
 a.selected {
     background-color: #0C3E6F;
     background-image: none;
     color: #fff;
     border: 0;
+}
+
+.ui-helper-hidden-accessible {
+    border: 0px;
+    overflow: visible;
+    position: static;
 }
 
 div#grwl {
