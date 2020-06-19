@@ -26,7 +26,7 @@
                <h:panelGroup layout="block" id="#{f.fieldName}_pg">
                   <syn:input id="#{f.fieldName}" label="#{f.label}" value="#{backingBean[fieldKey]}"
                      rendered="#{f.rendered eq selectValue or (empty selectValue and f.defaultDisplay)}"
-                     type="#{f.type}" required="#{f.type != 'text'}" requiredMessage="#{msg['req.field']}">
+                     type="#{f.type}" required="#{f.type != 'text'}">
                      
                      <c:choose>
                         <c:when test="#{f.type eq 'date'}">
