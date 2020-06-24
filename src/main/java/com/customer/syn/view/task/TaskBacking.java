@@ -1,13 +1,18 @@
 package com.customer.syn.view.task;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.customer.syn.resource.LoggedUser;
 import com.customer.syn.resource.model.Task;
+import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.TaskService;
 import com.customer.syn.view.AbstractBacking;
@@ -20,17 +25,32 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     private static final Logger log = Logger.getLogger(TaskBacking.class.getName());
 
     private Task task;
+    
     private Long contactId;
-    private Integer createdUserId;
-    private Integer assignedUserId;
+
+    private User assignedUser;
+    
+    
+    @Inject @LoggedUser
+    private User loggedUser;
 
     @Inject
     private TaskService taskService;
     
+    @Inject
+    private FacesContext facesContext;
 
-    // -------------------------------------------------------- constructors
+    
+
+    // ------------------------------------------------------------------ constructors
 
     public TaskBacking() { }
+    
+    
+    @PostConstruct
+    public void init() {
+        task = new Task();
+    }
 
     
     @Override
@@ -39,20 +59,30 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     }
 
     
-    public void initialize() {
-        task = new Task();
+//    public void initialize() {
+//        task = new Task();
+//    }
+    
+    
+    @Override
+    public void edit(Task task) {
+        // task = taskService.update(task);
+        task = taskService.TaskContactAndUsers(task.getId());
+        super.edit(task);
     }
     
     
     public String save() {
-        taskService.save(task, contactId, createdUserId, assignedUserId);
+        Long contact_Id = Long.valueOf(facesContext.getExternalContext().getRequestParameterMap().get("contactId"));
+        log.log(Level.INFO, () -> " contact id is : " + contact_Id);
+        taskService.save(task, contact_Id, loggedUser, assignedUser);
         addMsg("Task created successfully!");
         return "task?faces-redirect=true";
     }
     
 
     
-    // -------------------------------------------------------- setters and getters
+    // ------------------------------------------------------------------ setters and getters
 
     public Task getTask() {
         return this.task;
@@ -62,28 +92,20 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
         this.task = task;
     }
 
+    public User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
+    }
+
     public Long getContactId() {
         return contactId;
     }
 
     public void setContactId(Long contactId) {
         this.contactId = contactId;
-    }
-
-    public Integer getCreatedUserId() {
-        return createdUserId;
-    }
-
-    public void setCreatedUserId(Integer createdUserId) {
-        this.createdUserId = createdUserId;
-    }
-
-    public Integer getAssignedUserId() {
-        return assignedUserId;
-    }
-
-    public void setAssignedUserId(Integer assignedUserId) {
-        this.assignedUserId = assignedUserId;
     }
 
 }

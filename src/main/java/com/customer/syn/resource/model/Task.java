@@ -1,5 +1,7 @@
 package com.customer.syn.resource.model;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -11,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Task extends BaseEntity<Long> {
+public class Task extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 149L;
 
@@ -22,9 +24,10 @@ public class Task extends BaseEntity<Long> {
     
     @ViewMeta(order = 4,
               formField = false)
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     
     
+    @ViewMeta(formField = false)
     private LocalDateTime completedDate;
     
     
@@ -35,11 +38,14 @@ public class Task extends BaseEntity<Long> {
     private Status status = Status.OPEN;
     
     
+    @ViewMeta(formField = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")
     private Contact contact;
 
     
+    @NotNull
+    @ViewMeta(formField = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATED_BY", nullable = false)
     private User createdUser;
@@ -83,11 +89,11 @@ public class Task extends BaseEntity<Long> {
         this.note = note;
     }
 
-    public LocalDateTime getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

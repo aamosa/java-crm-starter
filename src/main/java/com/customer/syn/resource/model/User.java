@@ -1,5 +1,6 @@
 package com.customer.syn.resource.model;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class User extends BaseEntity<Integer> {
+public class User extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 92L;
 

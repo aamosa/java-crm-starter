@@ -25,7 +25,12 @@
          <c:if test="#{entityName eq 'task'}">
             <syn:input value="#{backingBean.contactId}" label="Contact Id" />
             <syn:input value="#{backingBean.createdUserId}" label="Create User Id" />
-            <syn:input value="#{backingBean.assignedUserId}" label="Assigned User Id" />
+            
+            <h:selectOneMenu id="assigned-usr" value="#{backingBean.assignedUser}">
+               <f:selectItems value="#{backingBean.userList}" var="u" itemValue="#{u}"
+                  itemLabel="#{u.id}" />
+            </h:selectOneMenu>
+            
          </c:if>
 
          <h:panelGroup id="btnPanel" layout="block" styleClass="row">

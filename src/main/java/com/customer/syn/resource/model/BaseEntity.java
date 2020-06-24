@@ -1,6 +1,5 @@
 package com.customer.syn.resource.model;
 
-import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -15,9 +14,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @MappedSuperclass
-public abstract class BaseEntity<I extends Number & Comparable<I>> implements Serializable {
-
-    private static final long serialVersionUID = -3L;
+public abstract class BaseEntity<I extends Number> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,11 +55,13 @@ public abstract class BaseEntity<I extends Number & Comparable<I>> implements Se
     }
     
     
-    /** Default equality based on the generated Id */
+    /** NOTE: Default equality based on the generated Id  */
     @Override
     public boolean equals(Object otherEntity) {
+        if (otherEntity == null) return false;
         if (this == otherEntity) return true;
-        if ( !(getClass().isInstance(otherEntity) && otherEntity.getClass().isInstance(this)) ) return false;
+        if (getClass() != otherEntity.getClass()) return false;
+        //if ( !(getClass().isInstance(otherEntity) && otherEntity.getClass().isInstance(this)) ) return false;
         return getId().equals( ((BaseEntity<?>) otherEntity).getId());
     }
     

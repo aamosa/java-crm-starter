@@ -28,6 +28,7 @@ public class AppIdentityStore implements IdentityStore {
         Password password = userPasswordCredential.getPassword();
 
         Optional<User> optionalUser = userService.findByUserandPassword(userName, String.valueOf(password.getValue()));
+        
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             return new CredentialValidationResult(user.getUserName(),

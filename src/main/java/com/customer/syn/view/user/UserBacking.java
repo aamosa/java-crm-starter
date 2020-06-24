@@ -20,7 +20,7 @@ import com.customer.syn.view.AbstractBacking;
 
 @Named
 @ViewScoped
-public class UserBacking extends AbstractBacking<User, Integer> implements Serializable {
+public class UserBacking extends AbstractBacking<User, Long> implements Serializable {
    
     private static final long serialVersionUID = 691L;
     private static final Logger log = Logger.getLogger(UserBacking.class.getName());
@@ -45,7 +45,7 @@ public class UserBacking extends AbstractBacking<User, Integer> implements Seria
 
     
     @Override
-    protected BaseRepositoryImpl<User, Integer> getService() {
+    protected BaseRepositoryImpl<User, Long> getService() {
         return userService;
     }
     

@@ -16,11 +16,15 @@
             <f:ajax execute="@form" render="someTable :eform :grwl :page">
                <h:commandLink value="Edit" actionListener="#{backingBean.edit(c)}"
                   styleClass="tab skinny">
-                  <f:setPropertyActionListener target="#{backingBean.page}" value="detail" />
+                  
+                  
+                  
                </h:commandLink>
+               
                <h:commandLink value="Delete" action="#{backingBean.delete(c)}"
                   styleClass="tab skinny">
                </h:commandLink>
+               
             </f:ajax>
          </p:column>
 

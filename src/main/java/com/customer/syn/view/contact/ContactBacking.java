@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.customer.syn.resource.model.Contact;
+import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
@@ -25,6 +26,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     @Inject
     private ContactService contactService;
+   
    
     
     // ---------------------------------------------- constructors
@@ -45,6 +47,13 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     public void initialize() {
         log.info("Contact object instantiated.");
         contact = new Contact();
+    }
+    
+    
+    @Override
+    public void edit(Contact contact) {
+        setPage("contactedit");
+        super.edit(contact);
     }
      
     

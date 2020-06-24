@@ -1,16 +1,13 @@
 package com.customer.syn.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.customer.syn.resource.model.User;
 
 @Stateless
-public class UserService extends BaseRepositoryImpl<User, Integer> {
+public class UserService extends BaseRepositoryImpl<User, Long> {
     
 
     public Optional<User> findByUserandPassword(String username, String password) {
@@ -29,10 +26,16 @@ public class UserService extends BaseRepositoryImpl<User, Integer> {
     }
     
     
-    public Optional<List<User>> findByUsername(String username) {
-        return Optional.ofNullable(em.createQuery("select u from User u where upper(u.userName) = upper(:username)", User.class)
-                        .setParameter("username", username)
-                        .getResultList());
+    
+    public User findByUsername(String username) {
+        User user = null;
+        try {
+            user = em.createQuery("select u from User u where u.userName = :username", User.class)
+                    .setParameter("username", username).getSingleResult();
+        } catch (Exception e) {
+            //:TODO
+        }
+        return user;
     }
-
+    
 }

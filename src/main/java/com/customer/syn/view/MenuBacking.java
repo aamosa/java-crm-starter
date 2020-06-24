@@ -8,8 +8,11 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.customer.syn.resource.model.User;
+import com.customer.syn.service.UserService;
 import com.customer.syn.util.FormField;
 import com.customer.syn.util.ValueLabelHolder;
 
@@ -24,7 +27,12 @@ public class MenuBacking implements Serializable {
     
     private static List<FormField> searchFields;
     private static Map<String, Object> searchFieldValues;
+    
+    private List<User> users;
 
+    @Inject
+    private UserService userService;
+    
     
     // -------------------------------------------------- constructors
     
@@ -32,8 +40,8 @@ public class MenuBacking implements Serializable {
 
     
     @PostConstruct
-    public void init() {
-        // :TODO load from property file or DB here
+    public void init() {  // :TODO load from property file or DB here
+        if (users == null) users = userService.fetchAll();
         menu = new ArrayList<>();
         menu.add(new ValueLabelHolder<>("Contacts", "index.xhtml"));
         menu.add(new ValueLabelHolder<>("Users", "user.xhtml"));
@@ -95,6 +103,10 @@ public class MenuBacking implements Serializable {
 
     public void setSearchFieldValues(Map<String, Object> searchFieldValues) {
         MenuBacking.searchFieldValues = searchFieldValues;
+    }
+
+    public List<User> getUsers() {
+        return users;
     }
     
 }

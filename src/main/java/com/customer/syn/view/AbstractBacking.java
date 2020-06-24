@@ -4,6 +4,7 @@ import static java.lang.String.join;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
@@ -30,22 +31,20 @@ import com.customer.syn.resource.model.BaseEntity;
 import com.customer.syn.resource.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
 
-public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number> {
+public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number> {
     
     private static final Logger log = Logger.getLogger(AbstractBacking.class.getName());
 
-    protected T Id;
+    protected I Id;
+    protected E currentEntity;
     
     protected String firstName;
-    
     @NotNull
     protected String lastName;
     
     protected String page;
     protected String searchOption;
-    
     protected LocalDate searchDateTo;
-    
     @PastOrPresent
     protected LocalDate searchDateFrom;
     
@@ -55,8 +54,6 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     protected Map<String, String> formFields;
     protected Map<String, String> attributeNames;
-    
-    protected E currentEntity;
     
     @Inject
     private FacesContext facesContext;
@@ -69,19 +66,18 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     public AbstractBacking() { }
     
-    protected abstract BaseRepositoryImpl<E, T> getService();
+    protected abstract BaseRepositoryImpl<E, I> getService();
 
     
     @PostConstruct
     public void setup() {
         log.info("AbstractBacking PostConstruct invoked.");
+        
         entities = getService().fetchAll();
         attributeNames = getViewMeta(getChildClass());
         formFields = getFormFieldsMap(getChildClass()); 
         createTableColumns(getChildClass());
         setPage("list");
-        
-        log.info("formFields : " + formFields.toString());
     }
     
 
@@ -221,11 +217,11 @@ public abstract class AbstractBacking<E extends BaseEntity<T>, T extends Number>
     
     // ---------------------------------------------- setters and getters
     
-    public T getId() {
+    public I getId() {
         return Id;
     }
 
-    public void setId(T Id) {
+    public void setId(I Id) {
         this.Id = Id;
     }
 

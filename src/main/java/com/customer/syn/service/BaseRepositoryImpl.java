@@ -11,8 +11,6 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-
-
 import com.customer.syn.resource.model.BaseEntity;
 
 public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Number> implements BasicRepository<E, I> {
@@ -41,12 +39,17 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
         }
     }
     
-    
+
     
     // ---------------------------------------------------------------- basic operations
     
     public E findByID(I id) {
         return em.find(clazz, id); 
+    }
+    
+    
+    public E findByID(Class<E> type, I id) {
+        return em.find(type, id);
     }
     
     
@@ -84,11 +87,12 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
 
     
     public E update(E entity) {
+        log.log(Level.INFO, () -> "update invoked.");
+        
         if (entity.getId() == null && !exists(entity)) {
             throw new IllegalArgumentException("Entity does not exist, yet.");
         }
         return em.merge(entity);
-        
     }
     
     
@@ -128,6 +132,10 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public Class<E> getClazz() {
+        return clazz;
     }
 
 }

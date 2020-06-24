@@ -1,9 +1,10 @@
 package com.customer.syn.service;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface BasicRepository<E, I> {
+import com.customer.syn.resource.model.BaseEntity;
+
+public interface BasicRepository<E extends BaseEntity<I>, I extends Number> {
     
     E findByID(I id);
     

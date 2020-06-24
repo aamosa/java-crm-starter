@@ -1,5 +1,6 @@
 package com.customer.syn.resource.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotNull;
 
 @Table
 @Entity
-public class Contact extends BaseEntity<Long> {
+public class Contact extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = -14L;
     

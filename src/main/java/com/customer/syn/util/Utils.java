@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
@@ -94,6 +97,24 @@ public final class Utils {
         return list;
     }
     
+    
+    
+    public static <T, ID> T findById(Class<T> type, ID id) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("syn");
+            em = emf.createEntityManager();
+            return em.find(type, id);
+        } catch (Exception e) {
+            throw new PersistenceException(e.getCause());
+        } finally {
+            if (em.isOpen())
+                em.close();
+            if (emf.isOpen())
+                emf.close();
+        }
+    }
     
     /**    
         public void getBeanFromEL() {
