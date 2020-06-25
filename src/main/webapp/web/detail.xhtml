@@ -40,15 +40,20 @@
       <h6 class="border-bottom mid-fnt full-width">Recent Activity</h6>
       <div class="swag">
          <ul class="clst">
-            <li>
-               <div class="row">
-                  <span class="push-right">
-                     <small class="sm-fnt lt-gry">01/11/2018 11:21pm</small>
-                  </span>
-                  <p class="strong pd-down">@Admin</p>
-                  <p class="lt-gry">Placeholder sample text</p>
-               </div>
-            </li>
+            <ui:repeat value="#{backingBean.assignedTasks}" var="task" varStatus="l">
+
+               <li>
+                  <div class="row">
+                     <span class="push-right">
+                        <small class="sm-fnt lt-gry">#{task.createdAt}</small>
+                     </span>
+                     <p class="strong pd-down">@#{task.createdUser.userName}</p>
+                     <p class="lt-gry">#{task.note}</p>
+                  </div>
+               </li>
+
+            </ui:repeat>
+
          </ul>
       </div>
    </div>

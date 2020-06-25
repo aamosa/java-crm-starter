@@ -1,6 +1,7 @@
 package com.customer.syn.view.contact;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -9,7 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.customer.syn.resource.model.Contact;
-import com.customer.syn.resource.model.User;
+import com.customer.syn.resource.model.Task;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
@@ -24,12 +25,14 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     private Contact contact;
     
+    private List<Task> assignedTasks;
+    
     @Inject
     private ContactService contactService;
    
    
     
-    // ---------------------------------------------- constructors
+    // --------------------------------------------------------- constructors
     
     public ContactBacking() {}
 
@@ -52,6 +55,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     @Override
     public void edit(Contact contact) {
+        assignedTasks = contactService.getTaskforContact(contact);
         setPage("detail");
         super.edit(contact);
     }
@@ -65,7 +69,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     
 
-    // ---------------------------------------------- setters and getters
+    // --------------------------------------------------------- setters and getters
 
     public Contact getContact() {
         return contact;
@@ -73,6 +77,11 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+
+    public List<Task> getAssignedTasks() {
+        return assignedTasks;
     }
 
 }
