@@ -52,7 +52,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     @Override
     public void edit(Contact contact) {
-        setPage("contactedit");
+        setPage("detail");
         super.edit(contact);
     }
      

@@ -223,6 +223,23 @@ body {
     -ms-flex: 0 0 auto;
 }
 
+.fields select, .fields input[type=text], .ui-datatable input[type=text],
+    .afrm input[type=text], .afrm input[type=password], .afrm select,
+    #xform select, .afrm input[type=date], #xform input[type=text],
+    #xform input[type=date], .canvas input[type=text], .canvas input[type=date]
+    {
+    padding: 0 0 0 8px;
+    height: 35px;
+    font-size: 12px;
+    color: #555;
+    box-sizing: content-box;
+    appearance: none;
+    background-color: #fff;
+    border: 1px solid #b1bdc8;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
 #xform div {
     position: relative;
     display: inline-block;
@@ -230,6 +247,10 @@ body {
 
 #xform .selector {
     vertical-align: top;
+}
+
+#xform .selector select {
+    padding-right: 33px;
 }
 
 #xform .searcher {
@@ -243,12 +264,12 @@ body {
     padding: 0 0.75em;
 }
 
-#xform .selector select {
-    padding-right: 33px;
-}
-
 #xform input[type=text] {
     width: 175px;
+}
+
+.canvas input[type=text] {
+    width:85%;
 }
 
 #xform .selector:after {
@@ -273,21 +294,6 @@ body {
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
     flex-direction: row;
-}
-
-.fields select, .fields input[type=text], .ui-datatable input[type=text],
-    .afrm input[type=text], .afrm input[type=password], #xform select,
-    #xform input[type=text], #xform input[type=date] {
-    padding: 0 0 0 8px;
-    height: 35px;
-    font-size: 12px;
-    color: #555;
-    box-sizing: content-box;
-    appearance: none;
-    background-color: #fff;
-    border: 1px solid #b1bdc8;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 }
 
 .fields label, #xform label {
@@ -324,7 +330,7 @@ body {
 
 .afrm {
     width: 100%;
-    max-width: 360px;
+    max-width: 380px;
     margin: auto;
 }
 
@@ -335,6 +341,23 @@ body {
 
 .afrm label {
     font-size: 0.75rem;
+}
+
+.canvas select {
+    padding: 0 0 0 8px;
+    height: 35px;
+    font-size: 12px;
+    color: #555;
+    box-sizing: content-box;
+    appearance: none;
+    background-color: #fff;
+    border: 1px solid #b1bdc8;
+}
+
+.canvas label {
+    display: inline-block;
+    width: 90px;
+    text-align: left;
 }
 
 a.selected {

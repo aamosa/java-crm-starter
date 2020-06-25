@@ -7,7 +7,6 @@
     xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
     xmlns:p="http://primefaces.org/ui">
 
-
    <div class="canvas box-shadow og-fnt lt-gry-bg">
       <h6 class="border-bottom mid-fnt full-width">Contact Details</h6>
 
@@ -38,7 +37,7 @@
 
    <div class="canvas box-shadow og-fnt lt-gry-bg">
       <h6 class="border-bottom mid-fnt full-width">Recent Tasks</h6>
-      <div class="swag">
+      <div class="swag full-width">
          <ul class="clst">
             <li>
                <div class="row">
@@ -50,32 +49,6 @@
                </div>
             </li>
          </ul>
-      </div>
-
-      <div>
-         <h:form id="taskform">
-            <h:panelGroup layout="block">
-               <syn:input value="#{taskBacking.task.note}" label="Task Note" />
-            </h:panelGroup>
-            <h:panelGroup layout="block">
-               <syn:input value="#{taskBacking.task.dueDate}" label="Due Date" type="date">
-                  <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-               </syn:input>
-            </h:panelGroup>
-            <label>Assign to user:</label>
-            <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
-               <f:selectItems value="#{menuBacking.users}" var="u" itemValue="#{u}"
-                  itemLabel="#{u.firstName} #{u.lastName}" />
-            </h:selectOneMenu>
-            
-            <h:panelGroup id="btnPanel" layout="block" styleClass="row">
-               <h:commandButton id="save" value="Save" action="#{taskBacking.save}"
-                  styleClass="tab">
-                  <f:param name="contactId" value="#{entity.id}" />
-               </h:commandButton>
-            </h:panelGroup>
-            
-         </h:form>
       </div>
       
    </div>

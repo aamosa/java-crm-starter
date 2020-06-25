@@ -13,11 +13,9 @@
          rendered="#{!empty backingBean.values}" paginator="true" rows="10">
 
          <p:column>
-            <f:ajax execute="@form" render="someTable :eform :grwl :page">
+            <f:ajax execute="@form" render="someTable :eform :grwl :page :currentform">
                <h:commandLink value="Edit" actionListener="#{backingBean.edit(c)}"
                   styleClass="tab skinny">
-                  
-                  
                   
                </h:commandLink>
                
