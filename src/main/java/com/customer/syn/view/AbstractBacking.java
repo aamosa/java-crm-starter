@@ -37,6 +37,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected I Id;
     protected E currentEntity;
+    protected E currentSelected;
     
     protected String firstName;
     @NotNull
@@ -299,6 +300,14 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     public void setCurrentEntity(E currentEntity) {
         this.currentEntity = currentEntity;
+    }
+
+    public E getCurrentSelected() {
+        return currentSelected;
+    }
+
+    public void setCurrentSelected(E currentSelected) {
+        this.currentSelected = currentSelected;
     }
 
 }

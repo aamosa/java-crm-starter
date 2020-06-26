@@ -46,7 +46,6 @@ public class MenuBacking implements Serializable {
         menu.add(new ValueLabelHolder<>("Contacts", "index.xhtml"));
         menu.add(new ValueLabelHolder<>("Users", "user.xhtml"));
         menu.add(new ValueLabelHolder<>("Tasks", "task.xhtml"));
-        menu.add(new ValueLabelHolder<>("Settings", "setting.xhtml"));
         initSearchOptions();
         initSearchFieldsAndValues();
     }

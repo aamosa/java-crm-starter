@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:syn="http://syn.customer.com/jsf"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+
+   <div class="canvas box-shadow og-fnt lt-gry-bg">
+      <div class="full-width">
+
+         <h:form id="editform">
+            <h:panelGroup layout="block" id="eblk" styleClass="row">
+               <syn:input value="#{taskBacking.task.note}" label="Task Note" styleClass="bgin" />
+            </h:panelGroup>
+            <h:panelGroup layout="block" id="dtblk" styleClass="row">
+               <syn:input value="#{taskBacking.task.dueDate}" label="Due Date" type="date">
+                  <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+               </syn:input>
+
+               <label>Assign to User</label>
+               <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
+                  <f:selectItems value="#{menuBacking.users}" var="u" itemValue="#{u}"
+                     itemLabel="#{u.firstName} #{u.lastName}" />
+               </h:selectOneMenu>
+            </h:panelGroup>
+            <h:commandButton id="save" value="Save" action="#{taskBacking.save}"
+               styleClass="tab">
+               <f:param name="contactId" value="#{param['conId']}" />
+            </h:commandButton>
+         </h:form>
+
+      </div>
+   </div>
+
+</ui:composition>

@@ -269,7 +269,7 @@ body {
 }
 
 .canvas input[type=text] {
-    width:85%;
+    width: 85%;
 }
 
 #xform .selector:after {
@@ -411,6 +411,10 @@ input[type=text].invalid, input[type=date].invalid {
     padding: 0.25em
 }
 
+tr.ui-state-hover {
+    background-color: #d7dfe7;
+}
+
 .ui-datatable {
     border: 1px solid #b7b7b7;
     background-color: #fff;
@@ -442,12 +446,21 @@ input[type=text].invalid, input[type=date].invalid {
     font-size: 11px;
 }
 
-.ui-datatable tr:nth-child(even) {
-    background: #f3f3f3;
+.ui-datatable-odd {
+    background-color: #f3f3f3;
 }
 
 .ui-datatable thead {
     background: #dadada;
+}
+
+.ui-column-title {
+    font-weight: 600;
+}
+
+.ui-state-highlight {
+    background-color: #0C3E6F;
+    color: #fff;
 }
 
 .ui-datatable thead th {

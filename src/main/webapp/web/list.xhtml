@@ -9,20 +9,19 @@
 
    <h:form id="eform">
 
-      <p:dataTable id="someTable" value="#{backingBean.values}" var="c"
-         rendered="#{!empty backingBean.values}" paginator="true" rows="10">
+      <p:dataTable id="someTable" value="#{backingBean.values}" var="c" selectionMode="single"
+         selection="#{backingBean.currentSelected}" rendered="#{!empty backingBean.values}"
+         paginator="true" rows="10" rowKey="#{c.id}">
 
          <p:column>
             <f:ajax execute="@form" render="someTable :eform :grwl :page :currentform">
                <h:commandLink value="Edit" actionListener="#{backingBean.edit(c)}"
                   styleClass="tab skinny">
-                  
                </h:commandLink>
-               
+
                <h:commandLink value="Delete" action="#{backingBean.delete(c)}"
                   styleClass="tab skinny">
                </h:commandLink>
-               
             </f:ajax>
          </p:column>
 
@@ -30,7 +29,6 @@
             headerText="#{column.header}">
             <h:outputText value="#{c[column.property]}" />
          </p:columns>
-
       </p:dataTable>
 
    </h:form>

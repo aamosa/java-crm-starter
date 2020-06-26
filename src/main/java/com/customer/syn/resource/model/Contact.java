@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -54,16 +54,22 @@ public class Contact extends BaseEntity<Long> implements Serializable {
 
     @Transient
     private boolean editable;
-
-    @Basic
-    @Column(columnDefinition = "CHAR(1) default 'A'")
+    
     @ViewMeta(order = 9,
               formField = false)
-    private String statusCode = "A";
+    @Enumerated(EnumType.STRING)
+    private Status statusCode;
     
     
     @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY)
     private Set<Task> tasks = new HashSet<>();
+    
+    
+    public enum Status {
+        ACTIVE,
+        INACTIVE,
+        DISABLED
+    }
 
     
     
@@ -133,11 +139,11 @@ public class Contact extends BaseEntity<Long> implements Serializable {
         this.phone = phone;
     }
 
-    public String getStatusCode() {
+    public Status getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(Status statusCode) {
         this.statusCode = statusCode;
     }
 
