@@ -1,9 +1,12 @@
 package com.customer.syn.service;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 
+import com.customer.syn.resource.model.Role;
 import com.customer.syn.resource.model.User;
 
 @Stateless
@@ -26,7 +29,6 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
     }
     
     
-    
     public User findByUsername(String username) {
         User user = null;
         try {
@@ -36,6 +38,13 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
             //:TODO
         }
         return user;
+    }
+    
+    
+    public Set<Role> getRoles() {
+        return getEntityManager().createQuery("select r from Role r", Role.class)
+                .getResultStream()
+                .collect(Collectors.toSet());
     }
     
 }

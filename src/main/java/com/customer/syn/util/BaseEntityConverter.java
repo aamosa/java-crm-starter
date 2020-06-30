@@ -29,6 +29,7 @@ public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
         if (entity == null)
             return "";
         if (entity.getId() != null) {
+            log.log(Level.INFO, () -> "convertor id is " + entity.getId().toString());
             return entity.getId().toString();
         } else {
             throw new ConverterException("Invalid Id");

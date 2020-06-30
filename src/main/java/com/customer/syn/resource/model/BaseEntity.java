@@ -18,7 +18,8 @@ public abstract class BaseEntity<I extends Number> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected I Id;
+    @Column(updatable = false)
+    protected I id;
     
 
 //    @Version
@@ -48,23 +49,24 @@ public abstract class BaseEntity<I extends Number> {
     }
     
     
-    /** Default hashCode based on the generated Id */
+    /** Note: default hashCode based on the generated Id */
     @Override
     public int hashCode() {
         return getId() != null ? Objects.hash(getId()) : super.hashCode(); 
     }
     
     
-    /** NOTE: Default equality based on the generated Id  */
+    /** Note: default equality based on the generated Id  */
     @Override
     public boolean equals(Object otherEntity) {
         if (otherEntity == null) return false;
         if (this == otherEntity) return true;
         if (getClass() != otherEntity.getClass()) return false;
-        //if ( !(getClass().isInstance(otherEntity) && otherEntity.getClass().isInstance(this)) ) return false;
         return getId().equals( ((BaseEntity<?>) otherEntity).getId());
     }
     
+    
+   
   
     
     // ------------------------------------------------- getters and setters
@@ -78,11 +80,11 @@ public abstract class BaseEntity<I extends Number> {
 //    }
     
     public I getId() {
-        return Id;
+        return id;
     }
 
     protected void setId(I id) {
-        Id = id;
+        this.id = id;
     }
 
     public LocalDateTime getCreatedAt() {

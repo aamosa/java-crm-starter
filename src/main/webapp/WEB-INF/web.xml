@@ -70,11 +70,11 @@
          <url-pattern>/web/*</url-pattern>
       </web-resource-collection>
       <auth-constraint>
-         <role-name>CAN_VIEW</role-name>
+         <role-name>ALLOW_ACCESS</role-name>
       </auth-constraint>
    </security-constraint>
 
    <security-role>
-      <role-name>CAN_VIEW</role-name>
+      <role-name>ALLOW_ACCESS</role-name>
    </security-role>
 </web-app>

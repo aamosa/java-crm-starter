@@ -20,11 +20,9 @@ import com.customer.syn.view.AbstractBacking;
 public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
     
     private static final Logger log = Logger.getLogger(ContactBacking.class.getName());
-
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
-    
     private List<Task> assignedTasks;
     
     @Inject
@@ -56,8 +54,15 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     @Override
     public void edit(Contact contact) {
         assignedTasks = contactService.getTaskforContact(contact);
-        setPage("detail");
         super.edit(contact);
+        setPage("editcontact");
+    }
+    
+    
+    @Override
+    public String update(Contact contact) {
+        super.update(contact);
+        return "index?faces-redirect=true";
     }
      
     

@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.customer.syn.resource.model.Contact.Status;
+import com.customer.syn.resource.model.Role;
 import com.customer.syn.resource.model.User;
 import com.customer.syn.service.UserService;
 import com.customer.syn.util.FormField;
@@ -29,9 +32,12 @@ public class MenuBacking implements Serializable {
     private static Map<String, Object> searchFieldValues;
     
     private List<User> users;
+    private Set<Role> roles;
+    private Status[] status;
 
     @Inject
     private UserService userService;
+    
     
     
     // -------------------------------------------------- constructors
@@ -42,6 +48,8 @@ public class MenuBacking implements Serializable {
     @PostConstruct
     public void init() {  // :TODO load from property file or DB here
         if (users == null) users = userService.fetchAll();
+        if (roles == null) roles = userService.getRoles();
+        
         menu = new ArrayList<>();
         menu.add(new ValueLabelHolder<>("Contacts", "index.xhtml"));
         menu.add(new ValueLabelHolder<>("Users", "user.xhtml"));
@@ -107,5 +115,16 @@ public class MenuBacking implements Serializable {
     public List<User> getUsers() {
         return users;
     }
-    
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public Status[] getStatus() {
+        if (status == null) {
+            status = Status.values();
+        }
+        return status;
+    }
+
 }

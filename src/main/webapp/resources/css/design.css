@@ -269,7 +269,7 @@ body {
 }
 
 .canvas input[type=text] {
-    width: 85%;
+    width: 80%;
 }
 
 #xform .selector:after {
@@ -356,7 +356,7 @@ body {
 
 .canvas label {
     display: inline-block;
-    width: 90px;
+    width: 110px;
     text-align: left;
 }
 
@@ -415,6 +415,10 @@ tr.ui-state-hover {
     background-color: #d7dfe7;
 }
 
+.ui-state-active {
+    font-weight: 700;
+}
+
 .ui-datatable {
     border: 1px solid #b7b7b7;
     background-color: #fff;
@@ -429,7 +433,6 @@ tr.ui-state-hover {
 
 .ui-datatable a {
     font-size: 12px;
-    font-weight: 500;
 }
 
 .ui-datatable td, .ui-datatable th {
@@ -488,6 +491,32 @@ tr.ui-state-hover {
     color: #FFFFFF;
     padding: 2px 8px;
     border-radius: 5px;
+}
+
+.ui-icon-seek-next {
+    visibility: hidden;
+    text-indent: 0;
+}
+
+.ui-icon-seek-next:after {
+    content: '>>';
+    visibility: visible;
+    font-size: 0.75rem;
+}
+
+.ui-icon-seek-prev {
+    visibility: hidden;
+    text-indent: 0;
+}
+
+.ui-icon-seek-prev:after {
+    content: '<<';
+    visibility: visible;
+    font-size: 0.75rem;
+}
+
+.ui-datatable a {
+    color: #0C3E6F
 }
 
 /* FOOTER */

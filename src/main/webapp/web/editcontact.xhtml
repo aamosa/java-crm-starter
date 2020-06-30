@@ -11,23 +11,43 @@
 
          <h:form id="editform">
             <h:panelGroup layout="block" id="eblk" styleClass="row">
-               <syn:input value="#{taskBacking.task.note}" label="Task Note" styleClass="bgin" />
+               <syn:input value="#{contactBacking.currentEntity.firstName}" label="First Name" />
             </h:panelGroup>
-            <h:panelGroup layout="block" id="dtblk" styleClass="row">
-               <syn:input value="#{taskBacking.task.dueDate}" label="Due Date" type="date">
-                  <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-               </syn:input>
-
-               <label>Assign to User</label>
-               <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
-                  <f:selectItems value="#{menuBacking.users}" var="u" itemValue="#{u}"
-                     itemLabel="#{u.firstName} #{u.lastName}" />
+            <h:panelGroup layout="block" id="eblk1" styleClass="row">
+               <syn:input value="#{contactBacking.currentEntity.lastName}" label="Last Name" />
+            </h:panelGroup>
+            <h:panelGroup layout="block" id="eblk2" styleClass="row">
+               <syn:input value="#{contactBacking.currentEntity.email}" label="Email" />
+            </h:panelGroup>
+            <h:panelGroup layout="block" id="eblk3" styleClass="row">
+               <syn:input value="#{contactBacking.currentEntity.phone}" label="Phone" />
+            </h:panelGroup>
+            <h:panelGroup layout="block" id="eblk4" styleClass="row">
+               <syn:input value="#{contactBacking.currentEntity.streetAddress}"
+                  label="Street Address" />
+            </h:panelGroup>
+            <h:panelGroup layout="block" id="eblk5" styleClass="row">
+               <syn:input value="#{contactBacking.currentEntity.city}" label="City" />
+            </h:panelGroup>
+            <h:panelGroup layout="block" id="eblk6" styleClass="row">
+               <syn:input value="#{contactBacking.currentEntity.state}" label="State" />
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" id="eblk7" styleClass="row">
+               <syn:input value="#{contactBacking.currentEntity.zipCode}" label="Zip Code" />
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" id="eblk8" styleClass="row">
+               <label>Status</label>
+               <h:selectOneMenu value="#{contactBacking.currentEntity.statusCode}">
+                  <f:selectItems value="#{menuBacking.status}" />
                </h:selectOneMenu>
             </h:panelGroup>
-            <h:commandButton id="save" value="Save" action="#{taskBacking.save}"
+
+            <h:commandButton id="save" value="Save" action="#{contactBacking.update(entity)}"
                styleClass="tab">
-               <f:param name="contactId" value="#{param['conId']}" />
             </h:commandButton>
+
          </h:form>
 
       </div>

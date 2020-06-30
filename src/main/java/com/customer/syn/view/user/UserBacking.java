@@ -5,13 +5,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
+import com.customer.syn.resource.model.Contact;
 import com.customer.syn.resource.model.Role;
 import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
@@ -26,11 +29,14 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     private static final Logger log = Logger.getLogger(UserBacking.class.getName());
     
     private User user;
-    private List<String> userRoles;
-    private List<String> availRoles;
+    private List<Role> userRoles;
+    private Set<Role> selectedRoles;
+    
+//    private List<String> availRoles;
 
     @Inject
     private UserService userService;
+    
     
 
     // ------------------------------------------------------ constructors
@@ -39,9 +45,7 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
     
     @PostConstruct
-    public void init() { 
-        availRoles = Arrays.asList("CAN_VIEW", "CAN_VIEW_EDIT", "CAN_DELETE");
-    }
+    public void init() { }
 
     
     @Override
@@ -51,8 +55,20 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
     
     public void initialize() {
-        log.info("User object instantiated.");
         user = new User();
+    }
+    
+    
+    @Override
+    public void edit(User user) {
+        super.edit(user);
+        setPage("edituser");
+    }
+    
+    
+    public String update() {
+        super.update(getCurrentEntity());
+        return "user?faces-redirect=true";
     }
     
     
@@ -66,16 +82,9 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
     
     public String save() {
-        Set<Role> selectedRoles = new HashSet<>();
-        for (String s : userRoles) {
-            Role role = new Role(s);
-            selectedRoles.add(role);
-        }
-        
-        user.addRoles(selectedRoles);
+        user.addRoles(new HashSet<Role>(userRoles));
         super.save(user);
-        addMsg("New User created!");
-        log.info("roles selected: " + getUserRoles().toString());
+        log.log(Level.INFO, () -> "Roles selected: " + getUserRoles().toString());
         return "user?faces-redirect=true&includeViewParams=true";
     }
     
@@ -91,20 +100,22 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
         this.user = user;
     }
 
-    public List<String> getUserRoles() {
+    public List<Role> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(List<String> userRoles) {
+    public void setUserRoles(List<Role> userRoles) {
         this.userRoles = userRoles;
     }
 
-    public List<String> getAvailRoles() {
-        return availRoles;
+
+    public Set<Role> getSelectedRoles() {
+        return selectedRoles;
     }
 
-    public void setAvailRoles(List<String> availRoles) {
-        this.availRoles = availRoles;
+
+    public void setSelectedRoles(Set<Role> selectedRoles) {
+        this.selectedRoles = selectedRoles;
     }
 
 }

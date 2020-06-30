@@ -7,8 +7,11 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.customer.syn.resource.model.Contact;
+import com.customer.syn.resource.model.Role;
 import com.customer.syn.service.ContactService;
 
 /**
@@ -16,11 +19,11 @@ import com.customer.syn.service.ContactService;
  * <code>Customer</code> entity objects.
  */
 @SuppressWarnings("rawtypes")
-@FacesConverter(value = "contactIdConverter", managed = true)
-public class ContactConverter implements Converter {
+@FacesConverter(value = "roleConverter", managed = true)
+public class RoleConverter implements Converter {
 
-    @Inject
-    private ContactService contactService;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public Object getAsObject(FacesContext facescontext, UIComponent component, String value) {
@@ -28,7 +31,7 @@ public class ContactConverter implements Converter {
             return null;
 
         try {
-            return contactService.findByID(Long.valueOf(value));
+            return em.find(Role.class, Long.valueOf(value));
         } catch (NumberFormatException nfe) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "invalid Id", "invalid Id"));
@@ -36,13 +39,14 @@ public class ContactConverter implements Converter {
         }
     }
 
+    
     @Override
     public String getAsString(FacesContext facescontext, UIComponent component, Object value) {
         if (value == null)
             return "";
 
-        if (value instanceof Contact) {
-            return String.valueOf(((Contact) value).getId());
+        if (value instanceof Role) {
+            return String.valueOf(((Role) value).getId());
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "conversion error", "conversion error"));

@@ -4,7 +4,6 @@ import static java.lang.String.join;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
@@ -16,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -72,8 +72,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     @PostConstruct
     public void setup() {
-        log.info("AbstractBacking PostConstruct invoked.");
-        
         entities = getService().fetchAll();
         attributeNames = getViewMeta(getChildClass());
         formFields = getFormFieldsMap(getChildClass()); 
@@ -82,27 +80,29 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
     
 
-    public void save(E entity) {
-        getService().save(entity);
+    public void save(E e) {
+        log.log(Level.INFO, () -> "persisting " + e);
+        getService().save(e);
     }
     
     
-    public void edit(E entity) {
-        log.info("edit invoked with entity: [ " + entity + " ]");
-        setCurrentEntity(entity);
+    public void edit(E e) {
+        log.log(Level.INFO, () -> "editing " + e);
+        setCurrentEntity(e);
     }
     
     
-    public void update(E entity) {
-        getService().update(entity);
-        addMsg("ID #: " + entity.getId() + " has been Updated.");
+    public String update(E e) {
+        getService().update(e);
+        addMsg(e.getClass().getSimpleName() + " Id #: " + e.getId() + " has been updated!");
+        return null;
     }
     
     
     public void delete(E e) {
         getService().deleteById(e.getId());
         values.remove(e);
-        addMsg("ID #: " + e.getId() + " has been Deleted.");
+        addMsg(e.getClass().getSimpleName() + " Id #: " + e.getId() + " has been deleted!");
     }
     
     

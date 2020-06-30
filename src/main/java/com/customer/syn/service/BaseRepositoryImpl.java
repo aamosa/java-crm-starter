@@ -67,7 +67,7 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     public void save(E entity) {
         if (entity.getId() == null && !exists(entity)) {
             em.persist(entity);
-            log.log(Level.INFO, () -> String.format("New entity with id %d persisted.", entity.getId()));
+            log.log(Level.INFO, () -> String.format("entity with id %d persisted successfully.", entity.getId()));
         }
     }
 

@@ -10,5 +10,9 @@ INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode,
 INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, phone, statusCode, updatedAt, createdAt) VALUES ('MARY','COOPER', '4415 PALM TREE CIRCLE','PALO ALTO','CA','90103','cooper_mary1974@yahoo.com', '6173335414', 'ACTIVE', '2020-01-30 06:13:25.104', '2020-01-04 10:11:35.111');
 INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, phone, statusCode, updatedAt, createdAt) VALUES ('PRIYA','KOOTHRAPPALI', '1100 REDWOOD BLVD','PASADENA','CA','91103','priya_k303@gmail.com', '8574214188', 'INACTIVE', '2019-12-22 09:16:25.421', '2019-12-12 13:11:09.109');
     
-INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('Joe', 'Doe', 'joe.doe@crm.com', 'ADMIN', 'password1', '2020-01-05 11:16:25.421', '2019-12-05 11:01:19.109');
+INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('Joe', 'Doe', 'joe.doe@crm.com', 'JDOE', 'password1', '2020-01-05 11:16:25.421', '2019-12-05 11:01:19.109');
 INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('John', 'User', 'john.user@crm.com', 'JUSER', 'password2', '2019-12-23 10:26:21.001', '2019-12-01 15:11:09.003');
+
+INSERT INTO `role` (roleName, updatedAt, createdAt) VALUES ('ADMIN', '2019-02-19 12:19:17.000', '2019-01-01 07:10:09.003');
+INSERT INTO `role` (roleName, updatedAt, createdAt) VALUES ('READ_ONLY', '2019-02-21 11:04:22.001', '2019-01-02 09:10:09.005');
+INSERT INTO `role` (roleName, updatedAt, createdAt) VALUES ('READ_WRITE', '2019-02-22 09:26:11.009', '2019-01-02 10:30:12.007');

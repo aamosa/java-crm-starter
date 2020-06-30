@@ -33,10 +33,8 @@ public class DatasourceDefinition {
 
     @PostConstruct
     public void init() {
-        User user = new User();
-        user.setUserName("admin");
-        user.setPassword("password");
-        user.addRole(new Role("CAN_VIEW", user));
+        User user = new User("Admin", "Web", "ADMIN", "passw0rd");
+        user.addRole(new Role("ALLOW_ACCESS", user));
         userService.save(user);
     }
 
