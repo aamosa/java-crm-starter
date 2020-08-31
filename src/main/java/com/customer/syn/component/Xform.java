@@ -22,12 +22,14 @@ public class Xform extends UIInput implements NamingContainer {
     }
 
     @Override
-    protected Object getConvertedValue(FacesContext context, Object newSubmittedValue) throws ConverterException {
+    protected Object getConvertedValue(FacesContext context, Object newSubmittedValue) 
+            throws ConverterException {
         return super.getConvertedValue(context, newSubmittedValue);
     }
 
     @Override
-    public void encodeBegin(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) 
+            throws IOException {
         super.encodeBegin(context);
     }
 

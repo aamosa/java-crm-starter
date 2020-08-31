@@ -10,9 +10,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.customer.syn.model.Task;
+import com.customer.syn.model.User;
 import com.customer.syn.resource.LoggedUser;
-import com.customer.syn.resource.model.Task;
-import com.customer.syn.resource.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.TaskService;
 import com.customer.syn.view.AbstractBacking;

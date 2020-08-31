@@ -15,8 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -27,45 +25,53 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
-import com.customer.syn.resource.model.BaseEntity;
-import com.customer.syn.resource.model.ViewMeta;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.customer.syn.model.BaseEntity;
+import com.customer.syn.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
+
 
 public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number> {
     
-    private static final Logger log = Logger.getLogger(AbstractBacking.class.getName());
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
+    @Inject
+    private ExternalContext ec;
+    
+    @Inject
+    private FacesContext facesContext;
+    
     protected I Id;
     protected E currentEntity;
     protected E currentSelected;
     
     protected String firstName;
+    
     @NotNull
     protected String lastName;
     
     protected String page;
     protected String searchOption;
     protected LocalDate searchDateTo;
+    
     @PastOrPresent
     protected LocalDate searchDateFrom;
     
     protected List<E> values;
     protected List<E> entities;
     protected List<ColumnModel> tableColumns;
-    
     protected Map<String, String> formFields;
     protected Map<String, String> attributeNames;
     
-    @Inject
-    private FacesContext facesContext;
     
-    @Inject
-    private ExternalContext ec;
-    
-    
-    // ---------------------------------------------- constructors
+    // ---------------------------------------------------------- constructors
     
     public AbstractBacking() { }
+    
+    
+    // ---------------------------------------------------------- abstract methods
     
     protected abstract BaseRepositoryImpl<E, I> getService();
 
@@ -81,19 +87,23 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
 
     public void save(E e) {
-        log.log(Level.INFO, () -> "persisting " + e);
         getService().save(e);
+        if (log.isDebugEnabled())
+            log.debug("persist invoked with {}", e);
     }
     
     
     public void edit(E e) {
-        log.log(Level.INFO, () -> "editing " + e);
         setCurrentEntity(e);
+        if (log.isDebugEnabled())
+            log.debug("edit invoked with {}", e);
     }
     
     
     public String update(E e) {
         getService().update(e);
+        if (log.isDebugEnabled())
+            log.debug("update invoked with {}", e);
         addMsg(e.getClass().getSimpleName() + " Id #: " + e.getId() + " has been updated!");
         return null;
     }
@@ -103,19 +113,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         getService().deleteById(e.getId());
         values.remove(e);
         addMsg(e.getClass().getSimpleName() + " Id #: " + e.getId() + " has been deleted!");
-    }
-    
-    
-    public void addMsg(String msg) {
-        ec.getFlash().setKeepMessages(true);
-        FacesMessage message = new FacesMessage(msg);
-        facesContext.addMessage(null, message);
-    }
-    
-    
-    public Class<?> getChildClass() {
-        ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
-        return (Class<?>) pt.getActualTypeArguments()[0];
     }
     
     
@@ -136,12 +133,25 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             values = entities;
             break;
         case "searchByDate":
-            values = getService().findByDateRange(searchDateFrom, searchDateTo);
+            values = getService().findByCreatedDateRange(searchDateFrom, searchDateTo);
             break;
         }
         
         if (values == null || values.size() < 1 )
             addMsg("No records found.");
+    }
+    
+    
+    public void addMsg(String msg) {
+        ec.getFlash().setKeepMessages(true);
+        FacesMessage message = new FacesMessage(msg);
+        facesContext.addMessage(null, message);
+    }
+    
+    
+    public Class<?> getChildClass() {
+        ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
+        return (Class<?>) pt.getActualTypeArguments()[0];
     }
     
  
@@ -153,16 +163,15 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
     
     
-    
-    // ---------------------------------------------- private methods
+    // ---------------------------------------------------------- private methods
     
     private Map<String, String> getFormFieldsMap(final Class<?> bean) {
         Map<String, String> map = attributeNames;
-        return getViewMetaforForm(bean).stream()
-                                       .filter(map::containsKey)
-                                       .collect(Collectors.toMap(Function.identity(), map::get, (u, v) -> {
-                                           throw new IllegalStateException();
-                                           }, LinkedHashMap::new));
+        return getViewMetaforForm(bean).stream().filter(map::containsKey)
+                .collect(Collectors.toMap(Function.identity(), 
+                        map::get, (u, v) -> { 
+                            throw new IllegalStateException();
+                            }, LinkedHashMap::new));
     }
     
     
@@ -171,7 +180,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         Map<String, String> map = new LinkedHashMap<>();
         for (Field f : fields) {
             if (f.getAnnotation(ViewMeta.class) != null) {
-                map.put(f.getName(), capitalize(join(" ", splitByCharacterTypeCamelCase(f.getName()))));
+                map.put(f.getName(), capitalize(join(" ", 
+                        splitByCharacterTypeCamelCase(f.getName()))));
             }
         }
         return map;
@@ -181,7 +191,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     private static List<String> getViewMetaforForm(final Class<?> bean) {
         List<Field> fields = getSortedFields(bean);
         List<String> formFields = new ArrayList<>();
-        
         for (Field f : fields) {
             ViewMeta meta = f.getAnnotation(ViewMeta.class);
             if (meta != null && meta.formField()) {
@@ -215,8 +224,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
     
     
-    
-    // ---------------------------------------------- setters and getters
+    // ---------------------------------------------------------- setters and getters
     
     public I getId() {
         return Id;

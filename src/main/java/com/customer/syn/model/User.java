@@ -1,4 +1,4 @@
-package com.customer.syn.resource.model;
+package com.customer.syn.model;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -19,7 +19,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.customer.syn.resource.model.Contact.Status;
+import com.customer.syn.model.Contact.Status;
 
 @Entity
 public class User extends BaseEntity<Long> implements Serializable {

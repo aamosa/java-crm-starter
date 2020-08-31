@@ -14,9 +14,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import com.customer.syn.resource.model.Contact;
-import com.customer.syn.resource.model.Role;
-import com.customer.syn.resource.model.User;
+import com.customer.syn.model.Contact;
+import com.customer.syn.model.Role;
+import com.customer.syn.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.UserService;
 import com.customer.syn.view.AbstractBacking;

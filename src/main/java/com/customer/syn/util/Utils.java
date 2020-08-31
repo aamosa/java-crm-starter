@@ -17,9 +17,15 @@ import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
-import com.customer.syn.resource.model.BaseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.customer.syn.model.BaseEntity;
+
 
 public final class Utils {
+    
+    private static final Logger log = LoggerFactory.getLogger(Utils.class);
     
     /** prevent instantiation :p */
     private Utils() {}
@@ -47,8 +53,11 @@ public final class Utils {
                     fields.add(field.getName());
                 }
             }
-        } catch (IntrospectionException | SecurityException | NoSuchFieldException e) {
-            e.printStackTrace();
+        } 
+        catch (IntrospectionException 
+                | SecurityException 
+                | NoSuchFieldException e) {
+            log.error("{}", e);
         }
         return fields;
     }
@@ -58,10 +67,11 @@ public final class Utils {
     public static String[] nonFinalorNonStaticFieldnames(Class<?> bean) {
         Field[] fields = bean.getDeclaredFields();
         String[] fieldNames = new String[fields.length];
+        
         int i = 0;
-
         for (Field field : fields) {
-            if (!Modifier.isFinal(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
+            if (!Modifier.isFinal(field.getModifiers()) 
+                    && !Modifier.isStatic(field.getModifiers())) {
                 fieldNames[i] = field.getName();
                 i++;
             }
@@ -71,10 +81,12 @@ public final class Utils {
     
     
     
-    public static Field getField(Class<?> clazz, String name) throws NoSuchFieldException {
+    public static Field getField(Class<?> clazz, String name) 
+            throws NoSuchFieldException {
         try {
             return clazz.getDeclaredField(name);
-        } catch (NoSuchFieldException e) {
+        } 
+        catch (NoSuchFieldException e) {
             Class<?> superClass = clazz.getSuperclass();
             if (superClass == null) {
                 throw e;
@@ -91,7 +103,7 @@ public final class Utils {
         Metamodel metamodel = em.getMetamodel();
         ManagedType<?> type = metamodel.managedType(clazz);
         
-        for (Attribute attr : type.getAttributes()) {
+        for (Attribute<?, ?> attr : type.getAttributes()) {
             list.add(attr.getName());
         }
         return list;
@@ -99,22 +111,31 @@ public final class Utils {
     
     
     
-    public static <T, ID> T findById(Class<T> type, ID id) {
+    public static <T, ID> T findById(Class<T> type, ID id, String pUnit) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         try {
-            emf = Persistence.createEntityManagerFactory("syn");
+            emf = Persistence.createEntityManagerFactory(pUnit);
             em = emf.createEntityManager();
             return em.find(type, id);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             throw new PersistenceException(e.getCause());
-        } finally {
-            if (em.isOpen())
-                em.close();
-            if (emf.isOpen())
-                emf.close();
+        } 
+        finally {
+            if (em.isOpen()) {
+                try {
+                    em.close();
+                } catch (Exception e) { /* ignore */ }
+            }
+            if (emf.isOpen()) {
+                try {
+                    emf.close();
+                } catch (Exception e) { /* ignore */ }
+            }
         }
     }
+    
     
     /**    
         public void getBeanFromEL() {

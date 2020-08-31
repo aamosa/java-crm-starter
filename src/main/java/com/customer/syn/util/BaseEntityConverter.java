@@ -1,8 +1,5 @@
 package com.customer.syn.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -12,13 +9,17 @@ import javax.faces.convert.FacesConverter;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.customer.syn.resource.model.BaseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.customer.syn.model.BaseEntity;
+
 
 @FacesConverter(forClass = BaseEntity.class,
                 managed = true)
 public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
 
-    private static final transient Logger log = Logger.getLogger(BaseEntityConverter.class.getName());
+    private final Logger log = LoggerFactory.getLogger(BaseEntityConverter.class);
 
     @PersistenceContext
     protected EntityManager em;
@@ -29,10 +30,11 @@ public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
         if (entity == null)
             return "";
         if (entity.getId() != null) {
-            log.log(Level.INFO, () -> "convertor id is " + entity.getId().toString());
+            log.debug("converting to string Id {}", entity.getId());
             return entity.getId().toString();
-        } else {
-            throw new ConverterException("Invalid Id");
+        } 
+        else {
+            throw new ConverterException("Invalid Id.");
         }
     }
     
@@ -47,12 +49,14 @@ public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
         Class<?> type = value.getType(ctx.getELContext());
 
         try {
-            log.log(Level.INFO, () -> String.format("Id is %d - type is %s", Long.valueOf(Id), type));
+            log.debug("converting to object Id {} of type {}", Long.valueOf(Id), type);
             return (BaseEntity<Number>) em.find(type, Long.valueOf(Id));
-        } catch (Exception e) {
-            log.log(Level.SEVERE, e.getMessage(), e);
+        } 
+        catch (Exception e) {
+            log.error(e.getMessage());
             throw new ConverterException("Invalid Id", e);
         }
     }
+    
 
 }

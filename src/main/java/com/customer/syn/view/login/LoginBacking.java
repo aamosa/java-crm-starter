@@ -1,5 +1,6 @@
 package com.customer.syn.view.login;
 
+import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.security.enterprise.AuthenticationStatus.NOT_DONE;
 import static javax.security.enterprise.AuthenticationStatus.SEND_CONTINUE;
 import static javax.security.enterprise.AuthenticationStatus.SEND_FAILURE;
@@ -29,48 +30,58 @@ public class LoginBacking implements Serializable {
 
     private static final long serialVersionUID = 3L;
 
+    @NotNull
+    private String user;
+    
+    @NotNull
+    private String pass;
+    
+    @Inject
+    private FacesContext fc;
+    
     @Inject
     private SecurityContext securityContext;
 
     @Inject
-    private ExternalContext externalContext;
+    private ExternalContext ec;
+    
+    private static final String LOGOUT_REDIRECT = "login.xhtml";
+    private static final String SUCCESS_URL = "/web/index.xhtml";
 
-    @Inject
-    private FacesContext facesContext;
-
-    @NotNull
-    private String user;
-
-    @NotNull
-    private String pass;
 
     public void login() throws IOException {
-        AuthenticationStatus authStatus = securityContext.authenticate(
-                (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(),
-                AuthenticationParameters.withParams().newAuthentication(true)
-                        .credential(new UsernamePasswordCredential(user, pass)));
-
-        if (authStatus == SEND_CONTINUE) {
-            facesContext.responseComplete();
-        } else if (authStatus == SEND_FAILURE) {
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Authentication Failed", null));
-        } else if (authStatus == SUCCESS) {
-            externalContext.redirect(externalContext.getRequestContextPath() + "/web/index.xhtml");
-        } else if (authStatus == NOT_DONE) {
-            // do nothing here
+        AuthenticationStatus status = securityContext.authenticate(
+                (HttpServletRequest) ec.getRequest(), 
+                (HttpServletResponse) ec.getResponse(),
+                AuthenticationParameters.withParams()
+                    .newAuthentication(true)
+                    .credential(new UsernamePasswordCredential(user, pass)));
+        if (status == SEND_CONTINUE) {
+            fc.responseComplete();
+        } 
+        else if (status == SEND_FAILURE) {
+            fc.addMessage(null, 
+                    new FacesMessage(SEVERITY_ERROR, "Authentication Failed", null));
+        } 
+        else if (status == SUCCESS) {
+            ec.redirect(ec.getRequestContextPath() + SUCCESS_URL);
+        } 
+        else if (status == NOT_DONE) {
+            /* do nothing here */
         }
     }
 
-    // logout
+    
+    /* logout */
     public void logout() throws ServletException, IOException {
-        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
         request.logout();
         request.getSession().invalidate();
-        externalContext.redirect("login.xhtml");
+        ec.redirect(LOGOUT_REDIRECT);
     }
 
     
-    // ---------------------------------------------------- setters and getters
+    // ------------------------------------------------------- setters and getters
 
     public String getUser() {
         return user;

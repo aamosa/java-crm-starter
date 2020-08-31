@@ -1,4 +1,4 @@
-package com.customer.syn.resource.model;
+package com.customer.syn.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;

@@ -11,6 +11,4 @@ import javax.security.enterprise.authentication.mechanism.http.LoginToContinue;
                                            useForwardToLogin = false))
 @FacesConfig
 @ApplicationScoped
-public class ApplicationConfig {
-
-}
+public class ApplicationConfig { }

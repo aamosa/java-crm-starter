@@ -1,5 +1,7 @@
 package com.customer.syn.util;
 
+import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -10,31 +12,41 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.customer.syn.resource.model.Contact;
-import com.customer.syn.resource.model.Role;
-import com.customer.syn.service.ContactService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.customer.syn.model.Role;
 
 /**
  * Custom {@link Converter} implementation for working with
  * <code>Customer</code> entity objects.
  */
 @SuppressWarnings("rawtypes")
-@FacesConverter(value = "roleConverter", managed = true)
+@FacesConverter(value = "roleConverter",
+                managed = true)
 public class RoleConverter implements Converter {
-
+    
+    private final Logger log = LoggerFactory.getLogger(RoleConverter.class);
+    
+    @Inject
+    private FacesContext fc;
+    
     @PersistenceContext
     private EntityManager em;
 
+    
     @Override
     public Object getAsObject(FacesContext facescontext, UIComponent component, String value) {
         if (value == null || value.isEmpty())
             return null;
 
         try {
+            log.debug("converting to object {}", value);
             return em.find(Role.class, Long.valueOf(value));
-        } catch (NumberFormatException nfe) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "invalid Id", "invalid Id"));
+        } 
+        catch (NumberFormatException e) {
+            fc.addMessage(null, 
+                    new FacesMessage(SEVERITY_ERROR, "Invalid Id", "Invalid Id"));
             throw new ConverterException();
         }
     }
@@ -46,10 +58,12 @@ public class RoleConverter implements Converter {
             return "";
 
         if (value instanceof Role) {
+            log.debug("converting to string {}", value);
             return String.valueOf(((Role) value).getId());
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "conversion error", "conversion error"));
+        } 
+        else {
+            fc.addMessage(null,
+                    new FacesMessage(SEVERITY_ERROR, "Conversion error", "Conversion error"));
             throw new ConverterException();
         }
     }

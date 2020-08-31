@@ -4,8 +4,9 @@ target/
 .vscode/
 .metadata/
 .classpath
-.settings
+.settings/
 .project
+nb-configuration.xml
 *.sh
 *.bat
 *.iml

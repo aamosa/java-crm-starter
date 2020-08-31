@@ -6,45 +6,48 @@ import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 
-import com.customer.syn.resource.model.Role;
-import com.customer.syn.resource.model.User;
+import com.customer.syn.model.Role;
+import com.customer.syn.model.User;
 
 @Stateless
 public class UserService extends BaseRepositoryImpl<User, Long> {
     
-
+    private static final String ROLES_QUERY = "select r from Role r";
+    private static final String USER_QUERY = "select u from User u where u.userName = :username";
+    private static final String USER_PASS_QUERY = "select u from User u where u.userName = :user AND u.password = :pass";
+    
+    
+    // ------------------------------------------------------------ business methods
+    
+    public Set<Role> getRoles() {
+        return getEntityManager().createQuery(ROLES_QUERY, Role.class)
+                .getResultStream()
+                .collect(Collectors.toSet());
+    }
+    
+    
     public Optional<User> findByUserandPassword(String username, String password) {
+        User user = null;
         try {
-            User user = em
-                    .createQuery("SELECT u FROM User u WHERE u.userName = :user AND u.password = :pass", User.class)
-                    .setParameter("user", username)
-                    .setParameter("pass", password)
+            user = getEntityManager().createQuery(USER_PASS_QUERY, User.class)
+                    .setParameter("user", username).setParameter("pass", password)
                     .getSingleResult();
-            if (user != null)
-                return Optional.of(user);
-        } catch (Exception e) {
-            // silently ignore 
-        }
-        return Optional.empty();
+        } 
+        catch (Exception e) { /* ignore */ }
+        return Optional.ofNullable(user);
     }
     
     
     public User findByUsername(String username) {
         User user = null;
         try {
-            user = em.createQuery("select u from User u where u.userName = :username", User.class)
-                    .setParameter("username", username).getSingleResult();
-        } catch (Exception e) {
-            //:TODO
-        }
+            user = getEntityManager().createQuery(USER_QUERY, User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        } 
+        catch (Exception e) { /* ignore */ }
         return user;
     }
     
-    
-    public Set<Role> getRoles() {
-        return getEntityManager().createQuery("select r from Role r", Role.class)
-                .getResultStream()
-                .collect(Collectors.toSet());
-    }
     
 }

@@ -2,15 +2,18 @@ package com.customer.syn.view.contact;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.customer.syn.resource.model.Contact;
-import com.customer.syn.resource.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.customer.syn.model.Contact;
+import com.customer.syn.model.Task;
 import com.customer.syn.service.BaseRepositoryImpl;
 import com.customer.syn.service.ContactService;
 import com.customer.syn.view.AbstractBacking;
@@ -19,7 +22,7 @@ import com.customer.syn.view.AbstractBacking;
 @ViewScoped
 public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
     
-    private static final Logger log = Logger.getLogger(ContactBacking.class.getName());
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
@@ -29,14 +32,13 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     private ContactService contactService;
    
    
-    
     // --------------------------------------------------------- constructors
     
     public ContactBacking() {}
 
     
     @PostConstruct
-    public void init() { }
+    public void setUp() {}
     
     
     @Override
@@ -46,14 +48,16 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     
     public void initialize() {
-        log.info("Contact object instantiated.");
         contact = new Contact();
+        if (log.isDebugEnabled()) {
+            log.debug("contact object instantiated.");
+        }
     }
     
     
     @Override
     public void edit(Contact contact) {
-        assignedTasks = contactService.getTaskforContact(contact);
+        assignedTasks = contactService.findTasksforContact(contact);
         super.edit(contact);
         setPage("editcontact");
     }
@@ -72,7 +76,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         return "index?faces-redirect=true&includeViewParams=true";
     }
     
-    
 
     // --------------------------------------------------------- setters and getters
 
@@ -80,6 +83,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         return contact;
     }
 
+    
     public void setContact(Contact contact) {
         this.contact = contact;
     }

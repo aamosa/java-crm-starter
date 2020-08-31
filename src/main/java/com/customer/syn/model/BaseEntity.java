@@ -1,4 +1,4 @@
-package com.customer.syn.resource.model;
+package com.customer.syn.model;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

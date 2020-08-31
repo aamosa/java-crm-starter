@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.sql.DataSource;
 
-import com.customer.syn.resource.model.Role;
-import com.customer.syn.resource.model.User;
+import com.customer.syn.model.Role;
+import com.customer.syn.model.User;
 import com.customer.syn.service.UserService;
 
 @Singleton
