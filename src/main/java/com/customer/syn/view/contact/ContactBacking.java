@@ -22,7 +22,6 @@ import com.customer.syn.view.AbstractBacking;
 @ViewScoped
 public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
     
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
@@ -63,7 +62,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     }
     
     
-    @Override
     public String update(Contact contact) {
         super.update(contact);
         return "index?faces-redirect=true";
@@ -72,7 +70,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     public String save() {
         super.save(contact);
-        addMsg("New contact created!");
         return "index?faces-redirect=true&includeViewParams=true";
     }
     

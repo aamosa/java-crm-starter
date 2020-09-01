@@ -9,9 +9,10 @@
 
    <h:form id="eform">
 
-      <p:dataTable id="someTable" value="#{backingBean.values}" var="c" selectionMode="single"
-         selection="#{backingBean.currentSelected}" rendered="#{!empty backingBean.values}"
-         paginator="true" rows="10" rowKey="#{c.id}">
+      <p:dataTable id="someTable" value="#{backingBean.values}" var="c" 
+        selectionMode="single" selection="#{backingBean.currentSelected}" 
+        rendered="#{!empty backingBean.values}"
+        paginator="true" rows="10" rowKey="#{c.id}">
 
          <p:column>
             <f:ajax execute="@form" render="someTable :eform :grwl :page :currentform">

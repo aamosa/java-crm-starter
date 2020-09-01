@@ -1,6 +1,7 @@
 package com.customer.syn.view;
 
 import static java.lang.String.join;
+import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
 
@@ -38,26 +39,26 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Inject
-    private ExternalContext ec;
+    private FacesContext fc;
     
     @Inject
-    private FacesContext facesContext;
+    private ExternalContext ec;
     
     protected I Id;
     protected E currentEntity;
     protected E currentSelected;
-    
+
     protected String firstName;
-    
     @NotNull
     protected String lastName;
     
     protected String page;
     protected String searchOption;
     protected LocalDate searchDateTo;
-    
     @PastOrPresent
     protected LocalDate searchDateFrom;
+    
+    private final Class<?> entityClass;
     
     protected List<E> values;
     protected List<E> entities;
@@ -65,10 +66,29 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected Map<String, String> formFields;
     protected Map<String, String> attributeNames;
     
+    private static final String NO_RECORDS = "No Records Found.";
+    private static final String UPDATE_MSG = "%s with Id: %d has been updated.";
+    private static final String DELETE_MSG = "%s with Id: %d has been deleted.";
+    private static final String CREATE_MSG = "New %s has been created successfully.";
+    
     
     // ---------------------------------------------------------- constructors
     
-    public AbstractBacking() { }
+    protected AbstractBacking(Class<?> clazz) { 
+        this.entityClass = clazz;
+    }
+    
+    
+    protected AbstractBacking() {
+        try {
+            ParameterizedType type = (ParameterizedType) this.getClass()
+                    .getGenericSuperclass();
+            this.entityClass = (Class<?>) type.getActualTypeArguments()[0];
+        } 
+        catch (Exception e) {
+            throw new IllegalArgumentException();
+        }
+    }
     
     
     // ---------------------------------------------------------- abstract methods
@@ -79,32 +99,29 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll();
-        attributeNames = getViewMeta(getChildClass());
-        formFields = getFormFieldsMap(getChildClass()); 
-        createTableColumns(getChildClass());
+        attributeNames = getViewMeta(getEntityClass());
+        formFields = getFormFieldsMap(getEntityClass()); 
+        createTableColumns(getEntityClass());
         setPage("list");
     }
     
 
-    public void save(E e) {
-        getService().save(e);
-        if (log.isDebugEnabled())
-            log.debug("persist invoked with {}", e);
-    }
-    
-    
     public void edit(E e) {
         setCurrentEntity(e);
         if (log.isDebugEnabled())
-            log.debug("edit invoked with {}", e);
+            log.debug("edit invoked on {}", e);
+    }
+
+    
+    public void save(E e) {
+        getService().save(e);
+        addMsg(format(CREATE_MSG, getEntityName()));
     }
     
     
     public String update(E e) {
         getService().update(e);
-        if (log.isDebugEnabled())
-            log.debug("update invoked with {}", e);
-        addMsg(e.getClass().getSimpleName() + " Id #: " + e.getId() + " has been updated!");
+        addMsg(format(UPDATE_MSG, getEntityName(), e.getId()));
         return null;
     }
     
@@ -112,7 +129,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     public void delete(E e) {
         getService().deleteById(e.getId());
         values.remove(e);
-        addMsg(e.getClass().getSimpleName() + " Id #: " + e.getId() + " has been deleted!");
+        addMsg(format(DELETE_MSG, getEntityName(), e.getId()));
     }
     
     
@@ -137,33 +154,37 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             break;
         }
         
-        if (values == null || values.size() < 1 )
-            addMsg("No records found.");
+        if (values == null || values.size() < 1)
+            addMsg(NO_RECORDS);
     }
     
     
-    public void addMsg(String msg) {
+    // ---------------------------------------------------------- private methods
+    
+    private String getEntityName() {
+        return entityClass.getSimpleName();
+    }
+    
+    
+    private Class<?> getEntityClass() {
+        return entityClass;
+    }
+    
+    
+    private void addMsg(String msg) {
         ec.getFlash().setKeepMessages(true);
         FacesMessage message = new FacesMessage(msg);
-        facesContext.addMessage(null, message);
+        fc.addMessage(null, message);
     }
+
     
-    
-    public Class<?> getChildClass() {
-        ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
-        return (Class<?>) pt.getActualTypeArguments()[0];
-    }
-    
- 
-    public void createTableColumns(final Class<?> bean) {
+    private void createTableColumns(final Class<?> bean) {
         tableColumns = new ArrayList<>();
         for (Map.Entry<String, String> e : getAttributeNames().entrySet()) {
             tableColumns.add(new ColumnModel(e.getValue(), e.getKey()));
         }
     }
     
-    
-    // ---------------------------------------------------------- private methods
     
     private Map<String, String> getFormFieldsMap(final Class<?> bean) {
         Map<String, String> map = attributeNames;
@@ -223,6 +244,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         return fields;
     }
     
+
     
     // ---------------------------------------------------------- setters and getters
     
@@ -317,5 +339,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     public void setCurrentSelected(E currentSelected) {
         this.currentSelected = currentSelected;
     }
+    
 
 }

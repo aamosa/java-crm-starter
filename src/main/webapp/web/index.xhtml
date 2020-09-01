@@ -14,7 +14,8 @@
    <ui:define name="header-stuff">
       <syn:search-form backingBean="#{contactBacking}"
          selectValue="#{contactBacking.searchOption}"
-         selectModel="#{menuBacking.searchOptions}" fieldModel="#{menuBacking.searchFields}"
+         selectModel="#{menuBacking.searchOptions}" 
+         fieldModel="#{menuBacking.searchFields}"
          fieldValues="#{menuBacking.searchFieldValues}" />
    </ui:define>
 
@@ -28,7 +29,8 @@
                   <f:setPropertyActionListener target="#{backingBean.page}" value="create" />
                </h:commandButton>
                
-               <h:link styleClass="tab" value="Create Task" outcome="createtask" rendered="#{backingBean.page == 'detail'}">
+               <h:link styleClass="tab" value="Create Task" outcome="createtask"
+                    rendered="#{backingBean.page == 'detail'}">
                     <f:param name="conId" value="#{contactBacking.currentEntity.id}" />
                </h:link>
                

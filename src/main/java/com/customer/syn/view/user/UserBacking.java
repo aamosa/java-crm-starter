@@ -1,20 +1,15 @@
 package com.customer.syn.view.user;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
 
-import com.customer.syn.model.Contact;
 import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
@@ -26,7 +21,6 @@ import com.customer.syn.view.AbstractBacking;
 public class UserBacking extends AbstractBacking<User, Long> implements Serializable {
    
     private static final long serialVersionUID = 691L;
-    private static final Logger log = Logger.getLogger(UserBacking.class.getName());
     
     private User user;
     private List<Role> userRoles;
@@ -36,7 +30,6 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
 
     @Inject
     private UserService userService;
-    
     
 
     // ------------------------------------------------------ constructors
@@ -84,10 +77,11 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     public String save() {
         user.addRoles(new HashSet<Role>(userRoles));
         super.save(user);
-        log.log(Level.INFO, () -> "Roles selected: " + getUserRoles().toString());
+        if (log.isDebugEnabled()) {
+            log.debug("user roles selected {}", getUserRoles());
+        }
         return "user?faces-redirect=true&includeViewParams=true";
     }
-    
     
     
     // ------------------------------------------------------ setters and getters
@@ -108,11 +102,9 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
         this.userRoles = userRoles;
     }
 
-
     public Set<Role> getSelectedRoles() {
         return selectedRoles;
     }
-
 
     public void setSelectedRoles(Set<Role> selectedRoles) {
         this.selectedRoles = selectedRoles;

@@ -26,6 +26,7 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     
     private Class<E> clazz;
     
+    private static final String LOG_MSG = "entity with Id {} {} successfully.";
     private static final String GET_COUNT = "select count(e) from %s e where e.id = :id";
     private static final String DATE_RANGE = "select e from  %s e where e.createdAt between :from and :to";
     private static final String LAST_NAME = "select e from %s e where e.lastName like :lastName";
@@ -77,8 +78,21 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
         if (entity.getId() == null && !exists(entity)) {
             em.persist(entity);
             if (log.isDebugEnabled())
-                log.debug("entity with id: {} persisted.", entity.getId());
+                log.debug(LOG_MSG, entity.getId(), "persisted");
         }
+        else {
+            update(entity);
+        }
+    }
+
+    
+    public E update(E entity) {
+        if (entity.getId() == null && !exists(entity))
+            throw new IllegalArgumentException("Cannot update because entity does not exist.");
+        E mergedEntity = em.merge(entity);
+        if (log.isDebugEnabled())
+            log.debug(LOG_MSG, entity.getId(), "merged");
+        return mergedEntity;
     }
 
     
@@ -90,13 +104,8 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     
     public void deleteById(I id) {
         getEntityManager().remove(findByID(id));
-    }
-
-    
-    public E update(E entity) {
-        if (entity.getId() == null && !exists(entity))
-            throw new IllegalArgumentException("entity does not exist.");
-        return em.merge(entity);
+        if (log.isDebugEnabled())
+            log.debug(LOG_MSG, id, "deleted");
     }
     
     
