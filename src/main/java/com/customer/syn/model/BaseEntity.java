@@ -20,11 +20,9 @@ public abstract class BaseEntity<I extends Number> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     protected I id;
-    
 
 //    @Version
 //    protected I version;
-    
     
     @ViewMeta(formField = false)
     @Column(nullable = false,
@@ -49,14 +47,14 @@ public abstract class BaseEntity<I extends Number> {
     }
     
     
-    /** Note: default hashCode based on the generated Id */
+    /* Note: default hashCode based on the surrogate Id */
     @Override
     public int hashCode() {
         return getId() != null ? Objects.hash(getId()) : super.hashCode(); 
     }
     
     
-    /** Note: default equality based on the generated Id  */
+    /* Note: default equality based on the surrogate Id */
     @Override
     public boolean equals(Object otherEntity) {
         if (otherEntity == null) return false;
@@ -64,12 +62,9 @@ public abstract class BaseEntity<I extends Number> {
         if (getClass() != otherEntity.getClass()) return false;
         return getId().equals( ((BaseEntity<?>) otherEntity).getId());
     }
-    
-    
-   
   
     
-    // ------------------------------------------------- getters and setters
+    // ------------------------------------------------------- setters and getters
 
 //    public I getVersion() {
 //        return this.version;

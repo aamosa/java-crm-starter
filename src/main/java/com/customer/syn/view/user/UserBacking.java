@@ -2,6 +2,7 @@ package com.customer.syn.view.user;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -67,9 +68,14 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
     @Override
     public void delete(User user) {
-        for (Role role : user.getRoles()) {
-            user.removeRole(role);
+        Iterator<Role> it = user.getRoles().iterator();
+        while (it.hasNext()) {
+            Role r = it.next();
+            user.removeRole(r);
         }
+//        for (Role role : user.getRoles()) {
+//            user.removeRole(role);
+//        }
         super.delete(user);
     }
     
@@ -77,9 +83,8 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     public String save() {
         user.addRoles(new HashSet<Role>(userRoles));
         super.save(user);
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
             log.debug("user roles selected {}", getUserRoles());
-        }
         return "user?faces-redirect=true&includeViewParams=true";
     }
     

@@ -1,4 +1,4 @@
-package com.customer.syn.util;
+package com.customer.syn.component;
 
 public class FormField {
 

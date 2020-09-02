@@ -66,13 +66,13 @@ public class User extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 7,
               formField = false)
     @ManyToMany(fetch = FetchType.EAGER,
-                cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+                cascade = { CascadeType.PERSIST, 
+                            CascadeType.MERGE })
     @JoinTable(name = "users_roles",
                joinColumns = @JoinColumn(name = "user_id",
                                          nullable = false),
                inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-    
     
     
     // ------------------------------------------------------------- constructors
@@ -86,7 +86,6 @@ public class User extends BaseEntity<Long> implements Serializable {
         this.userName = userName;
         this.password = password;
     }
-    
     
     
     // ------------------------------------------------------------- utility methods
@@ -109,7 +108,6 @@ public class User extends BaseEntity<Long> implements Serializable {
         getRoles().remove(role);
         role.getUsers().remove(this);
     }
-
     
     
     // ------------------------------------------------------------- setters and getters
@@ -171,7 +169,7 @@ public class User extends BaseEntity<Long> implements Serializable {
     }
 
     public Set<Role> getRoles() {
-        return roles;
+        return this.roles;
     }
 
     public void setRoles(Set<Role> roles) {

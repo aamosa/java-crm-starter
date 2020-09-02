@@ -3,14 +3,10 @@ package com.customer.syn.view.contact;
 import java.io.Serializable;
 import java.util.List;
 
-
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.customer.syn.model.Contact;
 import com.customer.syn.model.Task;
@@ -48,20 +44,38 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     public void initialize() {
         contact = new Contact();
-        if (log.isDebugEnabled()) {
-            log.debug("contact object instantiated.");
+        if (log.isDebugEnabled())
+            log.debug("contact object {} instantiated.", contact);
+    }
+    
+    
+    @Override
+    public void view() {
+        if (isSelected()) {
+            setAssignedTasks(contactService.findTasksforContact(
+                    getCurrentSelected()));
+            setCurrentEntity(getCurrentSelected());
+            setPage("detail");
+        }
+        else {
+            addMsg(NO_SELECTION);
         }
     }
     
     
     @Override
-    public void edit(Contact contact) {
-        assignedTasks = contactService.findTasksforContact(contact);
-        super.edit(contact);
-        setPage("editcontact");
+    public void edit() {
+        if (isSelected()) {
+            super.edit(getCurrentSelected());
+            setPage("editcontact");
+        }
+        else {
+            addMsg(NO_SELECTION);
+        }
     }
+   
     
-    
+    @Override
     public String update(Contact contact) {
         super.update(contact);
         return "index?faces-redirect=true";
@@ -80,14 +94,16 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         return contact;
     }
 
-    
     public void setContact(Contact contact) {
         this.contact = contact;
     }
 
-
     public List<Task> getAssignedTasks() {
         return assignedTasks;
+    }
+
+    public void setAssignedTasks(List<Task> assignedTasks) {
+        this.assignedTasks = assignedTasks;
     }
 
 }

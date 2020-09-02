@@ -1,4 +1,5 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:syn="http://syn.customer.com/jsf"
@@ -11,14 +12,17 @@
 
          <h:form id="editform">
             <h:panelGroup layout="block" id="eblk" styleClass="row">
-               <syn:input value="#{userBacking.currentEntity.firstName}" label="First Name" />
+               <syn:input value="#{userBacking.currentEntity.firstName}"
+                label="First Name" />
             </h:panelGroup>
             <h:panelGroup layout="block" id="eblk1" styleClass="row">
-               <syn:input value="#{userBacking.currentEntity.lastName}" label="Last Name" />
+               <syn:input value="#{userBacking.currentEntity.lastName}"
+                label="Last Name" />
             </h:panelGroup>
             <h:panelGroup layout="block" id="eblk2" styleClass="row">
-               <syn:input value="#{userBacking.currentEntity.email}" label="Email"
-                  readonly="true" />
+               <syn:input value="#{userBacking.currentEntity.email}"
+                label="Email" 
+                readonly="true" />
             </h:panelGroup>
             <h:panelGroup layout="block" id="eblk3" styleClass="row">
                <label>Status</label>
@@ -32,16 +36,19 @@
             </h:panelGroup>
             
             <h:panelGroup layout="block" id="eblk5" styleClass="row">
-               <p:selectManyCheckbox id="roles" layout="pageDirection"
-                  value="#{userBacking.currentEntity.roles}" collectionType="java.util.HashSet" converter="roleConverter">
-                  <f:selectItems value="#{menuBacking.roles}" var="r" itemLabel="#{r.roleName}" itemValue="#{r}" />
+               <p:selectManyCheckbox id="roles"
+                    layout="pageDirection"
+                    value="#{userBacking.currentEntity.roles}" 
+                    collectionType="java.util.HashSet" 
+                    converter="roleConverter">
+                  <f:selectItems value="#{menuBacking.roles}" itemLabel="#{r.roleName}" 
+                    var="r" 
+                    itemValue="#{r}" />
                </p:selectManyCheckbox>
             </h:panelGroup>
 
-            <h:commandButton id="save" value="Save" action="#{userBacking.update()}"
-               styleClass="tab">
-            </h:commandButton>
-
+            <h:commandButton id="save" value="Save" styleClass="tab"
+                action="#{userBacking.update()}" />
          </h:form>
 
       </div>

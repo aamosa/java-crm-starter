@@ -10,13 +10,18 @@
    <c:set var="id" value="${not empty id ? id : fn:replace(label,' ','')}" />
    <c:set var="rendered" value="${empty rendered ? true : rendered}" />
    <c:set var="required" value="${empty required ? false : required}" />
+   <c:set var="readonly" value="${empty readonly ? false : readonly}" />
 
    <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}" />
 
    <c:choose>
       <c:when test="#{type == 'date'}">
-         <h:inputText id="#{id}" label="#{label}" value="#{value}" rendered="#{rendered}"
-            required="#{required}" styleClass="#{component.valid ? styleClass : 'invalid'}"
+         <h:inputText id="#{id}" label="#{label}" 
+            value="#{value}" 
+            rendered="#{rendered}"
+            required="#{required}"
+            readonly="#{readonly}" 
+            styleClass="#{component.valid ? styleClass : 'invalid'}"
             a:type="date">
             <c:if test="${required}">
                <f:attribute name="requiredMessage" value="#{requiredMessage}" />
@@ -27,8 +32,12 @@
          </h:inputText>
       </c:when>
       <c:otherwise>
-         <h:inputText id="#{id}" label="#{label}" value="#{value}" rendered="#{rendered}"
-            required="#{required}" styleClass="#{component.valid ? styleClass : 'invalid'}">
+         <h:inputText id="#{id}" label="#{label}" 
+            styleClass="#{component.valid ? styleClass : 'invalid'}"
+            value="#{value}"
+            rendered="#{rendered}"
+            required="#{required}"
+            readonly="#{readonly}">
             <c:if test="${required}">
                <f:attribute name="requiredMessage" value="#{requiredMessage}" />
             </c:if>

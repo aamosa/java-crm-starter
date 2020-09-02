@@ -12,43 +12,41 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.customer.syn.component.FormField;
+import com.customer.syn.component.ValueLabelHolder;
 import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
 import com.customer.syn.model.Contact.Status;
 import com.customer.syn.service.UserService;
-import com.customer.syn.util.FormField;
-import com.customer.syn.util.ValueLabelHolder;
 
-@Named
+@Named(value = "menuBacking")
 @ApplicationScoped
-public class MenuBacking implements Serializable {
+public class ApplicationManager implements Serializable {
 
     private static final long serialVersionUID = 54L;
 
+    private Status[] status;
+    private Set<Role> availRoles;
+    private List<User> users;
+    
+    private static Map<String, Object> searchFieldValues;
+    private static List<FormField> searchFields;
     private static List<ValueLabelHolder<String>> menu;
     private static List<ValueLabelHolder<String>> searchOptions;
-    
-    private static List<FormField> searchFields;
-    private static Map<String, Object> searchFieldValues;
-    
-    private List<User> users;
-    private Set<Role> roles;
-    private Status[] status;
 
     @Inject
     private UserService userService;
     
     
-    
     // -------------------------------------------------- constructors
     
-    public MenuBacking() {}
+    public ApplicationManager() {}
 
     
     @PostConstruct
     public void init() {  // :TODO load from property file or DB here
         if (users == null) users = userService.fetchAll();
-        if (roles == null) roles = userService.getRoles();
+        if (availRoles == null) availRoles = userService.getRoles();
         
         menu = new ArrayList<>();
         menu.add(new ValueLabelHolder<>("Contacts", "index.xhtml"));
@@ -84,7 +82,6 @@ public class MenuBacking implements Serializable {
         searchFieldValues.put("id", "id");
     }
     
-
     
     // -------------------------------------------------- setters and getters
 
@@ -101,7 +98,7 @@ public class MenuBacking implements Serializable {
     }
 
     public void setSearchFields(List<FormField> searchFields) {
-        MenuBacking.searchFields = searchFields;
+        ApplicationManager.searchFields = searchFields;
     }
 
     public Map<String, Object> getSearchFieldValues() {
@@ -109,15 +106,15 @@ public class MenuBacking implements Serializable {
     }
 
     public void setSearchFieldValues(Map<String, Object> searchFieldValues) {
-        MenuBacking.searchFieldValues = searchFieldValues;
+        ApplicationManager.searchFieldValues = searchFieldValues;
     }
 
     public List<User> getUsers() {
         return users;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<Role> getAvailRoles() {
+        return availRoles;
     }
 
     public Status[] getStatus() {

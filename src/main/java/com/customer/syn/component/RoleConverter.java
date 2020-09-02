@@ -1,4 +1,4 @@
-package com.customer.syn.util;
+package com.customer.syn.component;
 
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 
@@ -54,12 +54,11 @@ public class RoleConverter implements Converter {
     
     @Override
     public String getAsString(FacesContext facescontext, UIComponent component, Object value) {
-        if (value == null)
-            return "";
+        if (value == null) return "";
 
         if (value instanceof Role) {
             log.debug("converting to string {}", value);
-            return String.valueOf(((Role) value).getId());
+            return String.valueOf( ((Role) value).getId() );
         } 
         else {
             fc.addMessage(null,

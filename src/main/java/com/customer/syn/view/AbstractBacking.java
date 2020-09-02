@@ -29,6 +29,7 @@ import javax.validation.constraints.PastOrPresent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.customer.syn.component.ColumnModel;
 import com.customer.syn.model.BaseEntity;
 import com.customer.syn.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
@@ -70,6 +71,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     private static final String UPDATE_MSG = "%s with Id: %d has been updated.";
     private static final String DELETE_MSG = "%s with Id: %d has been deleted.";
     private static final String CREATE_MSG = "New %s has been created successfully.";
+    protected static final String NO_SELECTION = "Please make a selection first.";
     
     
     // ---------------------------------------------------------- constructors
@@ -105,13 +107,34 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         setPage("list");
     }
     
+    
+    public void view() {
+        if (isSelected()) {
+            setCurrentEntity(getCurrentSelected());
+            setPage("detail");
+        }
+        else {
+            addMsg(NO_SELECTION);
+        }
+    }
 
-    public void edit(E e) {
+
+    public void edit() {
+        if (isSelected()) {
+            edit(getCurrentSelected());
+        }
+        else {
+            addMsg(NO_SELECTION);
+        }
+    }
+
+    
+    protected void edit(E e) {
         setCurrentEntity(e);
         if (log.isDebugEnabled())
             log.debug("edit invoked on {}", e);
     }
-
+    
     
     public void save(E e) {
         getService().save(e);
@@ -123,6 +146,16 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         getService().update(e);
         addMsg(format(UPDATE_MSG, getEntityName(), e.getId()));
         return null;
+    }
+
+    
+    public void delete() {
+        if (isSelected()) {
+            delete(getCurrentSelected());
+        }
+        else {
+            addMsg(NO_SELECTION);
+        }
     }
     
     
@@ -159,6 +192,13 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
     
     
+    protected void addMsg(String msg) {
+        ec.getFlash().setKeepMessages(true);
+        FacesMessage message = new FacesMessage(msg);
+        fc.addMessage(null, message);
+    }
+    
+    
     // ---------------------------------------------------------- private methods
     
     private String getEntityName() {
@@ -168,13 +208,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     private Class<?> getEntityClass() {
         return entityClass;
-    }
-    
-    
-    private void addMsg(String msg) {
-        ec.getFlash().setKeepMessages(true);
-        FacesMessage message = new FacesMessage(msg);
-        fc.addMessage(null, message);
     }
 
     
@@ -243,7 +276,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         });
         return fields;
     }
-    
 
     
     // ---------------------------------------------------------- setters and getters
@@ -333,11 +365,15 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     public E getCurrentSelected() {
-        return currentSelected;
+        return this.currentSelected;
     }
 
     public void setCurrentSelected(E currentSelected) {
         this.currentSelected = currentSelected;
+    }
+    
+    public boolean isSelected() {
+        return this.currentSelected != null;
     }
     
 

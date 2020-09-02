@@ -1,4 +1,4 @@
-package com.customer.syn.view;
+package com.customer.syn.component;
 
 import java.io.Serializable;
 
@@ -23,7 +23,6 @@ public class ColumnModel implements Serializable {
         this.property = property;
         this.type = type;
     }
-
     
     
     // ---------------------------------------------------- setters and getters

@@ -10,9 +10,12 @@
    <ui:define name="title">Create Tasks</ui:define>
 
    <ui:define name="header-stuff">
-      <syn:search-form backingBean="#{taskBacking}" selectValue="#{taskBacking.searchOption}"
-         selectModel="#{menuBacking.searchOptions}" fieldModel="#{menuBacking.searchFields}"
-         fieldValues="#{menuBacking.searchFieldValues}" />
+      <syn:search-form 
+            backingBean="#{taskBacking}"
+            selectValue="#{taskBacking.searchOption}"
+            selectModel="#{menuBacking.searchOptions}"
+            fieldModel="#{menuBacking.searchFields}"
+            fieldValues="#{menuBacking.searchFieldValues}" />
    </ui:define>
 
    <ui:define name="content-stuff">
@@ -23,23 +26,31 @@
 
                <h:form id="taskform">
                   <h:panelGroup layout="block" id="tnblk" styleClass="row">
-                     <syn:input value="#{taskBacking.task.note}" label="Task Note"
+                     <syn:input value="#{taskBacking.task.note}"
+                        label="Task Note"
                         styleClass="bgin" />
                   </h:panelGroup>
                   <h:panelGroup layout="block" id="dtblk" styleClass="row">
-                     <syn:input value="#{taskBacking.task.dueDate}" label="Due Date"
+                     <syn:input value="#{taskBacking.task.dueDate}" 
+                        label="Due Date"
                         type="date">
-                        <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            <f:convertDateTime type="localDate" 
+                                pattern="yyyy-MM-dd" />
                      </syn:input>
 
                      <label>Assign to User</label>
-                     <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
-                        <f:selectItems value="#{menuBacking.users}" var="u" itemValue="#{u}"
-                           itemLabel="#{u.firstName} #{u.lastName}" />
+                     <h:selectOneMenu id="asgnuser" 
+                        value="#{taskBacking.assignedUser}">
+                        <f:selectItems value="#{menuBacking.users}" 
+                            var="u" 
+                            itemValue="#{u}"
+                            itemLabel="#{u.firstName} #{u.lastName}" />
                      </h:selectOneMenu>
                   </h:panelGroup>
-                  <h:commandButton id="save" value="Save" action="#{taskBacking.save}"
-                     styleClass="tab">
+                  <h:commandButton action="#{taskBacking.save}"
+                    styleClass="tab"
+                    id="save" 
+                    value="Save">
                      <f:param name="contactId" value="#{param['conId']}" />
                   </h:commandButton>
                </h:form>

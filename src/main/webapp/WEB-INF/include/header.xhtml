@@ -16,14 +16,18 @@
          <div id="user-bar">
             <div class="fields">
             
-               <ui:repeat value="#{menuBacking.menu}" var="m">
-                  <h:link value="#{m.label}" outcome="#{m.value}"
-                     styleClass="#{view.viewId eq p+=m.value ? 'selected tab' : 'tab'}" />
+               <ui:repeat value="#{menuBacking.menu}"
+                var="m">
+                  <h:link value="#{m.label}" 
+                    outcome="#{m.value}"
+                    styleClass="#{view.viewId eq p+=m.value ? 'selected tab' : 'tab'}" />
                </ui:repeat>
                
                <c:if test="#{not empty request.userPrincipal}">
                   <h:form>
-                     <h:commandLink value="Logout" styleClass="tab" action="#{login.logout}" />
+                     <h:commandLink action="#{login.logout}" 
+                        value="Logout" 
+                        styleClass="tab" />
                   </h:form>
                </c:if>
                

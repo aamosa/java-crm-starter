@@ -16,14 +16,13 @@ public class Role extends BaseEntity<Long> implements Serializable {
 
     @Column(nullable = false)
     private String roleName;
-
     
     @ManyToMany(mappedBy = "roles",
                 fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
     
 
-    // ------------------------------------------- constructors
+    // ------------------------------------------------------- constructors
 
     public Role() {}
     
@@ -39,8 +38,7 @@ public class Role extends BaseEntity<Long> implements Serializable {
     }
     
     
-    
-    // ------------------------------------------- setters and getters
+    // ------------------------------------------------------- setters and getters
 
     public String getRoleName() {
         return roleName;

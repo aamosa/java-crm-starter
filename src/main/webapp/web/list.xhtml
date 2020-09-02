@@ -8,29 +8,36 @@
     xmlns:p="http://primefaces.org/ui">
 
    <h:form id="eform">
-
-      <p:dataTable id="someTable" value="#{backingBean.values}" var="c" 
-        selectionMode="single" selection="#{backingBean.currentSelected}" 
+      <p:dataTable id="someTable" 
+        value="#{backingBean.values}"
+        selectionMode="single" 
+        selection="#{backingBean.currentSelected}" 
         rendered="#{!empty backingBean.values}"
-        paginator="true" rows="10" rowKey="#{c.id}">
+        paginator="true" 
+        var="c"
+        rowKey="#{c.id}"
+        rows="10">
 
-         <p:column>
-            <f:ajax execute="@form" render="someTable :eform :grwl :page :currentform">
-               <h:commandLink value="Edit" actionListener="#{backingBean.edit(c)}"
-                  styleClass="tab skinny">
-               </h:commandLink>
+         <f:facet name="header">
+            <f:ajax execute="@form" 
+                render="someTable :eform :grwl :page :currentform">
+                <h:commandLink value="Delete" styleClass="tab skinny"
+                    actionListener="#{backingBean.delete()}" />
+                    
+                <h:commandLink value="Edit" styleClass="tab skinny"
+                    actionListener="#{backingBean.edit()}" />
 
-               <h:commandLink value="Delete" action="#{backingBean.delete(c)}"
-                  styleClass="tab skinny">
-               </h:commandLink>
+                  <h:commandLink value="View" styleClass="tab skinny"
+                     actionListener="#{backingBean.view()}" />
             </f:ajax>
-         </p:column>
+         </f:facet>
 
-         <p:columns value="#{backingBean.tableColumns}" var="column"
-            headerText="#{column.header}">
-            <h:outputText value="#{c[column.property]}" />
+         <p:columns headerText="#{col.header}" 
+            value="#{backingBean.tableColumns}" 
+            var="col">
+                <h:outputText value="#{c[col.property]}" />
          </p:columns>
       </p:dataTable>
-
    </h:form>
+   
 </ui:composition>

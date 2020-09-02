@@ -1,4 +1,4 @@
-package com.customer.syn.util;
+package com.customer.syn.component;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -27,8 +27,7 @@ public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
     
     @Override
     public String getAsString(FacesContext ctx, UIComponent component, BaseEntity<Number> entity) {
-        if (entity == null)
-            return "";
+        if (entity == null) return "";
         if (entity.getId() != null) {
             log.debug("converting to string Id {}", entity.getId());
             return entity.getId().toString();
