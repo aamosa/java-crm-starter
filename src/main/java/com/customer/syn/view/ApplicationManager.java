@@ -26,8 +26,9 @@ public class ApplicationManager implements Serializable {
     private static final long serialVersionUID = 54L;
 
     private Status[] status;
-    private Set<Role> availRoles;
+    
     private List<User> users;
+    private Set<Role> availRoles;
     
     private static Map<String, Object> searchFieldValues;
     private static List<FormField> searchFields;

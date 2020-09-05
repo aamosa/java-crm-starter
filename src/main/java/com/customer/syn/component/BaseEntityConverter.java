@@ -41,12 +41,10 @@ public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
     @SuppressWarnings("unchecked")
     @Override
     public BaseEntity<Number> getAsObject(FacesContext ctx, UIComponent component, String Id) {
-        if (Id == null || Id.isEmpty())
-            return null;
+        if (Id == null || Id.isEmpty()) return null;
 
         ValueExpression value = component.getValueExpression("value");
         Class<?> type = value.getType(ctx.getELContext());
-
         try {
             log.debug("converting to object Id {} of type {}", Long.valueOf(Id), type);
             return (BaseEntity<Number>) em.find(type, Long.valueOf(Id));

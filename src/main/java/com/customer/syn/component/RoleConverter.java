@@ -37,11 +37,9 @@ public class RoleConverter implements Converter {
     
     @Override
     public Object getAsObject(FacesContext facescontext, UIComponent component, String value) {
-        if (value == null || value.isEmpty())
-            return null;
-
+        if (value == null || value.isEmpty()) return null;
         try {
-            log.debug("converting to object {}", value);
+            log.debug("converting string {} to object.", value);
             return em.find(Role.class, Long.valueOf(value));
         } 
         catch (NumberFormatException e) {
@@ -55,15 +53,17 @@ public class RoleConverter implements Converter {
     @Override
     public String getAsString(FacesContext facescontext, UIComponent component, Object value) {
         if (value == null) return "";
-
+        
+        log.debug("{}", value);
+        
         if (value instanceof Role) {
-            log.debug("converting to string {}", value);
+            log.debug("converting {} to string.", value);
             return String.valueOf( ((Role) value).getId() );
         } 
         else {
             fc.addMessage(null,
                     new FacesMessage(SEVERITY_ERROR, "Conversion error", "Conversion error"));
-            throw new ConverterException();
+            throw new ConverterException("Conversion Error.");
         }
     }
 

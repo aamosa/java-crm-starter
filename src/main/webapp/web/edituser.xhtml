@@ -13,16 +13,15 @@
          <h:form id="editform">
             <h:panelGroup layout="block" id="eblk" styleClass="row">
                <syn:input value="#{userBacking.currentEntity.firstName}"
-                label="First Name" />
+                    label="First Name" />
             </h:panelGroup>
             <h:panelGroup layout="block" id="eblk1" styleClass="row">
                <syn:input value="#{userBacking.currentEntity.lastName}"
-                label="Last Name" />
+                    label="Last Name" />
             </h:panelGroup>
             <h:panelGroup layout="block" id="eblk2" styleClass="row">
                <syn:input value="#{userBacking.currentEntity.email}"
-                label="Email" 
-                readonly="true" />
+                    label="Email" readonly="true" />
             </h:panelGroup>
             <h:panelGroup layout="block" id="eblk3" styleClass="row">
                <label>Status</label>
@@ -34,15 +33,15 @@
             <h:panelGroup layout="block" id="eblk4" styleClass="row">
                <label>User Roles</label>
             </h:panelGroup>
-            
             <h:panelGroup layout="block" id="eblk5" styleClass="row">
                <p:selectManyCheckbox id="roles"
                     layout="pageDirection"
                     value="#{userBacking.currentEntity.roles}" 
                     collectionType="java.util.HashSet" 
                     converter="roleConverter">
-                  <f:selectItems value="#{menuBacking.roles}" itemLabel="#{r.roleName}" 
+                  <f:selectItems value="#{menuBacking.availRoles}" 
                     var="r" 
+                    itemLabel="#{r.roleName}" 
                     itemValue="#{r}" />
                </p:selectManyCheckbox>
             </h:panelGroup>
@@ -50,8 +49,6 @@
             <h:commandButton id="save" value="Save" styleClass="tab"
                 action="#{userBacking.update()}" />
          </h:form>
-
       </div>
    </div>
-
 </ui:composition>

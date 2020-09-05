@@ -1,16 +1,18 @@
 package com.customer.syn.model;
 
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.MERGE;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -65,13 +67,14 @@ public class User extends BaseEntity<Long> implements Serializable {
 
     @ViewMeta(order = 7,
               formField = false)
-    @ManyToMany(fetch = FetchType.EAGER,
-                cascade = { CascadeType.PERSIST, 
-                            CascadeType.MERGE })
+    @ManyToMany(fetch = EAGER,
+                cascade = { PERSIST, MERGE })
     @JoinTable(name = "users_roles",
-               joinColumns = @JoinColumn(name = "user_id",
-                                         nullable = false),
-               inverseJoinColumns = @JoinColumn(name = "role_id"))
+               joinColumns = 
+                   @JoinColumn(name = "user_id",
+                               nullable = false),
+               inverseJoinColumns = 
+                   @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
     
     
@@ -106,7 +109,7 @@ public class User extends BaseEntity<Long> implements Serializable {
     
     public void removeRole(Role role) {
         getRoles().remove(role);
-        role.getUsers().remove(this);
+        // role.getUsers().remove(this);
     }
     
     

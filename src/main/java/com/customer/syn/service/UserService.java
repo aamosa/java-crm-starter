@@ -20,7 +20,8 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
     // ------------------------------------------------------------ business methods
     
     public Set<Role> getRoles() {
-        return getEntityManager().createQuery(ROLES_QUERY, Role.class)
+        return getEntityManager()
+                .createQuery(ROLES_QUERY, Role.class)
                 .getResultStream()
                 .collect(Collectors.toSet());
     }

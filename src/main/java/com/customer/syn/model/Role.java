@@ -1,12 +1,13 @@
 package com.customer.syn.model;
 
+import static javax.persistence.FetchType.EAGER;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -17,8 +18,8 @@ public class Role extends BaseEntity<Long> implements Serializable {
     @Column(nullable = false)
     private String roleName;
     
-    @ManyToMany(mappedBy = "roles",
-                fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roles", 
+                fetch = EAGER)
     private Set<User> users = new HashSet<>();
     
 

@@ -14,6 +14,7 @@ import javax.inject.Named;
 import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
 import com.customer.syn.service.BaseRepositoryImpl;
+import com.customer.syn.service.RoleService;
 import com.customer.syn.service.UserService;
 import com.customer.syn.view.AbstractBacking;
 
@@ -26,8 +27,6 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     private User user;
     private List<Role> userRoles;
     private Set<Role> selectedRoles;
-    
-//    private List<String> availRoles;
 
     @Inject
     private UserService userService;
@@ -41,15 +40,15 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     @PostConstruct
     public void init() { }
 
+
+    public void initialize() {
+        user = new User();
+    }
+    
     
     @Override
     protected BaseRepositoryImpl<User, Long> getService() {
         return userService;
-    }
-    
-    
-    public void initialize() {
-        user = new User();
     }
     
     
@@ -68,23 +67,26 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
     @Override
     public void delete(User user) {
-        Iterator<Role> it = user.getRoles().iterator();
-        while (it.hasNext()) {
-            Role r = it.next();
-            user.removeRole(r);
-        }
+        super.delete(user);
+//        User managedUser = userService.update(user);
+//        Iterator<Role> it = managedUser.getRoles().iterator();
+//        while (it.hasNext()) {
+//            Role r = it.next();
+//            managedUser.removeRole(r);
+//        }
 //        for (Role role : user.getRoles()) {
 //            user.removeRole(role);
 //        }
-        super.delete(user);
     }
     
     
     public String save() {
-        user.addRoles(new HashSet<Role>(userRoles));
-        super.save(user);
+        userService.save(user);
+        user.addRoles(new HashSet<Role>(getUserRoles()));
         if (log.isDebugEnabled())
             log.debug("user roles selected {}", getUserRoles());
+        
+        super.save(user);
         return "user?faces-redirect=true&includeViewParams=true";
     }
     
@@ -114,5 +116,6 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     public void setSelectedRoles(Set<Role> selectedRoles) {
         this.selectedRoles = selectedRoles;
     }
+    
 
 }

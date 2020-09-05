@@ -84,6 +84,13 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
             update(entity);
         }
     }
+    
+    
+    public void saveAll(Iterable<E> iter) {
+        for (E entity : iter) {
+            save(entity);
+        }
+    }
 
     
     public E update(E entity) {
