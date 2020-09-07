@@ -82,7 +82,7 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
     public String save() {
         userService.save(user);
-        user.addRoles(new HashSet<Role>(getUserRoles()));
+        user.addRoles(new HashSet<>(getUserRoles()));
         if (log.isDebugEnabled())
             log.debug("user roles selected {}", getUserRoles());
         

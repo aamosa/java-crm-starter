@@ -37,7 +37,12 @@ public class Role extends BaseEntity<Long> implements Serializable {
         this.roleName = roleName;
         this.getUsers().add(user);
     }
-    
+
+
+    @Override
+    public String toString() {
+        return getRoleName();
+    }
     
     // ------------------------------------------------------- setters and getters
 
