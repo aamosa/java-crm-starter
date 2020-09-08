@@ -1,15 +1,15 @@
 package com.customer.syn.view.task;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.persistence.Tuple;
 
 import com.customer.syn.model.Task;
 import com.customer.syn.model.User;
@@ -28,6 +28,7 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     private Task task;
     private Long contactId;
     private User assignedUser;
+    private Map<String, String> detailAttrs;
     
     @Inject 
     @LoggedUser
@@ -57,15 +58,36 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     }
 
     
-//    public void initialize() {
-//        task = new Task();
-//    }
+    /*
+     "select t.id as id, "
+    + " t.note as note,"
+    + " t.dueDate as due,"
+    + " t.completedDate as completed,"
+    + " concat(u.firstName, ' ', u.lastName) as userName,"
+    + " concat(c.firstName, ' ', c.lastName) as contactName"
+    + " from Task t join t.createdBy u join t.contact c"
+     */
+    
+    @Override
+    public void view() {
+        Tuple t = taskService.getTasksDTOList(getCurrentSelected().getId()).get(0); // get first result
+        detailAttrs = new LinkedHashMap<>();
+        detailAttrs.put("Task Id", t.get("id").toString());
+        detailAttrs.put("Note", t.get("note").toString());
+        detailAttrs.put("Due Date", t.get("due").toString());
+        detailAttrs.put("Completed Date", t.get("completed") != null ? t.get("completed").toString() : "");
+        detailAttrs.put("Created By", t.get("userName").toString());
+        detailAttrs.put("For Contact", t.get("contactName").toString());
+        
+        // taskService.getTasksDTO(getCurrentSelected().getId());
+        setPage("taskdetail");
+    }
     
     
     @Override
     public void edit(Task task) {
         // task = taskService.update(task);
-        task = taskService.TaskContactAndUsers(task.getId());
+        task = taskService.getTaskContactAndUsers(task.getId());
         super.edit(task);
     }
     
@@ -106,6 +128,14 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     public void setContactId(Long contactId) {
         this.contactId = contactId;
     }
-    
 
+    public Map<String, String> getDetailAttrs() {
+        return detailAttrs;
+    }
+
+    public void setDetailAttrs(Map<String, String> detailAttrs) {
+        this.detailAttrs = detailAttrs;
+    }
+
+    
 }

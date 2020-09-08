@@ -12,7 +12,8 @@
    <ui:define name="title">Tasks</ui:define>
 
    <ui:define name="header-stuff">
-      <syn:search-form backingBean="#{taskBacking}"
+      <syn:search-form 
+        backingBean="#{taskBacking}"
         selectValue="#{taskBacking.searchOption}"
         selectModel="#{menuBacking.searchOptions}"
         fieldModel="#{menuBacking.searchFields}"

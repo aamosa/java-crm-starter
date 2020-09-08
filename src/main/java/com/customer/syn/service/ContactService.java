@@ -11,7 +11,7 @@ import com.customer.syn.model.Task;
 @Stateless
 public class ContactService extends BaseRepositoryImpl<Contact, Long> {
 
-    private static final String TASK_SQL = "select t from Task t join fetch t.createdUser "
+    private static final String TASK_SQL = "select t from Task t join fetch t.createdBy "
             + "where t.contact.id = :id";
     
     

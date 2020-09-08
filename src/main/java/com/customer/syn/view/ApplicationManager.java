@@ -25,8 +25,10 @@ public class ApplicationManager implements Serializable {
 
     private static final long serialVersionUID = 54L;
 
+    @Inject
+    private UserService userService;
+
     private Status[] status;
-    
     private List<User> users;
     private Set<Role> availRoles;
     
@@ -34,12 +36,9 @@ public class ApplicationManager implements Serializable {
     private static List<FormField> searchFields;
     private static List<ValueLabelHolder<String>> menu;
     private static List<ValueLabelHolder<String>> searchOptions;
-
-    @Inject
-    private UserService userService;
     
     
-    // -------------------------------------------------- constructors
+    // ---------------------------------------------------------------- constructors
     
     public ApplicationManager() {}
 
@@ -84,7 +83,7 @@ public class ApplicationManager implements Serializable {
     }
     
     
-    // -------------------------------------------------- setters and getters
+    // ---------------------------------------------------------------- setters and getters
 
     public List<ValueLabelHolder<String>> getMenu() {
         return menu;
@@ -124,5 +123,6 @@ public class ApplicationManager implements Serializable {
         }
         return status;
     }
+    
 
 }

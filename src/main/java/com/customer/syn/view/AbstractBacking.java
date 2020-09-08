@@ -108,6 +108,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
     
     
+    /* detail view */
     public void view() {
         if (isSelected()) {
             setCurrentEntity(getCurrentSelected());

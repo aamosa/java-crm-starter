@@ -19,16 +19,14 @@
         rows="10">
 
          <f:facet name="header">
-            <f:ajax execute="@form" 
+            <f:ajax execute="@form"
                 render="someTable :eform :grwl :page :currentform">
                 <h:commandLink value="Delete" styleClass="tab skinny"
-                    actionListener="#{backingBean.delete()}" />
-                    
+                        actionListener="#{backingBean.delete()}" />
                 <h:commandLink value="Edit" styleClass="tab skinny"
-                    actionListener="#{backingBean.edit()}" />
-
+                        actionListener="#{backingBean.edit()}" />
                   <h:commandLink value="View" styleClass="tab skinny"
-                     actionListener="#{backingBean.view()}" />
+                        actionListener="#{backingBean.view()}" />
             </f:ajax>
          </f:facet>
 
