@@ -20,45 +20,37 @@
 
    <ui:define name="content-stuff">
       <h:panelGroup id="page" layout="block">
-
          <div class="canvas box-shadow og-fnt lt-gry-bg">
             <div class="full-width">
-
                <h:form id="taskform">
-                  <h:panelGroup layout="block" id="tnblk" styleClass="row">
-                     <syn:input value="#{taskBacking.task.note}"
-                        label="Task Note"
-                        styleClass="bgin" />
+                  <h:panelGroup layout="block" id="tnb" styleClass="row">
+                     <syn:input value="#{taskBacking.task.note}" styleClass="bgin"
+                                label="Task Note" />
                   </h:panelGroup>
-                  <h:panelGroup layout="block" id="dtblk" styleClass="row">
-                     <syn:input value="#{taskBacking.task.dueDate}" 
-                        label="Due Date"
-                        type="date">
+                  <h:panelGroup layout="block" id="dtb" styleClass="row">
+                     <syn:input value="#{taskBacking.task.dueDate}" type="date"
+                                label="Due Date">
                             <f:convertDateTime type="localDate" 
                                 pattern="yyyy-MM-dd" />
                      </syn:input>
-
+                  </h:panelGroup>
+                  <h:panelGroup layout="block" id="aub" styleClass="row">
                      <label>Assign to User</label>
-                     <h:selectOneMenu id="asgnuser" 
-                        value="#{taskBacking.assignedUser}">
+                     <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
                         <f:selectItems value="#{menuBacking.users}" 
                             var="u" 
                             itemValue="#{u}"
                             itemLabel="#{u.firstName} #{u.lastName}" />
                      </h:selectOneMenu>
                   </h:panelGroup>
-                  <h:commandButton action="#{taskBacking.save}"
-                    styleClass="tab"
-                    id="save" 
-                    value="Save">
-                     <f:param name="contactId" value="#{param['conId']}" />
+                  <h:commandButton action="#{taskBacking.save}" styleClass="tab"
+                                   id="save" value="Save">
+                        <f:param name="contactId" value="#{param['conId']}" />
                   </h:commandButton>
                </h:form>
-
             </div>
          </div>
-
       </h:panelGroup>
-   </ui:define>
 
+   </ui:define>
 </ui:composition>
