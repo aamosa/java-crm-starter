@@ -24,12 +24,14 @@
             <div class="full-width">
                <h:form id="taskform">
                   <h:panelGroup layout="block" id="tnb" styleClass="row">
-                     <syn:input value="#{taskBacking.task.note}" styleClass="bgin"
-                                label="Task Note" />
+                     <syn:input value="#{taskBacking.task.note}"
+                        label="Task Note"
+                        styleClass="bgin" />
                   </h:panelGroup>
                   <h:panelGroup layout="block" id="dtb" styleClass="row">
-                     <syn:input value="#{taskBacking.task.dueDate}" type="date"
-                                label="Due Date">
+                     <syn:input value="#{taskBacking.task.dueDate}" 
+                        label="Due Date"
+                        type="date">
                             <f:convertDateTime type="localDate" 
                                 pattern="yyyy-MM-dd" />
                      </syn:input>
