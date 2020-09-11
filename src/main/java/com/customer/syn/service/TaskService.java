@@ -62,26 +62,5 @@ public class TaskService extends BaseRepositoryImpl<Task, Long> {
     }
     
     
-    public void getTasksDTO(Long id) {
-        TypedQuery<Tuple> query = getEntityManager()
-                .createQuery("select t.id as id, "
-                            + " t.note as note,"
-                            + " t.dueDate as due,"
-                            + " t.completedDate as completed,"
-                            + " concat(u.firstName, ' ', u.lastName) as userName,"
-                            + " concat(c.firstName, ' ', c.lastName) as contactName"
-                            + " from Task t join t.createdBy u join t.contact c"
-                            + " where t.id = :id", Tuple.class)
-                .setParameter("id", id);
-        List<Tuple> dto = query.getResultList();
-        log.info("size: {}", dto.get(0).toArray().length);
-        for (int i = 0; i < dto.size(); i++) {
-            log.info("{}", dto.get(0).get("id"));
-            log.info("{}", dto.get(0).get("note"));
-            log.info("{}", dto.get(0).get("userName"));
-            log.info("{}", dto.get(0).get("contactName"));
-        }
-    }
-    
     
 }

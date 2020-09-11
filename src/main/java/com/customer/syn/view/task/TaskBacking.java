@@ -58,16 +58,6 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     }
 
     
-    /*
-     "select t.id as id, "
-    + " t.note as note,"
-    + " t.dueDate as due,"
-    + " t.completedDate as completed,"
-    + " concat(u.firstName, ' ', u.lastName) as userName,"
-    + " concat(c.firstName, ' ', c.lastName) as contactName"
-    + " from Task t join t.createdBy u join t.contact c"
-     */
-    
     @Override
     public void view() {
         Tuple t = taskService.getTasksDTOList(getCurrentSelected().getId()).get(0); // get first result
@@ -78,8 +68,6 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
         detailAttrs.put("Completed Date", t.get("completed") != null ? t.get("completed").toString() : "");
         detailAttrs.put("Created By", t.get("userName").toString());
         detailAttrs.put("For Contact", t.get("contactName").toString());
-        
-        // taskService.getTasksDTO(getCurrentSelected().getId());
         setPage("taskdetail");
     }
     

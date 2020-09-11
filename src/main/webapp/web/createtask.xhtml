@@ -7,7 +7,7 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-   <ui:define name="title">Create Tasks</ui:define>
+   <ui:define name="title">Create Task</ui:define>
 
    <ui:define name="header-stuff">
       <syn:search-form 
@@ -20,10 +20,8 @@
 
    <ui:define name="content-stuff">
       <h:panelGroup id="page" layout="block">
-
          <div class="canvas box-shadow og-fnt lt-gry-bg">
             <div class="full-width">
-
                <h:form id="taskform">
                   <h:panelGroup layout="block" id="tnb" styleClass="row">
                      <syn:input value="#{taskBacking.task.note}"
@@ -34,10 +32,10 @@
                      <syn:input value="#{taskBacking.task.dueDate}" 
                         label="Due Date"
                         type="date">
-                            <f:convertDateTime type="localDate" 
-                                pattern="yyyy-MM-dd" />
+                            <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
                      </syn:input>
-
+                  </h:panelGroup>
+                  <h:panelGroup layout="block" id="atb" styleClass="row">
                      <label>Assign to User</label>
                      <h:selectOneMenu id="asgnuser" 
                         value="#{taskBacking.assignedUser}">
@@ -47,18 +45,14 @@
                             itemLabel="#{u.firstName} #{u.lastName}" />
                      </h:selectOneMenu>
                   </h:panelGroup>
-                  <h:commandButton action="#{taskBacking.save}"
-                    styleClass="tab"
+                  <h:commandButton action="#{taskBacking.save}" styleClass="tab"
                     id="save" 
                     value="Save">
                      <f:param name="contactId" value="#{param['conId']}" />
                   </h:commandButton>
                </h:form>
-
             </div>
          </div>
-
       </h:panelGroup>
    </ui:define>
-
 </ui:composition>

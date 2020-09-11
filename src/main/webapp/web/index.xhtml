@@ -24,30 +24,26 @@
          <h:form id="currentform">
             <f:ajax execute="@form" render="currentform :page">
                <h:commandButton id="nbt" value="Create New"
-                  actionListener="#{backingBean.initialize()}" styleClass="tab">
+                  actionListener="#{backingBean.initialize}" styleClass="tab">
                   <f:setPropertyActionListener target="#{backingBean.page}" 
-                    value="create" />
+                        value="create" />
                </h:commandButton>
 
                <h:link styleClass="tab" value="Create Task" outcome="createtask"
                   rendered="#{backingBean.page == 'detail'}">
-                  <f:param name="conId" value="#{contactBacking.currentEntity.id}" />
+                    <f:param name="conId" value="#{contactBacking.currentEntity.id}" />
                </h:link>
             </f:ajax>
          </h:form>
       </div>
    </ui:define>
 
-
    <ui:define name="content-stuff">
       <h:panelGroup id="page" layout="block">
-
          <ui:include src="#{contactBacking.page}.xhtml">
             <ui:param name="entity" value="#{contactBacking.currentEntity}" />
             <ui:param name="entityName" value="contact" />
          </ui:include>
-
       </h:panelGroup>
    </ui:define>
-
 </ui:composition>

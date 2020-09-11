@@ -101,6 +101,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll();
+        values = entities; // TESTING
         attributeNames = getViewMeta(getEntityClass());
         formFields = getFormFieldsMap(getEntityClass()); 
         createTableColumns(getEntityClass());

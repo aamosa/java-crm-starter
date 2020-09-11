@@ -8,25 +8,24 @@
     xmlns:p="http://primefaces.org/ui">
 
    <h:form id="eform">
+<!--         rendered="#{!empty backingBean.values}" -->
       <p:dataTable id="someTable" 
         value="#{backingBean.values}"
         selectionMode="single" 
         selection="#{backingBean.currentSelected}" 
-        rendered="#{!empty backingBean.values}"
         paginator="true" 
         var="c"
         rowKey="#{c.id}"
         rows="10">
 
          <f:facet name="header">
-            <f:ajax execute="@form"
-                render="someTable :eform :grwl :page :currentform">
+            <f:ajax execute="@form" render="someTable :eform :grwl :page :currentform">
                 <h:commandLink value="Delete" styleClass="tab skinny"
-                        actionListener="#{backingBean.delete()}" />
+                        actionListener="#{backingBean.delete}" />
                 <h:commandLink value="Edit" styleClass="tab skinny"
-                        actionListener="#{backingBean.edit()}" />
-                  <h:commandLink value="View" styleClass="tab skinny"
-                        actionListener="#{backingBean.view()}" />
+                        actionListener="#{backingBean.edit}" />
+                <h:commandLink value="View" styleClass="tab skinny"
+                        actionListener="#{backingBean.view}" />
             </f:ajax>
          </f:facet>
 
@@ -37,5 +36,4 @@
          </p:columns>
       </p:dataTable>
    </h:form>
-   
 </ui:composition>
