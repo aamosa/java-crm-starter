@@ -15,22 +15,18 @@
       <div id="nav-container">
          <div id="user-bar">
             <div class="fields">
-            
-               <ui:repeat value="#{menuBacking.menu}"
-                var="m">
-                  <h:link value="#{m.label}" 
-                    outcome="#{m.value}"
-                    styleClass="#{view.viewId eq p+=m.value ? 'selected tab' : 'tab'}" />
+               <ui:repeat value="#{menuBacking.menu}"  var="m">
+                  <h:link styleClass="#{view.viewId eq p+=m.value ? 'selected tab' : 'tab'}"
+                          value="#{m.label}"
+                          outcome="#{m.value}" />
                </ui:repeat>
                
                <c:if test="#{not empty request.userPrincipal}">
                   <h:form>
-                     <h:commandLink action="#{login.logout}" 
-                        value="Logout" 
-                        styleClass="tab" />
+                     <h:commandLink action="#{login.logout}" value="Logout"
+                                    styleClass="tab" />
                   </h:form>
                </c:if>
-               
             </div>
             <div class="fields right">Logged in as: #{request.userPrincipal.name}</div>
          </div>

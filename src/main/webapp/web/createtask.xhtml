@@ -35,20 +35,20 @@
                             <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
                      </syn:input>
                   </h:panelGroup>
-                  <h:panelGroup layout="block" id="atb" styleClass="row">
+                  <h:panelGroup layout="block" id="aub" styleClass="row">
                      <label>Assign to User</label>
-                     <h:selectOneMenu id="asgnuser" 
-                        value="#{taskBacking.assignedUser}">
+                     <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
                         <f:selectItems value="#{menuBacking.users}" 
                             var="u" 
                             itemValue="#{u}"
                             itemLabel="#{u.firstName} #{u.lastName}" />
                      </h:selectOneMenu>
                   </h:panelGroup>
-                  <h:commandButton action="#{taskBacking.save}" styleClass="tab"
-                    id="save" 
-                    value="Save">
-                     <f:param name="contactId" value="#{param['conId']}" />
+                  <h:commandButton id="save"
+                        action="#{taskBacking.save}" 
+                        value="Save"
+                        styleClass="tab">
+                            <f:param name="contactId" value="#{param['conId']}" />
                   </h:commandButton>
                </h:form>
             </div>
