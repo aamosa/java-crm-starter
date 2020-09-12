@@ -9,8 +9,14 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.customer.syn.component.FormField;
 import com.customer.syn.component.ValueLabelHolder;
@@ -24,9 +30,13 @@ import com.customer.syn.service.UserService;
 public class ApplicationManager implements Serializable {
 
     private static final long serialVersionUID = 54L;
+    private static final Logger log = LoggerFactory.getLogger(ApplicationManager.class);
 
     @Inject
     private UserService userService;
+    
+    @Inject
+    private FacesContext fc;
 
     private Status[] status;
     private List<User> users;
@@ -36,24 +46,30 @@ public class ApplicationManager implements Serializable {
     private static List<FormField> searchFields;
     private static List<ValueLabelHolder<String>> menu;
     private static List<ValueLabelHolder<String>> searchOptions;
-    
+
     
     // ---------------------------------------------------------------- constructors
     
-    public ApplicationManager() {}
+    public ApplicationManager() { }
 
     
     @PostConstruct
-    public void init() {  // :TODO load from property file or DB here
+    public void init() {  /* :TODO load from property file or DB here */
         if (users == null) users = userService.fetchAll();
         if (availRoles == null) availRoles = userService.getRoles();
-        
-        menu = new ArrayList<>();
-        menu.add(new ValueLabelHolder<>("Contacts", "index.xhtml"));
-        menu.add(new ValueLabelHolder<>("Users", "user.xhtml"));
-        menu.add(new ValueLabelHolder<>("Tasks", "task.xhtml"));
+        initHeaderMenu();
         initSearchOptions();
         initSearchFieldsAndValues();
+        if (log.isDebugEnabled())
+            log.debug("{} postconstruct initialized.", getClass().getSimpleName());
+    }
+    
+    
+    private void initHeaderMenu() {
+        menu = new ArrayList<>();
+        menu.add(new ValueLabelHolder<>("Contacts", getServletPath().concat("index.xhtml")));
+        menu.add(new ValueLabelHolder<>("Users", getServletPath().concat("user.xhtml")));
+        menu.add(new ValueLabelHolder<>("Tasks", getServletPath().concat("task.xhtml")));
     }
 
     
@@ -80,6 +96,12 @@ public class ApplicationManager implements Serializable {
         searchFieldValues.put("toDate", "searchDateTo");
         searchFieldValues.put("fromDate", "searchDateFrom");
         searchFieldValues.put("id", "id");
+    }
+    
+    
+    private String getServletPath() {
+        String path = fc.getExternalContext().getRequestServletPath();
+        return path != null ? path.substring(0, path.lastIndexOf('/')+1) : "";
     }
     
     

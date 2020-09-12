@@ -8,15 +8,12 @@
     xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
     xmlns:p="http://primefaces.org/ui">
 
-   <c:set var="p"
-      value="${'/'+= fn:split(facesContext.externalContext.requestServletPath, '/')[0] += '/'}" />
-
    <div id="header-wrapper" class="box-shadow">
       <div id="nav-container">
          <div id="user-bar">
             <div class="fields">
-               <ui:repeat value="#{menuBacking.menu}"  var="m">
-                  <h:link styleClass="#{view.viewId eq p+=m.value ? 'selected tab' : 'tab'}"
+               <ui:repeat value="#{menuBacking.menu}" var="m">
+                  <h:link styleClass="#{view.viewId eq m.value ? 'selected' : ''} tab"
                           value="#{m.label}"
                           outcome="#{m.value}" />
                </ui:repeat>
@@ -34,13 +31,9 @@
       
       <div id="header-block" class="lite-bg">
          <div id="header-container">
-         
             <ui:insert name="header-stuff"></ui:insert>
-            
          </div>
-         
             <ui:insert name="subcommand" />
-
       </div>
    </div>
 </ui:composition>
