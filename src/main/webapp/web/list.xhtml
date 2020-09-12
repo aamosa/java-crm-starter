@@ -13,7 +13,9 @@
         value="#{backingBean.values}"
         selectionMode="single" 
         selection="#{backingBean.currentSelected}" 
-        paginator="true" 
+        paginator="true"
+        paginatorPosition="bottom"
+        paginatorAlwaysVisible="false"
         var="c"
         rowKey="#{c.id}"
         rows="10">

@@ -8,36 +8,33 @@
     xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
    <title><ui:insert name="title"></ui:insert></title>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 </h:head>
 
 <ui:insert name="meta" />
 
 <h:body>
-   <h:outputStylesheet name="/css/design.css" />
-   
+   <ui:include src="/WEB-INF/include/resource.xhtml" />
    <div id="main-block">
       <c:if test="#{view.viewId != '/login.xhtml'}">
-         <ui:include src="/WEB-INF/include/header.xhtml">
+        <ui:include src="/WEB-INF/include/header.xhtml">
             <ui:param name="backingBean" value="#{backingBean}" />
-         </ui:include>
+        </ui:include>
       </c:if>
-
       <div id="content-wrapper" class="wht-bg">
          <div id="right-column" class="column">
             <div class="conwrap">
                <h:panelGroup id="grwl" layout="block">
                   <h:messages id="gmsgs" infoClass="info messages" 
-                    errorClass="error messages"
-                    rendered="#{not empty facesContext.messageList}" />
+                        errorClass="error messages"
+                        rendered="#{not empty facesContext.messageList}" />
                </h:panelGroup>
 
                <ui:insert name="content-stuff" />
 
             </div>
-
             <div id="footer">
                <p class="copy-text">&#169; Demo</p>
             </div>

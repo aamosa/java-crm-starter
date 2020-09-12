@@ -1,0 +1,133 @@
+/* ----------------------------------------------------------- paginator */
+
+.ui-paginator-last,
+.ui-paginator-first,
+.ui-paginator-prev,
+.ui-paginator-next  {
+    font: 12px "Consolas", monospace;
+    display: inline-block;
+    visibility: visible;
+    text-indent: 0;
+    color: #222;
+}
+
+.ui-paginator-page {
+    font-size: 13px;
+    color: #222;
+}
+
+.ui-paginator a:hover {
+    font-weight: bold;
+}
+
+.ui-paginator .ui-paginator-first:after {
+    content: '<<';
+}
+
+.ui-paginator .ui-paginator-last:after {
+    content: '>>';
+}
+
+.ui-paginator .ui-paginator-prev:after {
+    content: '<';
+}
+
+.ui-paginator .ui-paginator-next:after {
+    content: '>';
+}
+
+
+/* ----------------------------------------------------------- datatable */
+
+.ui-state-active {
+    font-weight: 700;
+}
+
+.ui-datatable-data tr.ui-state-highlight {
+    background-color: #0052cc; /* #0C3E6F */
+    color: #fff;
+}
+
+.ui-datatable-data tr.ui-state-hover {
+    background-color: #d7dfe7;
+}
+
+.ui-datatable table {
+    table-layout: auto;
+}
+
+.ui-datatable tbody td {
+    font-size: 0.72rem;
+    padding: 7px 10px;
+}
+
+.ui-datatable-odd {
+    background-color: #f3f3f3;
+}
+
+.ui-datatable thead {
+    background: #dadada;
+}
+
+.ui-datatable {
+    border: 1px solid #b7b7b7;
+    background-color: #fff;
+    border-collapse: collapse;
+    min-width: 980px;
+    margin: 0.5em auto;
+}
+
+.ui-datatable .ui-datatable-header {
+    text-align: left;
+    padding: 6px 15px;
+}
+
+.ui-datatable td, .ui-datatable th {
+    border: 1px solid #999999;
+    padding: 0.5em;
+    white-space: nowrap;
+}
+
+.ui-datatable thead th {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.ui-datatable tfoot {
+    font-size: 12px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.ui-datatable tfoot td {
+    font-size: 12px;
+}
+
+.ui-datatable tfoot .links {
+    text-align: right;
+}
+
+.ui-datatable tfoot .links a {
+    display: inline-block;
+    background: #1C6EA4;
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+.ui-column-title {
+    font-weight: 600;
+}
+
+.ui-datatable input[type=text] {
+    border: solid 1px #3cb13c;
+}
+
+/* ----------------------------------------------------------- misc */
+
+.ui-helper-hidden-accessible {
+    border: 0px;
+    overflow: visible;
+    position: static;
+}
+

@@ -1,4 +1,5 @@
-<ui:composition template="/WEB-INF/template.xhtml" 
+<ui:composition 
+    template="/WEB-INF/template.xhtml" 
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -7,43 +8,5 @@
     xmlns:syn="http://syn.customer.com/jsf"
     xmlns:p="http://primefaces.org/ui">
 
-   <ui:param name="backingBean" value="#{contactBacking}" />
-
-   <ui:define name="title">Contacts</ui:define>
-
-   <ui:define name="header-stuff">
-      <syn:search-form backingBean="#{contactBacking}"
-         selectValue="#{contactBacking.searchOption}"
-         selectModel="#{menuBacking.searchOptions}" 
-         fieldModel="#{menuBacking.searchFields}"
-         fieldValues="#{menuBacking.searchFieldValues}" />
-   </ui:define>
-
-   <ui:define name="subcommand">
-      <div class="mid-width">
-         <h:form id="currentform">
-            <f:ajax execute="@form" render="currentform :page">
-               <h:commandButton id="nbt" value="Create New"
-                  actionListener="#{backingBean.initialize}" styleClass="tab">
-                  <f:setPropertyActionListener target="#{backingBean.page}" 
-                        value="create" />
-               </h:commandButton>
-
-               <h:link styleClass="tab" value="Create Task" outcome="createtask"
-                  rendered="#{backingBean.page == 'detail'}">
-                    <f:param name="conId" value="#{contactBacking.currentEntity.id}" />
-               </h:link>
-            </f:ajax>
-         </h:form>
-      </div>
-   </ui:define>
-
-   <ui:define name="content-stuff">
-      <h:panelGroup id="page" layout="block">
-         <ui:include src="#{contactBacking.page}.xhtml">
-            <ui:param name="entity" value="#{contactBacking.currentEntity}" />
-            <ui:param name="entityName" value="contact" />
-         </ui:include>
-      </h:panelGroup>
-   </ui:define>
+   
 </ui:composition>

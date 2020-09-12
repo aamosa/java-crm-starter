@@ -9,11 +9,9 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +65,7 @@ public class ApplicationManager implements Serializable {
     
     private void initHeaderMenu() {
         menu = new ArrayList<>();
-        menu.add(new ValueLabelHolder<>("Contacts", getServletPath().concat("index.xhtml")));
+        menu.add(new ValueLabelHolder<>("Contacts", getServletPath().concat("contact.xhtml")));
         menu.add(new ValueLabelHolder<>("Users", getServletPath().concat("user.xhtml")));
         menu.add(new ValueLabelHolder<>("Tasks", getServletPath().concat("task.xhtml")));
     }
