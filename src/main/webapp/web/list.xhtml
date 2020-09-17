@@ -21,14 +21,16 @@
         rows="10">
 
          <f:facet name="header">
-            <f:ajax execute="@form" render="someTable :eform :grwl :page :currentform">
-                <h:commandLink value="Delete" styleClass="tab skinny"
-                        actionListener="#{backingBean.delete}" />
-                <h:commandLink value="Edit" styleClass="tab skinny"
-                        actionListener="#{backingBean.edit}" />
-                <h:commandLink value="View" styleClass="tab skinny"
-                        actionListener="#{backingBean.view}" />
-            </f:ajax>
+            
+            <p:menuButton value="Actions">
+               <p:menuitem value="View" actionListener="#{backingBean.view}" update="" />
+               <p:menuitem value="Edit" actionListener="#{backingBean.edit}" update="" />
+               <p:menuitem value="Delete" actionListener="#{backingBean.delete}" ajax="false" />
+               <p:separator />
+               <p:menuitem value="Homepage" url="index.xhtml" icon="pi pi-home" />
+            </p:menuButton>
+
+          
          </f:facet>
 
          <p:columns headerText="#{col.header}" 
