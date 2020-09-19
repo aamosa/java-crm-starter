@@ -8,34 +8,33 @@
     xmlns:p="http://primefaces.org/ui">
 
    <h:form id="eform">
-<!--         rendered="#{!empty backingBean.values}" -->
-      <p:dataTable id="someTable" 
-        value="#{backingBean.values}"
-        selectionMode="single" 
-        selection="#{backingBean.currentSelected}" 
-        paginator="true"
-        paginatorPosition="bottom"
-        paginatorAlwaysVisible="false"
-        var="c"
-        rowKey="#{c.id}"
-        rows="10">
-
-         <f:facet name="header">
-            
+      <p:dataTable
+              id="someTable"
+              value="#{backingBean.values}"
+              selectionMode="single"
+              selection="#{backingBean.currentSelected}"
+              paginator="true"
+              paginatorPosition="bottom"
+              paginatorAlwaysVisible="false"
+              var="c"
+              rowKey="#{c.id}"
+              rows="10">
+          <f:facet name="header">
             <p:menuButton value="Actions">
-               <p:menuitem value="View" actionListener="#{backingBean.view}" update="" />
-               <p:menuitem value="Edit" actionListener="#{backingBean.edit}" update="" />
-               <p:menuitem value="Delete" actionListener="#{backingBean.delete}" ajax="false" />
-               <p:separator />
-               <p:menuitem value="Homepage" url="index.xhtml" icon="pi pi-home" />
+               <p:menuitem value="View" actionListener="#{backingBean.view}"
+                           update="someTable :grwl :page" />
+               <p:menuitem value="Edit" actionListener="#{backingBean.edit}"
+                           update="someTable :grwl :page" />
+               <p:menuitem value="Delete" actionListener="#{backingBean.delete}"
+                           update="someTable :grwl :page" />
+               <p:menuitem value="Create New" actionListener="#{backingBean.initialize}"
+                           update=":page" />
             </p:menuButton>
-
-          
          </f:facet>
 
-         <p:columns headerText="#{col.header}" 
-            value="#{backingBean.tableColumns}" 
-            var="col">
+         <p:columns headerText="#{col.header}"
+                    value="#{backingBean.tableColumns}"
+                    var="col">
                 <h:outputText value="#{c[col.property]}" />
          </p:columns>
       </p:dataTable>

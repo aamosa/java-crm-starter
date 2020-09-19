@@ -12,8 +12,8 @@
       <div id="nav-container">
          <div id="user-bar">
             <div class="fields">
-               <ui:repeat value="#{menuBacking.menu}" 
-                    var="m">
+               <ui:repeat value="#{menuBacking.menu}"
+                          var="m">
                     <h:link styleClass="#{view.viewId eq m.value ? 'selected' : ''} tab"
                             value="#{m.label}"
                             outcome="#{m.value}" />
@@ -21,7 +21,8 @@
                
                <c:if test="#{not empty request.userPrincipal}">
                   <h:form>
-                     <h:commandLink action="#{login.logout}" value="Logout"
+                     <h:commandLink action="#{login.logout}"
+                                    value="Logout"
                                     styleClass="tab" />
                   </h:form>
                </c:if>

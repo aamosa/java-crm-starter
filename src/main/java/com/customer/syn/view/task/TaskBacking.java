@@ -24,7 +24,6 @@ import com.customer.syn.view.AbstractBacking;
 public class TaskBacking extends AbstractBacking<Task, Long> implements Serializable {
 
     private static final long serialVersionUID = 5691L;
-
     private Task task;
     private Long contactId;
     private User assignedUser;
@@ -42,7 +41,6 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     
 
     // ------------------------------------------------------------------ constructors
-
     public TaskBacking() {}
     
     
@@ -92,7 +90,6 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
 
     
     // ------------------------------------------------------------------ setters and getters
-
     public Task getTask() {
         return this.task;
     }

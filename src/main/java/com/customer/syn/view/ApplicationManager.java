@@ -47,7 +47,6 @@ public class ApplicationManager implements Serializable {
 
     
     // ---------------------------------------------------------------- constructors
-    
     public ApplicationManager() { }
 
     
@@ -104,7 +103,6 @@ public class ApplicationManager implements Serializable {
     
     
     // ---------------------------------------------------------------- setters and getters
-
     public List<ValueLabelHolder<String>> getMenu() {
         return menu;
     }

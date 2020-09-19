@@ -26,14 +26,14 @@
       <div id="content-wrapper" class="wht-bg">
          <div id="right-column" class="column">
             <div class="conwrap">
-               <h:panelGroup id="grwl" layout="block">
-                  <h:messages id="gmsgs" infoClass="info messages" 
-                        errorClass="error messages"
-                        rendered="#{not empty facesContext.messageList}" />
+               <h:panelGroup id="grwl"
+                             layout="block">
+                  <h:messages id="gmsgs"
+                              infoClass="info messages"
+                              errorClass="error messages"
+                              rendered="#{not empty facesContext.messageList}" />
                </h:panelGroup>
-
                <ui:insert name="content-stuff" />
-
             </div>
             <div id="footer">
                <p class="copy-text">&#169; Demo</p>
@@ -42,7 +42,4 @@
       </div>
    </div>
 </h:body>
-
-<ui:debug hotkey="k" />
-
 </html>

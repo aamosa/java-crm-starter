@@ -28,7 +28,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
    
    
     // --------------------------------------------------------- constructors
-    
     public ContactBacking() {}
 
     
@@ -44,6 +43,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
     public void initialize() {
         contact = new Contact();
+        setPage("create");
         if (log.isDebugEnabled())
             log.debug("contact object {} instantiated.", contact);
     }
@@ -89,7 +89,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
 
     // --------------------------------------------------------- setters and getters
-
     public Contact getContact() {
         return contact;
     }

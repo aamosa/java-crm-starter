@@ -27,14 +27,16 @@ public class AppIdentityStore implements IdentityStore {
         UsernamePasswordCredential userPasswordCredential = (UsernamePasswordCredential) credential;
         String userName = userPasswordCredential.getCaller();
         Password pass = userPasswordCredential.getPassword();
-        Optional<User> optionalUser = userService.findByUserandPassword(userName, 
+        Optional<User> optionalUser = userService.findByUserNamePassword(
+                userName,
                 String.valueOf(pass.getValue()));
         
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             return new CredentialValidationResult(user.getUserName(),
-                    user.getRoles().stream().map(Role::getRoleName)
-                    .collect(Collectors.toSet()));
+                    user.getRoles().stream()
+                            .map(Role::getRoleName)
+                            .collect(Collectors.toSet()));
         } 
         else {
             return CredentialValidationResult.INVALID_RESULT;

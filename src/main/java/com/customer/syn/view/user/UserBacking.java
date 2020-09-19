@@ -25,6 +25,7 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     private static final long serialVersionUID = 691L;
     
     private User user;
+    private String userName;
     private List<Role> userRoles;
     private Set<Role> selectedRoles;
 
@@ -33,7 +34,6 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
 
     // ------------------------------------------------------ constructors
-
     public UserBacking() { }
     
     
@@ -43,6 +43,7 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
 
     public void initialize() {
         user = new User();
+        setPage("create");
     }
     
     
@@ -83,22 +84,29 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     public String save() {
         userService.save(user);
         user.addRoles(new HashSet<>(getUserRoles()));
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("user roles selected {}", getUserRoles());
-        
+        }
         super.save(user);
         return "user?faces-redirect=true&includeViewParams=true";
     }
     
     
     // ------------------------------------------------------ setters and getters
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public List<Role> getUserRoles() {

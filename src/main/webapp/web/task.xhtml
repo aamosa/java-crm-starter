@@ -1,14 +1,14 @@
-<ui:composition template="/WEB-INF/template.xhtml" 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:syn="http://syn.customer.com/jsf"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+<ui:composition
+        template="/WEB-INF/template.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
 
    <ui:param name="backingBean" value="#{taskBacking}" />
-
    <ui:define name="title">Tasks</ui:define>
 
    <ui:define name="header-stuff">
@@ -22,13 +22,10 @@
 
    <ui:define name="content-stuff">
       <h:panelGroup id="page" layout="block">
-
          <ui:include src="#{taskBacking.page}.xhtml">
             <ui:param name="entity" value="#{taskBacking.currentEntity}" />
             <ui:param name="entityName" value="task" />
          </ui:include>
-
       </h:panelGroup>
    </ui:define>
-
 </ui:composition>

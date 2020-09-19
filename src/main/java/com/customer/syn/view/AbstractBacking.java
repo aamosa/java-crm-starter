@@ -22,10 +22,13 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
+import org.primefaces.model.menu.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,8 +78,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     
     // ---------------------------------------------------------- constructors
-    
-    protected AbstractBacking(Class<?> clazz) { 
+    protected AbstractBacking(Class<?> clazz) {
         this.entityClass = clazz;
     }
     
@@ -94,22 +96,31 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     
     // ---------------------------------------------------------- abstract methods
-    
     protected abstract BaseRepositoryImpl<E, I> getService();
 
     
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll();
-        values = entities; // TESTING
+        values = entities;  /* :TODO TESTING */
         attributeNames = getViewMeta(getEntityClass());
         formFields = getFormFieldsMap(getEntityClass()); 
         createTableColumns(getEntityClass());
         setPage("list");
     }
-    
-    
-    /* detail view */
+
+
+    public void menuChange(ActionEvent event) {
+        try {
+            MenuItem item = (MenuItem) event.getSource();
+            log.debug("value is: {}", item.getValue());
+        }
+        catch (Exception e) {
+            log.error("{}", e);
+        }
+    }
+
+
     public void view() {
         if (isSelected()) {
             setCurrentEntity(getCurrentSelected());
@@ -181,16 +192,13 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             E entity = getService().findByID(Id);
             if (entity != null) values = new ArrayList<>(Arrays.asList(entity));
             break;
-        case "fetchAll":
-            values = entities;
-            break;
         case "searchByDate":
             values = getService().findByCreatedDateRange(searchDateFrom, searchDateTo);
             break;
+        case "fetchAll":
+           values = entities;
+           break;
         }
-        
-        if (values == null || values.size() < 1)
-            addMsg(NO_RECORDS);
     }
     
     
@@ -202,7 +210,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     
     // ---------------------------------------------------------- private methods
-    
     private String getEntityName() {
         return entityClass.getSimpleName();
     }
@@ -281,7 +288,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     
     // ---------------------------------------------------------- setters and getters
-    
     public I getId() {
         return Id;
     }
