@@ -1,27 +1,31 @@
-<ui:composition template="/WEB-INF/template.xhtml" 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core" 
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:syn="http://syn.customer.com/jsf">
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:syn="http://syn.customer.com/jsf">
 
-   <ui:define name="content-stuff">
-      <f:view transient="true">
-         <div class="afrm">
-            <h1 class="jumbo">Please Login</h1>
-            <h:form id="lgfrm">
-               <syn:input value="#{login.user}" label="Username" required="true" />
-               <label>Password</label>
-               <h:inputSecret value="#{login.pass}" label="Password" required="true" />
-
-               <h:panelGroup id="btnPanel" layout="block" styleClass="row">
-                  <h:commandButton id="svBtn" value="Login" action="#{login.login}"
-                     styleClass="tab" />
-                  <h:button id="rstBtn" value="Reset" styleClass="tab" />
-               </h:panelGroup>
-            </h:form>
-         </div>
-      </f:view>
-   </ui:define>
-
+    <ui:define name="content-stuff">
+        <f:view transient="true">
+            <div class="afrm">
+                <h1 class="jumbo">Please Login</h1>
+                <h:form id="lgfrm">
+                    <syn:input value="#{login.user}"
+                               label="Username"
+                               required="true" />
+                    <label>Password</label>
+                    <h:inputSecret value="#{login.pass}"
+                                   label="Password"
+                                   required="true" />
+                    <h:panelGroup id="btnPanel" layout="block" styleClass="row">
+                        <h:commandButton id="svBtn"
+                                         value="Login"
+                                         action="#{login.login}"
+                                         styleClass="tab" />
+                        <h:button id="rstBtn" value="Reset" styleClass="tab" />
+                    </h:panelGroup>
+                </h:form>
+            </div>
+        </f:view>
+    </ui:define>
 </ui:composition>

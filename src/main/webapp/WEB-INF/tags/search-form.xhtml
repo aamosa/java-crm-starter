@@ -1,72 +1,68 @@
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:syn="http://syn.customer.com/jsf"
-    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
-    xmlns:p="http://primefaces.org/ui">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+        xmlns:p="http://primefaces.org/ui">
 
-   <h:form id="sform">
-      <div id="xform">
-         <div class="selector">
-            <label>Search By</label>
-            <h:selectOneMenu id="search-menu" 
-                value="#{selectValue}">
-                <f:selectItems value="#{selectModel}"
-                               var="s"
-                               itemValue="#{s.value}"
-                               itemLabel="#{s.label}" />
-                    <f:ajax event="change"
-                            execute="this"
-                            render=":sform:searchPnl" />
-            </h:selectOneMenu>
-         </div>
+    <h:form id="sform">
+        <div id="xform">
+            <div class="selector">
+                <label>Search By</label>
+                <h:selectOneMenu id="search-menu"
+                                 value="#{selectValue}">
+                    <f:selectItems value="#{selectModel}"
+                                   var="s"
+                                   itemValue="#{s.value}"
+                                   itemLabel="#{s.label}" />
+                    <f:ajax event="change" execute="this" render=":sform:searchPnl" />
+                </h:selectOneMenu>
+            </div>
 
-         <h:panelGroup layout="block" id="searchPnl">
-            <c:forEach items="#{fieldModel}"
-                    var="f">
-               <c:set var="fieldKey" value="#{fieldValues[f.fieldName]}" />
+            <h:panelGroup layout="block" id="searchPnl">
+                <c:forEach items="#{fieldModel}"
+                           var="f">
+                    <c:set var="field" value="#{f.value}" />
+                    <h:panelGroup layout="block" id="#{f.name}_pg">
+                        <syn:input id="#{f.name}"
+                                   label="#{f.label}"
+                                   value="#{backingBean[field]}"
+                                   rendered="#{f.renderFor eq selectValue or (empty selectValue and f.show)}"
+                                   type="#{f.type}"
+                                   required="#{f.type != 'TEXT'}">
+                            <c:choose>
+                                <c:when test="#{f.type eq 'DATE'}">
+                                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                                </c:when>
+                                <c:when test="#{f.type eq 'NUMBER'}">
+                                    <f:validateLongRange minimum="1" maximum="1000000000" />
+                                </c:when>
+                                <c:otherwise>
+                                    <ui:insert name="other" />
+                                </c:otherwise>
+                            </c:choose>
+                        </syn:input>
+                    </h:panelGroup>
+                </c:forEach>
+            </h:panelGroup>
 
-               <h:panelGroup layout="block" id="#{f.fieldName}_pg">
-                  <syn:input id="#{f.fieldName}"
-                             label="#{f.label}"
-                             value="#{backingBean[fieldKey]}"
-                             rendered="#{f.rendered eq selectValue or (empty selectValue and f.defaultDisplay)}"
-                             type="#{f.type}"
-                             required="#{f.type != 'text'}">
-                     <c:choose>
-                        <c:when test="#{f.type eq 'date'}">
-                           <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-                        </c:when>
-                        <c:when test="#{f.type eq 'number'}">
-                           <f:validateLongRange minimum="1" maximum="1000000000" />
-                        </c:when>
-                        <c:otherwise>
-                           <ui:insert name="other" />
-                        </c:otherwise>
-                     </c:choose>
-                  </syn:input>
-               </h:panelGroup>
-            </c:forEach>
-         </h:panelGroup>
-
-         <h:panelGroup layout="block" styleClass="searcher" id="srchBtn">
-            <h:commandButton id="submitBtn"
-                             value="Search"
-                             action="#{backingBean.search}">
-               <ui:insert name="commandListener">
-                  <f:setPropertyActionListener target="#{backingBean.page}"
-                                               value="list" />
-                  <ui:insert name="commandListenerInside" />
-               </ui:insert>
-               
-               <ui:insert name="commandAjax">
-                  <f:ajax execute="@form" render="@form grwl :page" />
-               </ui:insert>
-            </h:commandButton>
-         </h:panelGroup>
-      </div>
-   </h:form>
+            <h:panelGroup layout="block" styleClass="searcher" id="srchBtn">
+                <h:commandButton id="submitBtn"
+                                 value="Search"
+                                 action="#{backingBean.search}">
+                    <ui:insert name="commandListener">
+                        <f:setPropertyActionListener target="#{backingBean.page}"
+                                                     value="list" />
+                        <ui:insert name="commandListenerInside" />
+                    </ui:insert>
+                    <ui:insert name="commandAjax">
+                        <f:ajax execute="@form" render="@form grwl :page" />
+                    </ui:insert>
+                </h:commandButton>
+            </h:panelGroup>
+        </div>
+    </h:form>
 </ui:composition>

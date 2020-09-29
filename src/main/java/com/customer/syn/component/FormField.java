@@ -4,36 +4,43 @@ public class FormField {
 
     private String label;
     private String fieldName;
+    private String fieldValue;
     private String type;
     private String rendered;
     private boolean required;
     private boolean defaultDisplay;
-    
+
 
     // -------------------------------------------------------------- constructors
-
-    public FormField(String label, String fieldName, String type, String rendered, boolean defaultDisplay) {
+    public FormField(String label, String fieldName, String fieldValue, String type, String rendered, boolean defaultDisplay) {
         this.label = label;
         this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
         this.type = type;
         this.rendered = rendered;
         this.defaultDisplay = defaultDisplay;
     }
 
-    public FormField(String label, String fieldName, String type, String rendered) {
-        this(label, fieldName, type, rendered, false);
+    public FormField(String label, String fieldName, String fieldValue, String type, String rendered) {
+        this(label, fieldName, fieldValue, type, rendered, false);
     }
-    
-    
+
     
     // -------------------------------------------------------------- setters and getters
-
     public String getLabel() {
         return label;
     }
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public void setFieldValue(String value) {
+        this.fieldValue = value;
+    }
+
+    public String getFieldValue() {
+        return this.fieldValue;
     }
 
     public String getFieldName() {
@@ -75,5 +82,6 @@ public class FormField {
     public void setDefaultDisplay(boolean defaultDisplay) {
         this.defaultDisplay = defaultDisplay;
     }
+
 
 }

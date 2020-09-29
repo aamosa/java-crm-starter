@@ -1,51 +1,50 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
-    xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+        xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
-   <c:set var="id" value="${not empty id ? id : fn:replace(label,' ','')}" />
-   <c:set var="rendered" value="${empty rendered ? true : rendered}" />
-   <c:set var="required" value="${empty required ? false : required}" />
-   <c:set var="readonly" value="${empty readonly ? false : readonly}" />
+    <c:set var="id" value="${not empty id ? id : fn:replace(label,' ','')}" />
+    <c:set var="rendered" value="${empty rendered ? true : rendered}" />
+    <c:set var="required" value="${empty required ? false : required}" />
+    <c:set var="readonly" value="${empty readonly ? false : readonly}" />
+    <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}" />
+    <c:choose>
+        <c:when test="#{type eq 'DATE'}">
+            <h:inputText id="#{id}"
+                         label="#{label}"
+                         value="#{value}"
+                         rendered="#{rendered}"
+                         required="#{required}"
+                         readonly="#{readonly}"
+                         styleClass="#{component.valid ? styleClass : 'invalid'}"
+                         a:type="date">
+                <c:if test="${required}">
+                    <f:attribute name="requiredMessage" value="#{requiredMessage}" />
+                </c:if>
 
-   <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}" />
+                <ui:insert />
 
-   <c:choose>
-      <c:when test="#{type == 'date'}">
-         <h:inputText id="#{id}" label="#{label}" 
-            value="#{value}" 
-            rendered="#{rendered}"
-            required="#{required}"
-            readonly="#{readonly}" 
-            styleClass="#{component.valid ? styleClass : 'invalid'}"
-            a:type="date">
-            <c:if test="${required}">
-               <f:attribute name="requiredMessage" value="#{requiredMessage}" />
-            </c:if>
+            </h:inputText>
+        </c:when>
+        <c:otherwise>
+            <h:inputText id="#{id}"
+                         label="#{label}"
+                         styleClass="#{component.valid ? styleClass : 'invalid'}"
+                         value="#{value}"
+                         rendered="#{rendered}"
+                         required="#{required}"
+                         readonly="#{readonly}">
+                <c:if test="${required}">
+                    <f:attribute name="requiredMessage" value="#{requiredMessage}" />
+                </c:if>
 
-            <ui:insert />
+                <ui:insert />
 
-         </h:inputText>
-      </c:when>
-      <c:otherwise>
-         <h:inputText id="#{id}" label="#{label}" 
-            styleClass="#{component.valid ? styleClass : 'invalid'}"
-            value="#{value}"
-            rendered="#{rendered}"
-            required="#{required}"
-            readonly="#{readonly}">
-            <c:if test="${required}">
-               <f:attribute name="requiredMessage" value="#{requiredMessage}" />
-            </c:if>
-
-            <ui:insert />
-
-         </h:inputText>
-      </c:otherwise>
-   </c:choose>
-
+            </h:inputText>
+        </c:otherwise>
+    </c:choose>
 </ui:composition>

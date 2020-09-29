@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <select label="Display All"></select>
+    <select label="Contact Name" entityClass="contact">
+        <field type="text" label="First Name" value="fName" default="true"></field>
+        <field type="text" label="Last Name" value="lName" default="true"></field>
+    </select>
+
+    <select label="Username" entityClass="user">
+        <field type="text" label="User Name" value="userName" default="true"></field>
+    </select>
+
+    <select label="Id">
+        <field type="number" label="Id" value="id"></field>
+    </select>
+
+    <select label="Created Date">
+        <field type="date" label="From Date" value="searchDateFrom"></field>
+        <field type="date" label="To Date" value="searchDateTo"></field>
+    </select>
+</config>

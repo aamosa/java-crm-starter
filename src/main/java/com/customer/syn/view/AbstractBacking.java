@@ -2,8 +2,7 @@ package com.customer.syn.view;
 
 import static java.lang.String.join;
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.capitalize;
-import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
+import static org.apache.commons.lang3.StringUtils.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -28,6 +27,7 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
+import com.customer.syn.component.ValueLabelHolder;
 import org.primefaces.model.menu.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,39 +38,38 @@ import com.customer.syn.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
 
 
+/** Base backing class with common functionality */
 public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number> {
     
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Inject
-    private FacesContext fc;
-    
-    @Inject
-    private ExternalContext ec;
-    
+    @Inject private FacesContext fc;
+    @Inject private ExternalContext ec;
+    @Inject private SearchManager searchManager;
+
     protected I Id;
     protected E currentEntity;
     protected E currentSelected;
+    private final Class<?> entityClass;
 
-    protected String firstName;
-    @NotNull
-    protected String lastName;
-    
+
     protected String page;
     protected String searchOption;
     protected LocalDate searchDateTo;
-    @PastOrPresent
-    protected LocalDate searchDateFrom;
-    
-    private final Class<?> entityClass;
-    
+    @PastOrPresent protected LocalDate searchDateFrom;
+
     protected List<E> values;
     protected List<E> entities;
+
+    protected List<SearchModel.Field> searchFields;           // TODO:
+    protected List<SearchModel.SelectModel> searchOptions;    // TODO:
+
     protected List<ColumnModel> tableColumns;
     protected Map<String, String> formFields;
     protected Map<String, String> attributeNames;
     
     private static final String NO_RECORDS = "No Records Found.";
+    private static final String EDIT_LOG = "[edit invoked, entity = {}]";
     private static final String UPDATE_MSG = "%s with Id: %d has been updated.";
     private static final String DELETE_MSG = "%s with Id: %d has been deleted.";
     private static final String CREATE_MSG = "New %s has been created successfully.";
@@ -78,31 +77,37 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     
     // ---------------------------------------------------------- constructors
-    protected AbstractBacking(Class<?> clazz) {
-        this.entityClass = clazz;
-    }
-    
-    
     protected AbstractBacking() {
         try {
             ParameterizedType type = (ParameterizedType) this.getClass()
                     .getGenericSuperclass();
             this.entityClass = (Class<?>) type.getActualTypeArguments()[0];
-        } 
-        catch (Exception e) {
-            throw new IllegalArgumentException();
+            // debugging
+            if (log.isDebugEnabled()) {
+                log.debug("[{} constructor initialized]", getClass().getSimpleName());
+            }
         }
+        catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+
     }
-    
-    
+
+    protected AbstractBacking(Class<?> clazz) {
+        this.entityClass = clazz;
+    }
+
+
     // ---------------------------------------------------------- abstract methods
     protected abstract BaseRepositoryImpl<E, I> getService();
 
     
     @PostConstruct
     public void setup() {
-        entities = getService().fetchAll();
-        values = entities;  /* :TODO TESTING */
+        entities = getService().fetchAll(); // TODO: add paging and lazy loading here
+        this.searchOptions = searchManager.getSearchOptions(getEntityName().toLowerCase());
+        this.searchFields = searchManager.getSearchFields(getEntityName().toLowerCase());
+
         attributeNames = getViewMeta(getEntityClass());
         formFields = getFormFieldsMap(getEntityClass()); 
         createTableColumns(getEntityClass());
@@ -113,7 +118,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     public void menuChange(ActionEvent event) {
         try {
             MenuItem item = (MenuItem) event.getSource();
-            log.debug("value is: {}", item.getValue());
+            log.debug("[value = {}]", item.getValue());
         }
         catch (Exception e) {
             log.error("{}", e);
@@ -145,7 +150,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected void edit(E e) {
         setCurrentEntity(e);
         if (log.isDebugEnabled())
-            log.debug("edit invoked on {}", e);
+            log.debug(EDIT_LOG, e);
     }
     
     
@@ -181,22 +186,22 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     public void search() {
         switch (searchOption) {
-        case "searchByName":
-            if (firstName != null && !firstName.trim().isEmpty() && !lastName.trim().isEmpty())
-                values = getService().findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
-            else
-                values = getService().findByLastName(lastName.toUpperCase());
-            break;
-        case "searchByID":
+        //case "searchByName":
+        //    if (firstName != null && !firstName.trim().isEmpty() && !lastName.trim().isEmpty())
+        //        values = getService().findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
+        //    else
+        //        values = getService().findByLastName(lastName.toUpperCase());
+        //    break;
+        case "searchId":
             values = null;
             E entity = getService().findByID(Id);
             if (entity != null) values = new ArrayList<>(Arrays.asList(entity));
             break;
-        case "searchByDate":
+        case "searchCreatedDate":
             values = getService().findByCreatedDateRange(searchDateFrom, searchDateTo);
             break;
-        case "fetchAll":
-           values = entities;
+        case "searchDisplayAll":
+           values = getEntities();
            break;
         }
     }
@@ -286,7 +291,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         return fields;
     }
 
-    
+
     // ---------------------------------------------------------- setters and getters
     public I getId() {
         return Id;
@@ -296,20 +301,16 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         this.Id = Id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public List<E> getValues() {
+        return values;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getPage() {
+        return page;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPage(String page) {
+        this.page = page;
     }
 
     public String getSearchOption() {
@@ -336,24 +337,12 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         this.searchDateFrom = searchDateFrom;
     }
 
-    public List<E> getValues() {
-        return values;
-    }
-
     public List<E> getEntities() {
         return entities;
     }
 
     public Map<String, String> getAttributeNames() {
         return attributeNames;
-    }
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
     }
 
     public List<ColumnModel> getTableColumns() {
@@ -383,6 +372,14 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     public boolean isSelected() {
         return this.currentSelected != null;
     }
-    
+
+    public List<SearchModel.SelectModel> getSearchOptions() {
+        return this.searchOptions;
+    }
+
+    public List<SearchModel.Field> getSearchFields() {
+        return this.searchFields;
+    }
+
 
 }

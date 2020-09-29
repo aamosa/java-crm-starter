@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.NotNull;
 
 import com.customer.syn.model.Contact;
 import com.customer.syn.model.Task;
@@ -21,18 +22,21 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     private static final long serialVersionUID = 12L;
     
     private Contact contact;
+    private String fName;
+    @NotNull private String lName;
     private List<Task> assignedTasks;
-    
-    @Inject
-    private ContactService contactService;
-   
-   
+
+    @Inject private ContactService contactService;
+
     // --------------------------------------------------------- constructors
-    public ContactBacking() {}
+    public ContactBacking() { /* no-args constructor */ }
 
     
-    @PostConstruct
-    public void setUp() {}
+    //@Override
+    //@PostConstruct
+    //public void setup() {
+    //    super.setup();
+    //}
     
     
     @Override
@@ -89,6 +93,22 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     
 
     // --------------------------------------------------------- setters and getters
+    public String getfName() {
+        return fName;
+    }
+
+    public void setfName(String fName) {
+        this.fName = fName;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
+
     public Contact getContact() {
         return contact;
     }

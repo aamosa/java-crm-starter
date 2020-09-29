@@ -12,7 +12,6 @@ public class ColumnModel implements Serializable {
 
     
     // ---------------------------------------------------- constructors
-    
     public ColumnModel(String header, String property) {
         this.header = header;
         this.property = property;
@@ -26,7 +25,6 @@ public class ColumnModel implements Serializable {
     
     
     // ---------------------------------------------------- setters and getters
-
     public String getType() {
         return type;
     }

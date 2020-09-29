@@ -39,7 +39,7 @@
                     value="#{userBacking.currentEntity.roles}" 
                     collectionType="java.util.HashSet" 
                     converter="roleConverter">
-                  <f:selectItems value="#{menuBacking.availRoles}" 
+                  <f:selectItems value="#{menuBacking.rolesMenu}"
                     var="r" 
                     itemLabel="#{r.roleName}" 
                     itemValue="#{r}" />

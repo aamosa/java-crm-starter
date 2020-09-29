@@ -8,24 +8,23 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:p="http://primefaces.org/ui">
 
-   <ui:param name="backingBean" value="#{taskBacking}" />
-   <ui:define name="title">Tasks</ui:define>
+    <ui:param name="backingBean" value="#{taskBacking}" />
+    <ui:define name="title">Tasks</ui:define>
 
-   <ui:define name="header-stuff">
-      <syn:search-form 
-        backingBean="#{taskBacking}"
-        selectValue="#{taskBacking.searchOption}"
-        selectModel="#{menuBacking.searchOptions}"
-        fieldModel="#{menuBacking.searchFields}"
-        fieldValues="#{menuBacking.searchFieldValues}" />
-   </ui:define>
+    <ui:define name="header-stuff">
+        <syn:search-form
+                backingBean="#{taskBacking}"
+                selectValue="#{taskBacking.searchOption}"
+                selectModel="#{menuBacking.searchOptions}"
+                fieldModel="#{menuBacking.searchFields}" />
+    </ui:define>
 
-   <ui:define name="content-stuff">
-      <h:panelGroup id="page" layout="block">
-         <ui:include src="#{taskBacking.page}.xhtml">
-            <ui:param name="entity" value="#{taskBacking.currentEntity}" />
-            <ui:param name="entityName" value="task" />
-         </ui:include>
-      </h:panelGroup>
-   </ui:define>
+    <ui:define name="content-stuff">
+        <h:panelGroup id="page" layout="block">
+            <ui:include src="#{taskBacking.page}.xhtml">
+                <ui:param name="entity" value="#{taskBacking.currentEntity}" />
+                <ui:param name="entityName" value="task" />
+            </ui:include>
+        </h:panelGroup>
+    </ui:define>
 </ui:composition>

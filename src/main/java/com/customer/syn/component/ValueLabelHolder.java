@@ -7,13 +7,13 @@ public class ValueLabelHolder<T> {
     
     
     // ------------------------------------------------------ constructors
-    
     public ValueLabelHolder(String label, T value) {
         this.label = label;
         this.value = value;
     }
-    
 
+
+    // ------------------------------------------------------ setters and getters
     public String getLabel() {
         return label;
     }

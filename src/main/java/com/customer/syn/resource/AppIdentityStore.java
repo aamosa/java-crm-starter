@@ -24,11 +24,10 @@ public class AppIdentityStore implements IdentityStore {
     
     @Override
     public CredentialValidationResult validate(Credential credential) {
-        UsernamePasswordCredential userPasswordCredential = (UsernamePasswordCredential) credential;
-        String userName = userPasswordCredential.getCaller();
-        Password pass = userPasswordCredential.getPassword();
-        Optional<User> optionalUser = userService.findByUserNamePassword(
-                userName,
+        UsernamePasswordCredential upc = (UsernamePasswordCredential) credential;
+        String userName = upc.getCaller();
+        Password pass = upc.getPassword();
+        Optional<User> optionalUser = userService.findByUsernameAndPass(userName,
                 String.valueOf(pass.getValue()));
         
         if (optionalUser.isPresent()) {

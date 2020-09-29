@@ -75,6 +75,17 @@
          <version>${primefaces.version}</version>
       </dependency>
 
+      <!--
+      <dependency>
+         <groupId>org.omnifaces</groupId>
+         <artifactId>omnifaces</artifactId>
+         <version>3.8</version>
+      </dependency>
+      -->
+      <!--
+
+      -->
+
       <dependency>
          <groupId>com.h2database</groupId>
          <artifactId>h2</artifactId>

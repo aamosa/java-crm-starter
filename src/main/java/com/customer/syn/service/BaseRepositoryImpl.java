@@ -21,12 +21,10 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     
     protected final Logger log = LoggerFactory.getLogger(getClass());
     
-    @PersistenceContext
-    protected EntityManager em;
+    @PersistenceContext protected EntityManager em;
     
-    private Class<E> clazz;
-    
-    private static final String LOG_MSG = "entity with Id {} {} successfully.";
+    private final Class<E> clazz;
+    private static final String LOG_MSG = "[entity Id = {}, {} successfully]";
     private static final String GET_COUNT = "select count(e) from %s e where e.id = :id";
     private static final String DATE_RANGE = "select e from  %s e where e.createdAt between :from and :to";
     private static final String LAST_NAME = "select e from %s e where e.lastName like :lastName";
@@ -69,6 +67,9 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
 
     
     public List<E> fetchAll() {
+        if (log.isDebugEnabled()) {
+            log.debug("[fetching entities for {}]", getEntityName());
+        }
         return em.createQuery("from " + getEntityName(), getClazz())
                 .getResultList();
     }
