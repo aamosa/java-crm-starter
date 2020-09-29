@@ -28,17 +28,15 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     private String userName;
     private List<Role> userRoles;
     private Set<Role> selectedRoles;
-
-    @Inject
-    private UserService userService;
+    @Inject private UserService userService;
     
 
     // ------------------------------------------------------ constructors
-    public UserBacking() { }
+    public UserBacking() { /* no-arg constructor */ }
     
     
     @PostConstruct
-    public void init() { }
+    public void init() { /* TODO: */ }
 
 
     public void initialize() {
@@ -69,15 +67,6 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     @Override
     public void delete(User user) {
         super.delete(user);
-//        User managedUser = userService.update(user);
-//        Iterator<Role> it = managedUser.getRoles().iterator();
-//        while (it.hasNext()) {
-//            Role r = it.next();
-//            managedUser.removeRole(r);
-//        }
-//        for (Role role : user.getRoles()) {
-//            user.removeRole(role);
-//        }
     }
     
     
@@ -85,7 +74,7 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
         userService.save(user);
         user.addRoles(new HashSet<>(getUserRoles()));
         if (log.isDebugEnabled()) {
-            log.debug("user roles selected {}", getUserRoles());
+            log.debug("[selected roles = {}]", getUserRoles());
         }
         super.save(user);
         return "user?faces-redirect=true&includeViewParams=true";
@@ -124,6 +113,5 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     public void setSelectedRoles(Set<Role> selectedRoles) {
         this.selectedRoles = selectedRoles;
     }
-    
 
 }

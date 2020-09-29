@@ -16,7 +16,6 @@ class SearchModel {
         public String getValue() {
             return value;
         }
-
     }
 
     // ------------------------------------------------------ constructors

@@ -1,6 +1,9 @@
 package com.customer.syn.view;
 
 import static com.customer.syn.view.SearchModel.SelectModel.BASE_CLASS;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +19,7 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -25,86 +29,37 @@ public class SearchManager {
 
     @PostConstruct
     public void init() {
+        // parse config and create model
         SearchParser parser = new SearchParser("/searchfields.xml");
-        try {
-            // parse config file and create search model
-            parser.parse();
-
-            log.debug("[{} postconstruct initialize]", getClass().getSimpleName());
-
-            // Debugging
-            log.debug("[selectMap size = {}]", SearchParser.selectMap.size());
-            for (SearchModel.SelectModel s : getSearchOptions(BASE_CLASS))
-                log.debug("[base search option, class = {} value = {}]", s.getClazz(), s.getValue());
-
-            for (SearchModel.Field f : getSearchFields(BASE_CLASS))
-                log.debug("[base search field, name = {} value = {} renderFor = {}]", f.getName(), f.getValue(),
-                        f.getRenderFor());
-        }
-        catch (Exception e) {
-            log.error("{}", e);
-        }
-    }
-
-    public List<SearchModel.SelectModel> getSearchOptions(String className) {
-        // Debugging
-        if (log.isDebugEnabled()) {
-            log.debug("[getSearchOptions className = {}]", className);
-        }
-        return SearchParser.selectMap.get(className.toLowerCase());
+        log.debug("[{} postconstruct initialized]", getClass());
+        // debugging
+        //log.debug("[select map size = {}]", SearchParser.SELECT_MAPPING.size());
+        //for (SearchModel.SelectModel s : getSearchOptions("contact"))
+        //    log.debug("[search option, class = {} value = {}]", s.getClazz(), s.getValue());
+        //
+        //for (SearchModel.Field f : getSearchFields("contact"))
+        //    log.debug("[search field, name = {} value = {} renderFor = {}]", f.getName(),
+        //            f.getValue(), f.getRenderFor());
     }
 
 
-    public List<SearchModel.Field> getSearchFields(String className) {
-        List<SearchModel.SelectModel> list = SearchParser.selectMap.get(className.toLowerCase());
+    public List<SearchModel.SelectModel> getSearchOptions(String key) {
+        return Collections.unmodifiableList(SearchParser.getMapping().get(key));
+    }
+
+
+    public List<SearchModel.Field> getSearchFields(String key) {
+        List<SearchModel.SelectModel> list = SearchParser.getMapping().get(key);
         return list.stream().filter(s -> s.getRenderFields().size() > 0)
                 .map(SearchModel.SelectModel::getRenderFields).flatMap(List::stream)
-                .collect(Collectors.toList());
+                .collect(collectingAndThen(toList(), Collections::unmodifiableList));
     }
+
 
     public SearchModel.DataType[] getDataTypes() {
         return SearchModel.DataType.values();
     }
 
-    // public Map<String, String> getSearchOptions(String className) {
-    //
-    //    Map<String, String> bso = new LinkedHashMap<>();
-    //    for (SearchModel.SelectModel sm : SearchParser.selectList) {
-    //        if (className == null) {
-    //            if (sm.getClazz() == null)
-    //                bso.put(sm.getLabel(), sm.getValue());
-    //        }
-    //        else {
-    //
-    //        }
-    //    }
-    //    return bso;
-    //}
-
-    //public List<SearchModel.Field> getSearchFields(String className) {
-    //    List<SearchModel.Field> fields = new ArrayList<>();
-    //    for (SearchModel.SelectModel sm : SearchParser.selectList) {
-    //        if (sm.getClazz() == null
-    //                && sm.getRenderFields().size() > 0) {
-    //            for (SearchModel.Field f : sm.getRenderFields())
-    //                fields.add(f);
-    //        }
-    //    }
-    //    return fields;
-    //}
-
-    //public List<FormField> setUpBaseSearchFields() {
-    //    List<FormField> searchFields = new ArrayList<>();
-    //    searchFields.add(new FormField("First Name", "firstName", "firstName", "text", "searchByName", true));
-    //    searchFields.add(new FormField("Last Name", "lastName", "lastName", "text", "searchByName", true));
-    //    searchFields.add(new FormField("From", "fromDate", "searchDateFrom", "date", "searchByDate"));
-    //    searchFields.add(new FormField("To", "toDate", "searchDateTo", "date", "searchByDate"));
-    //    searchFields.add(new FormField("ID", "id", "id", "number", "searchByID"));
-    //    return searchFields;
-    // }
-
-
-    // -------------------------------------------------- nested classes
 
     // ---------------------------------------------------------- private nested class
     private static class SearchParser {
@@ -115,54 +70,54 @@ public class SearchManager {
         private static final String SELECT = "select";
         private static final String DEFAULT = "default";
         private static final String ENTITY_CLASS = "entityClass";
-        private static final Map<String, List<SearchModel.SelectModel>> selectMap = new HashMap<>();
-
-        private final String file;
-        private final XMLInputFactory xif;
+        private static final Map<String, List<SearchModel.SelectModel>> SELECT_MAPPING = new HashMap<>();
 
 
         // ------------------------------------------------------ constructor
         public SearchParser(String file) {
-            this.file = file;
-            xif = XMLInputFactory.newInstance();
+            XMLEventReader reader;
+            XMLInputFactory xif;
+            try (InputStream in = this.getClass().getResourceAsStream(file);) {
+                xif = XMLInputFactory.newInstance();
+                reader = xif.createXMLEventReader(in);
+                parse(reader);    // parse config
+                baseify(SELECT_MAPPING);
+            }
+            catch (Exception e) {
+                throw new IllegalStateException("Unable to construct SearchParser", e);
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("[{} instantiated]", getClass());
+            }
         }
 
 
-        public void parse() throws IOException, XMLStreamException {
+        private void parse(XMLEventReader reader) throws XMLStreamException {
             Deque<String> stack = new ArrayDeque<>();
             SearchModel.SelectModel selectModel = null;
-            try (InputStream stream = this.getClass().getResourceAsStream(file)) {
-                XMLEventReader reader = xif.createXMLEventReader(stream);
-                while (reader.hasNext()) {  // parse the tags
-                    XMLEvent event = reader.nextEvent();
-                    if (event.isStartElement()) {
-                        StartElement element = event.asStartElement();
-                        String name = element.getName().getLocalPart();
-                        if (name.equals(SELECT)) {
-                            selectModel = parseSelect(element);
-                            if (selectMap.containsKey(selectModel.getClazz())) {
-                                selectMap.get(selectModel.getClazz()).add(selectModel);
-                            }
-                            else {
-                                List<SearchModel.SelectModel> list = new ArrayList<>();
-                                list.add(selectModel);
-                                selectMap.put(selectModel.getClazz(), list);
-                            }
-                            stack.push(name);
-                        }
-                        else if (name.equals(FIELD)) {
-                            if (stack.size() > 0) {
-                                SearchModel.Field f = parseField(element);
-                                selectModel.addFieldToRender(f);
-                                f.setRenderFor(selectModel.getValue());
-                            }
+            while (reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
+                if (event.isStartElement()) {
+                    StartElement element = event.asStartElement();
+                    String name = element.getName().getLocalPart();
+                    if (name.equals(SELECT)) {
+                        selectModel = parseSelect(element);
+                        SELECT_MAPPING.computeIfAbsent(selectModel.getClazz(), k -> new ArrayList<>())
+                                .add(selectModel);
+                        stack.push(name);
+                    }
+                    else if (name.equals(FIELD)) {
+                        if (stack.size() > 0) {     // add field tag to the parent select
+                            SearchModel.Field f = parseField(element);
+                            selectModel.addFieldToRender(f);
+                            f.setRenderFor(selectModel.getValue());
                         }
                     }
-                    if (event.isEndElement()
-                            && event.asEndElement().getName().getLocalPart()
-                                .equals(SELECT)) {
-                        if (stack.size() > 0) { stack.poll(); }
-                    }
+                }
+                if (event.isEndElement()
+                        && event.asEndElement().getName().getLocalPart()
+                            .equals(SELECT)) {
+                    if (stack.size() > 0) { stack.poll(); }
                 }
             }
         }
@@ -176,7 +131,7 @@ public class SearchManager {
                 select.setClazz(entity);
             }
             if (log.isDebugEnabled()) {
-                log.debug("[label = {} entityclass = {}]", label, entity);
+                log.debug("[label = {} class name = {}]", label, entity);
             }
             return select;
         }
@@ -213,7 +168,23 @@ public class SearchManager {
             return field;
         }
 
-        // helper method
+
+        // ------------------------------------------------------ helper methods
+        public static Map<String, List<SearchModel.SelectModel>> getMapping() {
+            if (SELECT_MAPPING.size() > 0) {
+                return Collections.unmodifiableMap(SELECT_MAPPING);
+            }
+            return Collections.EMPTY_MAP;
+        }
+
+        // add base model to all mappings
+        private void baseify(Map<String, List<SearchModel.SelectModel>> map) {
+            List<SearchModel.SelectModel> list = map.get(BASE_CLASS);
+            map.entrySet().stream().filter(e -> !e.getKey().equals(BASE_CLASS))
+                    .forEach(e -> e.getValue().addAll(list));
+        }
+
+        // convenience wrapper
         private static String getAttrValue(StartElement tag, String value) {
             Attribute a = tag.getAttributeByName(QName.valueOf(value));
             return a != null ? a.getValue() : null;

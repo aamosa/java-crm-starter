@@ -1,27 +1,22 @@
 package com.customer.syn.view;
 
-import static com.customer.syn.view.SearchModel.SelectModel.BASE_CLASS;
-
-import java.awt.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import com.customer.syn.component.ValueLabelHolder;
+import com.customer.syn.model.Contact.Status;
+import com.customer.syn.model.Role;
+import com.customer.syn.model.User;
+import com.customer.syn.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.customer.syn.component.ValueLabelHolder;
-import com.customer.syn.model.Role;
-import com.customer.syn.model.User;
-import com.customer.syn.model.Contact.Status;
-import com.customer.syn.service.UserService;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Named(value = "menuBacking")
 @ApplicationScoped
@@ -30,19 +25,16 @@ public class MenuManager implements Serializable {
     private static final long serialVersionUID = 54L;
     private static final Logger log = LoggerFactory.getLogger(MenuManager.class);
 
-    @Inject private FacesContext fc;
-    @Inject private UserService userService;
-    @Inject private SearchManager searchManager;
-
     private Status[] status;
     private List<User> users;
     private Set<Role> rolesMenu;
     private List<ValueLabelHolder<String>> navMenu;
 
-    private List<SearchModel.Field> searchFields;
-    private List<SearchModel.SelectModel> searchOptions;
+    @Inject private FacesContext fc;
+    @Inject private UserService userService;
+    @Inject private SearchManager searchManager;
 
-    
+
     // ---------------------------------------------------------------- constructors
     public MenuManager() { /* no-args constructor */ }
 
@@ -51,9 +43,8 @@ public class MenuManager implements Serializable {
     public void init() {  // TODO: load from config file or db here
         loadNavMenu();
         loadSelects();
-        setUpBaseSearch();
         if (log.isDebugEnabled()) {
-            log.debug("[{} postconstruct initialize]", getClass().getSimpleName());
+            log.debug("[{} postconstruct initialized]", getClass());
         }
     }
 
@@ -72,7 +63,7 @@ public class MenuManager implements Serializable {
     }
 
 
-    private void loadUserMenu() {   // TODO: reload / refresh when new entity created
+    private void loadUserMenu() {   // TODO: reload when new entity created
         if (this.users == null) {
             this.users = userService.fetchAll();
         }
@@ -85,13 +76,7 @@ public class MenuManager implements Serializable {
         }
     }
 
-    
-    private void setUpBaseSearch() {
-        searchOptions = searchManager.getSearchOptions(BASE_CLASS);
-        searchFields = searchManager.getSearchFields(BASE_CLASS);
-    }
-    
-    
+
     private String getServletPath() {
         String path = fc.getExternalContext().getRequestServletPath();
         return path != null ? path.substring(0, path.lastIndexOf('/')+1) : "";
@@ -101,14 +86,6 @@ public class MenuManager implements Serializable {
     // ---------------------------------------------------------------- getters
     public List<ValueLabelHolder<String>> getMenu() {
         return navMenu;
-    }
-
-    public List<SearchModel.SelectModel> getSearchOptions() {
-        return searchOptions;
-    }
-
-    public List<SearchModel.Field> getSearchFields() {
-        return searchFields;
     }
 
     public List<User> getUsers() {

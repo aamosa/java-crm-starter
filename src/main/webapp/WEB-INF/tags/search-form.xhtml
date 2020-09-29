@@ -26,7 +26,7 @@
                 <c:forEach items="#{fieldModel}"
                            var="f">
                     <c:set var="field" value="#{f.value}" />
-                    <h:panelGroup layout="block" id="#{f.name}_pg">
+                    <h:panelGroup layout="block" id="#{f.name}grp">
                         <syn:input id="#{f.name}"
                                    label="#{f.label}"
                                    value="#{backingBean[field]}"

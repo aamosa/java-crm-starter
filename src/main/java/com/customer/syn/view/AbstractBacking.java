@@ -28,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
 import com.customer.syn.component.ValueLabelHolder;
+import org.hibernate.sql.Select;
 import org.primefaces.model.menu.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected E currentSelected;
     private final Class<?> entityClass;
 
-
     protected String page;
     protected String searchOption;
     protected LocalDate searchDateTo;
@@ -60,14 +60,12 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected List<E> values;
     protected List<E> entities;
-
-    protected List<SearchModel.Field> searchFields;           // TODO:
-    protected List<SearchModel.SelectModel> searchOptions;    // TODO:
-
     protected List<ColumnModel> tableColumns;
     protected Map<String, String> formFields;
     protected Map<String, String> attributeNames;
-    
+    protected List<SearchModel.Field> searchFields;
+    protected List<SearchModel.SelectModel> searchOptions;
+
     private static final String NO_RECORDS = "No Records Found.";
     private static final String EDIT_LOG = "[edit invoked, entity = {}]";
     private static final String UPDATE_MSG = "%s with Id: %d has been updated.";
@@ -82,7 +80,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             ParameterizedType type = (ParameterizedType) this.getClass()
                     .getGenericSuperclass();
             this.entityClass = (Class<?>) type.getActualTypeArguments()[0];
-            // debugging
             if (log.isDebugEnabled()) {
                 log.debug("[{} constructor initialized]", getClass().getSimpleName());
             }
@@ -90,7 +87,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
-
     }
 
     protected AbstractBacking(Class<?> clazz) {
@@ -105,9 +101,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll(); // TODO: add paging and lazy loading here
-        this.searchOptions = searchManager.getSearchOptions(getEntityName().toLowerCase());
-        this.searchFields = searchManager.getSearchFields(getEntityName().toLowerCase());
-
+        searchOptions = searchManager.getSearchOptions(getEntityName());
+        searchFields = searchManager.getSearchFields(getEntityName());
         attributeNames = getViewMeta(getEntityClass());
         formFields = getFormFieldsMap(getEntityClass()); 
         createTableColumns(getEntityClass());
@@ -185,7 +180,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     
     public void search() {
-        switch (searchOption) {
+        switch (getSearchOption()) {
         //case "searchByName":
         //    if (firstName != null && !firstName.trim().isEmpty() && !lastName.trim().isEmpty())
         //        values = getService().findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
@@ -216,7 +211,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     // ---------------------------------------------------------- private methods
     private String getEntityName() {
-        return entityClass.getSimpleName();
+        return entityClass.getSimpleName().toLowerCase();
     }
     
     

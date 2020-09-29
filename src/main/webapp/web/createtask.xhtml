@@ -1,59 +1,57 @@
-<ui:composition 
-    template="/WEB-INF/template.xhtml" 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:syn="http://syn.customer.com/jsf"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+<ui:composition
+        template="/WEB-INF/template.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
 
-   <ui:define name="title">Create Task</ui:define>
+    <ui:define name="title">Create Task</ui:define>
+    <ui:define name="header-stuff">
+        <syn:search-form
+                backingBean="#{taskBacking}"
+                selectValue="#{taskBacking.searchOption}"
+                selectModel="#{taskBacking.searchOptions}"
+                fieldModel="#{taskBacking.searchFields}" />
+    </ui:define>
 
-   <ui:define name="header-stuff">
-      <syn:search-form 
-            backingBean="#{taskBacking}"
-            selectValue="#{taskBacking.searchOption}"
-            selectModel="#{menuBacking.searchOptions}"
-            fieldModel="#{menuBacking.searchFields}"
-            fieldValues="#{menuBacking.searchFieldValues}" />
-   </ui:define>
-
-   <ui:define name="content-stuff">
-      <h:panelGroup id="page" layout="block">
-         <div class="canvas box-shadow og-fnt lt-gry-bg">
-            <div class="full-width">
-               <h:form id="taskform">
-                  <h:panelGroup layout="block" id="tnb" styleClass="row">
-                     <syn:input value="#{taskBacking.task.note}"
-                        label="Task Note"
-                        styleClass="bgin" />
-                  </h:panelGroup>
-                  <h:panelGroup layout="block" id="dtb" styleClass="row">
-                     <syn:input value="#{taskBacking.task.dueDate}" 
-                        label="Due Date"
-                        type="date">
-                            <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-                     </syn:input>
-                  </h:panelGroup>
-                  <h:panelGroup layout="block" id="aub" styleClass="row">
-                     <label>Assign to User</label>
-                     <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
-                        <f:selectItems value="#{menuBacking.users}" 
-                            var="u" 
-                            itemValue="#{u}"
-                            itemLabel="#{u.firstName} #{u.lastName}" />
-                     </h:selectOneMenu>
-                  </h:panelGroup>
-                  <h:commandButton id="save"
-                        action="#{taskBacking.save}" 
-                        value="Save"
-                        styleClass="tab">
+    <ui:define name="content-stuff">
+        <h:panelGroup id="page" layout="block">
+            <div class="canvas box-shadow og-fnt lt-gry-bg">
+                <div class="full-width">
+                    <h:form id="taskform">
+                        <h:panelGroup layout="block" id="tnb" styleClass="row">
+                            <syn:input value="#{taskBacking.task.note}"
+                                       label="Task Note"
+                                       styleClass="bgin" />
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" id="dtb" styleClass="row">
+                            <syn:input value="#{taskBacking.task.dueDate}"
+                                       label="Due Date"
+                                       type="date">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </syn:input>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" id="aub" styleClass="row">
+                            <label>Assign to User</label>
+                            <h:selectOneMenu id="asgnuser" value="#{taskBacking.assignedUser}">
+                                <f:selectItems value="#{menuBacking.users}"
+                                               var="u"
+                                               itemValue="#{u}"
+                                               itemLabel="#{u.firstName} #{u.lastName}" />
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                        <h:commandButton id="save"
+                                         action="#{taskBacking.save}"
+                                         value="Save"
+                                         styleClass="tab">
                             <f:param name="contactId" value="#{param['conId']}" />
-                  </h:commandButton>
-               </h:form>
+                        </h:commandButton>
+                    </h:form>
+                </div>
             </div>
-         </div>
-      </h:panelGroup>
-   </ui:define>
+        </h:panelGroup>
+    </ui:define>
 </ui:composition>
