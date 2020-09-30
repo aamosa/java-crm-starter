@@ -6,7 +6,7 @@
         <field type="text" label="Last Name" value="lName" default="true"></field>
     </select>
 
-    <select label="Username" entityClass="user">
+    <select label="User Name" entityClass="user">
         <field type="text" label="User Name" value="userName" default="true"></field>
     </select>
 
@@ -17,5 +17,13 @@
     <select label="Created Date">
         <field type="date" label="From Date" value="searchDateFrom"></field>
         <field type="date" label="To Date" value="searchDateTo"></field>
+    </select>
+
+    <select label="Created By" entityClass="task">
+        <field type="text" label="Created By User Name" value="userName" default="true"></field>
+    </select>
+
+    <select label="Assigned To" entityClass="task">
+        <field type="text" label="Assigned to User Name" value="assgnUserName"></field>
     </select>
 </config>

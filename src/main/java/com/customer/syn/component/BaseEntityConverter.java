@@ -15,16 +15,13 @@ import org.slf4j.LoggerFactory;
 import com.customer.syn.model.BaseEntity;
 
 
-@FacesConverter(forClass = BaseEntity.class,
-                managed = true)
+@FacesConverter(forClass = BaseEntity.class, managed = true)
 public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
 
     private final Logger log = LoggerFactory.getLogger(BaseEntityConverter.class);
 
-    @PersistenceContext
-    protected EntityManager em;
+    @PersistenceContext protected EntityManager em;
 
-    
     @Override
     public String getAsString(FacesContext ctx, UIComponent component, BaseEntity<Number> entity) {
         if (entity == null) return "";
@@ -42,7 +39,6 @@ public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
     @Override
     public BaseEntity<Number> getAsObject(FacesContext ctx, UIComponent component, String Id) {
         if (Id == null || Id.isEmpty()) return null;
-
         ValueExpression value = component.getValueExpression("value");
         Class<?> type = value.getType(ctx.getELContext());
         try {
@@ -50,7 +46,6 @@ public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
             return (BaseEntity<Number>) em.find(type, Long.valueOf(Id));
         } 
         catch (Exception e) {
-            log.error(e.getMessage());
             throw new ConverterException("Invalid Id", e);
         }
     }

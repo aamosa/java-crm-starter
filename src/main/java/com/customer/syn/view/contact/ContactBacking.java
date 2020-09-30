@@ -18,12 +18,12 @@ import com.customer.syn.view.AbstractBacking;
 @Named
 @ViewScoped
 public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
-    
+
     private static final long serialVersionUID = 12L;
     
-    private Contact contact;
     private String fName;
     @NotNull private String lName;
+    private Contact contact;
     private List<Task> assignedTasks;
 
     @Inject private ContactService contactService;
@@ -31,28 +31,35 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
 
-    
-    //@Override
-    //@PostConstruct
-    //public void setup() {
-    //    super.setup();
-    //}
-    
-    
+
     @Override
     protected BaseRepositoryImpl<Contact, Long> getService() {
         return contactService;
     }
-    
-    
+
+
+    @Override
+    protected void doSearch(String value) {
+        if (value != null && "searchContactName".equals(value)) {
+            if (getfName() != null && !getfName().trim().isEmpty()
+                    && !getlName().trim().isEmpty()) {
+                values = getService().findByFullName(getfName(), getlName());
+            }
+            else {
+                values = getService().findByLastName(getlName());
+            }
+        }
+    }
+
+
     public void initialize() {
         contact = new Contact();
         setPage("create");
         if (log.isDebugEnabled())
             log.debug("contact object {} instantiated.", contact);
     }
-    
-    
+
+
     @Override
     public void view() {
         if (isSelected()) {

@@ -13,11 +13,8 @@ import com.customer.syn.model.User;
 @Stateless
 public class TaskService extends BaseRepositoryImpl<Task, Long> {
     
-    @Inject 
-    private UserService userService;
-    
-    @Inject
-    private ContactService contactService;
+    @Inject private UserService userService;
+    @Inject private ContactService contactService;
     
     private static final String QUERY = "select t from Task t"
             + " join fetch t.contact"
@@ -41,7 +38,7 @@ public class TaskService extends BaseRepositoryImpl<Task, Long> {
             super.save(task);
         } 
         catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("{}", e);
         }
     }
     

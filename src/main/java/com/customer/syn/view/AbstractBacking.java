@@ -66,13 +66,12 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected List<SearchModel.Field> searchFields;
     protected List<SearchModel.SelectModel> searchOptions;
 
-    private static final String NO_RECORDS = "No Records Found.";
     private static final String EDIT_LOG = "[edit invoked, entity = {}]";
     private static final String UPDATE_MSG = "%s with Id: %d has been updated.";
     private static final String DELETE_MSG = "%s with Id: %d has been deleted.";
     private static final String CREATE_MSG = "New %s has been created successfully.";
     protected static final String NO_SELECTION = "Please make a selection first.";
-    
+
     
     // ---------------------------------------------------------- constructors
     protected AbstractBacking() {
@@ -95,12 +94,14 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
 
     // ---------------------------------------------------------- abstract methods
-    protected abstract BaseRepositoryImpl<E, I> getService();
+    protected abstract <R extends BaseRepositoryImpl<E, I>> R getService();
+
+    protected abstract void doSearch(String value);
 
     
     @PostConstruct
     public void setup() {
-        entities = getService().fetchAll(); // TODO: add paging and lazy loading here
+        entities = getService().fetchAll(); // TODO: add paging and lazy loading
         searchOptions = searchManager.getSearchOptions(getEntityName());
         searchFields = searchManager.getSearchFields(getEntityName());
         attributeNames = getViewMeta(getEntityClass());
@@ -177,27 +178,27 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         values.remove(e);
         addMsg(format(DELETE_MSG, getEntityName(), e.getId()));
     }
-    
-    
+
+
     public void search() {
         switch (getSearchOption()) {
-        //case "searchByName":
-        //    if (firstName != null && !firstName.trim().isEmpty() && !lastName.trim().isEmpty())
-        //        values = getService().findByFullName(firstName.toUpperCase(), lastName.toUpperCase());
-        //    else
-        //        values = getService().findByLastName(lastName.toUpperCase());
-        //    break;
-        case "searchId":
-            values = null;
-            E entity = getService().findByID(Id);
-            if (entity != null) values = new ArrayList<>(Arrays.asList(entity));
-            break;
-        case "searchCreatedDate":
-            values = getService().findByCreatedDateRange(searchDateFrom, searchDateTo);
-            break;
-        case "searchDisplayAll":
-           values = getEntities();
-           break;
+            case "searchId":
+                E entity = getService().findByID(Id);
+                if (entity != null)
+                    values = Arrays.asList(entity);
+                else
+                    values = Collections.EMPTY_LIST;
+                break;
+            case "searchCreatedDate":
+                values = getService().findByCreatedDateRange(searchDateFrom, searchDateTo);
+                break;
+            case "searchDisplayAll":
+                values = getEntities();
+                break;
+            default:
+                // delegate to subclass for specific search
+                doSearch(getSearchOption());
+                break;
         }
     }
     
@@ -213,8 +214,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     private String getEntityName() {
         return entityClass.getSimpleName().toLowerCase();
     }
-    
-    
+
+
     private Class<?> getEntityClass() {
         return entityClass;
     }
@@ -226,31 +227,18 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             tableColumns.add(new ColumnModel(e.getValue(), e.getKey()));
         }
     }
-    
-    
+
+
     private Map<String, String> getFormFieldsMap(final Class<?> bean) {
         Map<String, String> map = attributeNames;
         return getViewMetaforForm(bean).stream().filter(map::containsKey)
-                .collect(Collectors.toMap(Function.identity(), 
-                        map::get, (u, v) -> { 
+                .collect(Collectors.toMap(Function.identity(),
+                        map::get, (u, v) -> {
                             throw new IllegalStateException();
-                            }, LinkedHashMap::new));
+                        }, LinkedHashMap::new));
     }
-    
-    
-    private static Map<String, String> getViewMeta(final Class<?> bean) {
-        List<Field> fields = getSortedFields(bean);  
-        Map<String, String> map = new LinkedHashMap<>();
-        for (Field f : fields) {
-            if (f.getAnnotation(ViewMeta.class) != null) {
-                map.put(f.getName(), capitalize(join(" ", 
-                        splitByCharacterTypeCamelCase(f.getName()))));
-            }
-        }
-        return map;
-    }
-    
-    
+
+
     private static List<String> getViewMetaforForm(final Class<?> bean) {
         List<Field> fields = getSortedFields(bean);
         List<String> formFields = new ArrayList<>();
@@ -262,8 +250,21 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
         return formFields;
     }
-    
-    
+
+
+    private static Map<String, String> getViewMeta(final Class<?> bean) {
+        List<Field> fields = getSortedFields(bean);
+        Map<String, String> map = new LinkedHashMap<>();
+        for (Field f : fields) {
+            if (f.getAnnotation(ViewMeta.class) != null) {
+                map.put(f.getName(), capitalize(join(" ",
+                        splitByCharacterTypeCamelCase(f.getName()))));
+            }
+        }
+        return map;
+    }
+
+
     private static List<Field> getSortedFields(final Class<?> bean) {
         Class<?> node = bean;
         List<Field> fields = new ArrayList<>();
@@ -271,7 +272,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             fields.addAll(Arrays.asList(node.getDeclaredFields()));
             node = node.getSuperclass();
         }
-        
+
         Collections.sort(fields, new Comparator<Field>() {
             @Override
             public int compare(Field o1, Field o2) {

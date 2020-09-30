@@ -1,54 +1,53 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:syn="http://syn.customer.com/jsf"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:p="http://primefaces.org/ui">
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:p="http://primefaces.org/ui">
 
-   <div class="canvas box-shadow og-fnt lt-gry-bg">
-      <div class="full-width">
+    <div class="canvas box-shadow og-fnt lt-gry-bg">
+        <div class="full-width">
+            <h:form id="editform">
+                <h:panelGroup layout="block" id="eblk" styleClass="row">
+                    <syn:input value="#{userBacking.currentEntity.firstName}"
+                               label="First Name" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" id="eblk1" styleClass="row">
+                    <syn:input value="#{userBacking.currentEntity.lastName}"
+                               label="Last Name" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" id="eblk2" styleClass="row">
+                    <syn:input value="#{userBacking.currentEntity.email}"
+                               label="Email" readonly="true" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" id="eblk3" styleClass="row">
+                    <label>Status</label>
+                    <h:selectOneMenu value="#{userBacking.currentEntity.status}">
+                        <f:selectItems value="#{menuBacking.status}" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
 
-         <h:form id="editform">
-            <h:panelGroup layout="block" id="eblk" styleClass="row">
-               <syn:input value="#{userBacking.currentEntity.firstName}"
-                    label="First Name" />
-            </h:panelGroup>
-            <h:panelGroup layout="block" id="eblk1" styleClass="row">
-               <syn:input value="#{userBacking.currentEntity.lastName}"
-                    label="Last Name" />
-            </h:panelGroup>
-            <h:panelGroup layout="block" id="eblk2" styleClass="row">
-               <syn:input value="#{userBacking.currentEntity.email}"
-                    label="Email" readonly="true" />
-            </h:panelGroup>
-            <h:panelGroup layout="block" id="eblk3" styleClass="row">
-               <label>Status</label>
-               <h:selectOneMenu value="#{userBacking.currentEntity.status}">
-                  <f:selectItems value="#{menuBacking.status}" />
-               </h:selectOneMenu>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" id="eblk4" styleClass="row">
-               <label>User Roles</label>
-            </h:panelGroup>
-            <h:panelGroup layout="block" id="eblk5" styleClass="row">
-               <p:selectManyCheckbox id="roles"
-                    layout="pageDirection"
-                    value="#{userBacking.currentEntity.roles}" 
-                    collectionType="java.util.HashSet" 
-                    converter="roleConverter">
-                  <f:selectItems value="#{menuBacking.rolesMenu}"
-                    var="r" 
-                    itemLabel="#{r.roleName}" 
-                    itemValue="#{r}" />
-               </p:selectManyCheckbox>
-            </h:panelGroup>
+                <h:panelGroup layout="block" id="eblk4" styleClass="row">
+                    <label>User Roles</label>
+                </h:panelGroup>
+                <h:panelGroup layout="block" id="eblk5" styleClass="row">
+                    <p:selectManyCheckbox id="roles"
+                                          layout="pageDirection"
+                                          value="#{userBacking.currentEntity.roles}"
+                                          collectionType="java.util.HashSet"
+                                          converter="roleConverter">
+                        <f:selectItems value="#{menuBacking.rolesMenu}"
+                                       var="r"
+                                       itemLabel="#{r.roleName}"
+                                       itemValue="#{r}" />
+                    </p:selectManyCheckbox>
+                </h:panelGroup>
 
-            <h:commandButton id="save" value="Save" styleClass="tab"
-                action="#{userBacking.update()}" />
-         </h:form>
-      </div>
-   </div>
+                <h:commandButton id="save" value="Save" styleClass="tab"
+                                 action="#{userBacking.update()}" />
+            </h:form>
+        </div>
+    </div>
 </ui:composition>

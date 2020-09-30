@@ -1,10 +1,7 @@
 package com.customer.syn.view.user;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -45,9 +42,20 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     }
     
     
-    @Override
-    protected BaseRepositoryImpl<User, Long> getService() {
+    @Override // BaseRepositoryImpl<User, Long>
+    protected UserService getService() {
         return userService;
+    }
+
+
+    @Override
+    protected void doSearch(String value) {
+        if (value != null && "searchUserName".equals(value)) {
+            if (!getUserName().isEmpty()) {
+                User user = getService().findByUsername(getUserName());
+                if (user != null) values = Arrays.asList(user);
+            }
+        }
     }
     
     

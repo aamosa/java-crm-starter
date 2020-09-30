@@ -13,7 +13,7 @@ import com.customer.syn.model.User;
 public class UserService extends BaseRepositoryImpl<User, Long> {
     
     private static final String ROLES_QUERY = "select r from Role r";
-    private static final String USER_QUERY = "select u from User u where u.userName = :username";
+    private static final String USER_QUERY = "select u from User u where UPPER(u.userName) = UPPER(:username)";
     private static final String USER_PASS_QUERY = "select u from User u where u.userName = :user AND u.password = :pass";
     
     
@@ -34,7 +34,7 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
                     .setParameter("pass", password)
                     .getSingleResult();
         } 
-        catch (Exception e) { /* ignore */ }
+        catch (Exception e) { /* TODO: */ }
         return Optional.ofNullable(user);
     }
     
@@ -46,7 +46,7 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
                     .setParameter("username", username)
                     .getSingleResult();
         } 
-        catch (Exception e) { /* ignore */ }
+        catch (Exception e) { /* TODO: */ }
         return user;
     }
     

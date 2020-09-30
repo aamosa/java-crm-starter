@@ -1,43 +1,41 @@
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:syn="http://syn.customer.com/jsf"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:p="http://primefaces.org/ui">
-   
-   <div class="canvas box-shadow og-fnt lt-gry-bg">
-      <h6 class="border-bottom mid-fnt full-width">Details</h6>
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:p="http://primefaces.org/ui">
 
-      <div class="swag">
-         <ui:repeat
-            value="#{backingBean.attributeNames}" 
-            var="field" 
-            varStatus="loop">
-            
-            <ui:fragment rendered="#{loop.index le 7}">
-               <p class="row">
-                  <strong>#{field.value}:</strong>
-                  <span>#{entity[field.key]}</span>
-               </p>
-            </ui:fragment>
-         </ui:repeat>
-      </div>
-      
-      <ui:fragment rendered="#{backingBean.attributeNames.size() ge 8}">
-         <div class="swag">
-            <ui:repeat 
-                value="#{backingBean.attributeNames}" 
-                var="field" 
-                varStatus="loop"
-                offset="8">
-                  <p class="row">
-                     <strong>#{field.value}:</strong>
-                     <span>#{entity[field.key]}</span>
-                  </p>
+    <div class="canvas box-shadow og-fnt lt-gry-bg">
+        <h6 class="border-bottom mid-fnt full-width">Details</h6>
+        <div class="swag">
+            <ui:repeat
+                    value="#{backingBean.attributeNames}"
+                    var="field"
+                    varStatus="loop">
+
+                <ui:fragment rendered="#{loop.index le 7}">
+                    <p class="row">
+                        <strong>#{field.value}:</strong>
+                        <span>#{entity[field.key]}</span>
+                    </p>
+                </ui:fragment>
             </ui:repeat>
-         </div>
-      </ui:fragment>
-   </div>
+        </div>
+        <ui:fragment rendered="#{backingBean.attributeNames.size() ge 8}">
+            <div class="swag">
+                <ui:repeat
+                        value="#{backingBean.attributeNames}"
+                        var="field"
+                        varStatus="loop"
+                        offset="8">
+                    <p class="row">
+                        <strong>#{field.value}:</strong>
+                        <span>#{entity[field.key]}</span>
+                    </p>
+                </ui:repeat>
+            </div>
+        </ui:fragment>
+    </div>
 </ui:composition>

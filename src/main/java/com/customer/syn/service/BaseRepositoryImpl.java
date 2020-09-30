@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.customer.syn.model.BaseEntity;
 
 
+/** Base CRUD operations used by base entities */
 public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Number> implements BasicRepository<E, I> {
     
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -27,12 +28,12 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     private static final String LOG_MSG = "[entity Id = {}, {} successfully]";
     private static final String GET_COUNT = "select count(e) from %s e where e.id = :id";
     private static final String DATE_RANGE = "select e from  %s e where e.createdAt between :from and :to";
-    private static final String LAST_NAME = "select e from %s e where e.lastName like :lastName";
-    private static final String FULL_NAME = "select e from %s e where e.firstName like :firstName and e.lastName like :lastName";
+    private static final String LAST_NAME = "select e from %s e where UPPER(e.lastName) = UPPER(:lastName)";
+    private static final String FULL_NAME = "select e from %s e where UPPER(e.firstName) = UPPER(:firstName) " +
+            "and UPPER(e.lastName) = UPPER(:lastName)";
    
     
     // ----------------------------------------------------------------- constructors
-    
     @SuppressWarnings("unchecked")
     protected BaseRepositoryImpl() {
         Type type = this.getClass().getGenericSuperclass();  
@@ -49,8 +50,7 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     }
 
     
-    // ---------------------------------------------------------------- common operations
-    
+    // ---------------------------------------------------------------- crud operations
     public E findByID(I id) {
         return em.find(getClazz(), id); 
     }
@@ -123,17 +123,17 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     }
     
     
-    public List<E> findByFullName(String firstName, String lastName) {
+    public List<E> findByFullName(String fName, String lName) {
         return em.createQuery(format(FULL_NAME, getEntityName()), getClazz())
-                .setParameter("firstName", firstName)
-                .setParameter("lastName", lastName)
+                .setParameter("firstName", fName)
+                .setParameter("lastName", lName)
                 .getResultList();
     }
     
     
-    public List<E> findByLastName(String lastName) {
+    public List<E> findByLastName(String lName) {
         return em.createQuery(format(LAST_NAME, getEntityName()), getClazz())
-                .setParameter("lastName", lastName)
+                .setParameter("lastName", lName)
                 .getResultList();
     }
     
@@ -147,7 +147,6 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     
     
     // ---------------------------------------------------------------- setters and getters
-    
     protected EntityManager getEntityManager() {
         return em;
     }

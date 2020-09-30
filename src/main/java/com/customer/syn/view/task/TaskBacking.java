@@ -24,24 +24,21 @@ import com.customer.syn.view.AbstractBacking;
 public class TaskBacking extends AbstractBacking<Task, Long> implements Serializable {
 
     private static final long serialVersionUID = 5691L;
+
     private Task task;
     private Long contactId;
+    private String userName;
+    private String assgnUserName;
     private User assignedUser;
     private Map<String, String> detailAttrs;
-    
-    @Inject 
-    @LoggedUser
-    private User loggedUser;
-    
-    @Inject
-    private FacesContext fc;
-    
-    @Inject
-    private TaskService taskService;
-    
+
+    @Inject private FacesContext fc;
+    @Inject private TaskService taskService;
+    @Inject @LoggedUser private User loggedUser;
+
 
     // ------------------------------------------------------------------ constructors
-    public TaskBacking() {}
+    public TaskBacking() { /* no-arg constructor */ }
     
     
     @PostConstruct
@@ -53,6 +50,12 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     @Override
     protected BaseRepositoryImpl<Task, Long> getService() {
         return taskService;
+    }
+
+
+    @Override
+    protected void doSearch(String value) {
+        // TODO:
     }
 
     
@@ -82,7 +85,7 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
         Long contactId = Long.valueOf(fc.getExternalContext()
                 .getRequestParameterMap().get("contactId"));
         if (log.isDebugEnabled()) {
-            log.debug("contact id is {}.", contactId);
+            log.debug("[contact id = {}]", contactId);
         }
         taskService.save(task, contactId, loggedUser, assignedUser);
         return "task?faces-redirect=true";
@@ -90,6 +93,22 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
 
     
     // ------------------------------------------------------------------ setters and getters
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getAssgnUserName() {
+        return assgnUserName;
+    }
+
+    public void setAssgnUserName(String assgnUserName) {
+        this.assgnUserName = assgnUserName;
+    }
+
     public Task getTask() {
         return this.task;
     }

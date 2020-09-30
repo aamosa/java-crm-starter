@@ -29,17 +29,11 @@ public class SearchManager {
 
     @PostConstruct
     public void init() {
-        // parse config and create model
+        // parse config and create search model - xml is not so bad :P
         SearchParser parser = new SearchParser("/searchfields.xml");
-        log.debug("[{} postconstruct initialized]", getClass());
-        // debugging
-        //log.debug("[select map size = {}]", SearchParser.SELECT_MAPPING.size());
-        //for (SearchModel.SelectModel s : getSearchOptions("contact"))
-        //    log.debug("[search option, class = {} value = {}]", s.getClazz(), s.getValue());
-        //
-        //for (SearchModel.Field f : getSearchFields("contact"))
-        //    log.debug("[search field, name = {} value = {} renderFor = {}]", f.getName(),
-        //            f.getValue(), f.getRenderFor());
+        if (log.isDebugEnabled()) {
+            log.debug("[{} postconstruct initialized]", getClass());
+        }
     }
 
 
@@ -52,7 +46,8 @@ public class SearchManager {
         List<SearchModel.SelectModel> list = SearchParser.getMapping().get(key);
         return list.stream().filter(s -> s.getRenderFields().size() > 0)
                 .map(SearchModel.SelectModel::getRenderFields).flatMap(List::stream)
-                .collect(collectingAndThen(toList(), Collections::unmodifiableList));
+                .collect(collectingAndThen(toList(),
+                        Collections::unmodifiableList));
     }
 
 
@@ -107,7 +102,7 @@ public class SearchManager {
                         stack.push(name);
                     }
                     else if (name.equals(FIELD)) {
-                        if (stack.size() > 0) {     // add field tag to the parent select
+                        if (stack.size() > 0) {     // add child field tag to the parent select
                             SearchModel.Field f = parseField(element);
                             selectModel.addFieldToRender(f);
                             f.setRenderFor(selectModel.getValue());
@@ -168,7 +163,6 @@ public class SearchManager {
             return field;
         }
 
-
         // ------------------------------------------------------ helper methods
         public static Map<String, List<SearchModel.SelectModel>> getMapping() {
             if (SELECT_MAPPING.size() > 0) {
@@ -177,7 +171,7 @@ public class SearchManager {
             return Collections.EMPTY_MAP;
         }
 
-        // add base model to all mappings
+        // add base/common  model to all select model mappings
         private void baseify(Map<String, List<SearchModel.SelectModel>> map) {
             List<SearchModel.SelectModel> list = map.get(BASE_CLASS);
             map.entrySet().stream().filter(e -> !e.getKey().equals(BASE_CLASS))

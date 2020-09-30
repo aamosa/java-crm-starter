@@ -16,7 +16,6 @@ public class ContactService extends BaseRepositoryImpl<Contact, Long> {
     
     
     // ------------------------------------------------------------ business methods
-    
     public List<Task> findTasksforContact(Contact contact) {
         return getEntityManager()
                 .createQuery(TASK_SQL, Task.class)
