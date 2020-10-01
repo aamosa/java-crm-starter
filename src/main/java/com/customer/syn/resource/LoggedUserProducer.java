@@ -15,12 +15,8 @@ import com.customer.syn.service.UserService;
 public class LoggedUserProducer implements Serializable {
     
     private static final long serialVersionUID = -3410942127L;
-    
-    @Inject 
-    private UserService userService;
-    
-    @Inject
-    private SecurityContext securityContext;
+    @Inject private UserService userService;
+    @Inject private SecurityContext securityContext;
     
     
     @Produces

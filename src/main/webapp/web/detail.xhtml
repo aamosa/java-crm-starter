@@ -10,11 +10,8 @@
     <div class="canvas box-shadow og-fnt lt-gry-bg">
         <h6 class="border-bottom mid-fnt full-width">Details</h6>
         <div class="swag">
-            <ui:repeat
-                    value="#{backingBean.attributeNames}"
-                    var="field"
-                    varStatus="loop">
-
+            <ui:repeat value="#{backingBean.attributeNames}"
+                       var="field" varStatus="loop">
                 <ui:fragment rendered="#{loop.index le 7}">
                     <p class="row">
                         <strong>#{field.value}:</strong>

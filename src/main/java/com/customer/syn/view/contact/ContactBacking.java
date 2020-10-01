@@ -25,8 +25,8 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     @NotNull private String lName;
     private Contact contact;
     private List<Task> assignedTasks;
-
     @Inject private ContactService contactService;
+
 
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
@@ -56,7 +56,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         contact = new Contact();
         setPage("create");
         if (log.isDebugEnabled())
-            log.debug("contact object {} instantiated.", contact);
+            log.debug("[{} instantiated]", contact);
     }
 
 

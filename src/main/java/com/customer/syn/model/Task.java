@@ -1,13 +1,13 @@
 package com.customer.syn.model;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.EnumType.STRING;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,7 +30,7 @@ public class Task extends BaseEntity<Long> implements Serializable {
     
     @NotNull
     @ViewMeta(order = 2, formField = false)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private Status status = Status.OPEN;
     
     @ManyToOne(fetch = LAZY)
@@ -48,10 +48,9 @@ public class Task extends BaseEntity<Long> implements Serializable {
 
     
     // ------------------------------------------------------------------ constructors
+    public Task() { /* no-args constructor */ }
 
-    public Task() { }
-    
-    
+
     public Task(String note, Contact contact, User createdUser, User assignedUser) {
         this.note = note;
         this.contact = contact;
@@ -69,7 +68,6 @@ public class Task extends BaseEntity<Long> implements Serializable {
     
     
     // ------------------------------------------------------------------ setters and getters
-
     public String getNote() {
         return note;
     }

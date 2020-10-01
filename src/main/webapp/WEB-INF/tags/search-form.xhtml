@@ -21,7 +21,6 @@
                     <f:ajax event="change" execute="this" render=":sform:searchPnl" />
                 </h:selectOneMenu>
             </div>
-
             <h:panelGroup layout="block" id="searchPnl">
                 <c:forEach items="#{fieldModel}"
                            var="f">
@@ -54,8 +53,7 @@
                                  value="Search"
                                  action="#{backingBean.search}">
                     <ui:insert name="commandListener">
-                        <f:setPropertyActionListener target="#{backingBean.page}"
-                                                     value="list" />
+                        <f:setPropertyActionListener target="#{backingBean.page}" value="list" />
                         <ui:insert name="commandListenerInside" />
                     </ui:insert>
                     <ui:insert name="commandAjax">

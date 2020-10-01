@@ -1,14 +1,14 @@
 package com.customer.syn.model;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.EnumType.STRING;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -16,7 +16,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-@Table
 @Entity
 public class Contact extends BaseEntity<Long> implements Serializable {
 
@@ -42,8 +41,7 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 6)
     private String state;
     
-    @Digits(fraction = 0,
-            integer = 5)
+    @Digits(fraction = 0, integer = 5)
     @ViewMeta(order = 7)
     private String zipCode;
     
@@ -52,29 +50,22 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 3)
     private String email;
 
-    @Transient
-    private boolean editable;
+    @Transient private boolean editable;
     
-    @ViewMeta(order = 9,
-              formField = false)
-    @Enumerated(EnumType.STRING)
+    @ViewMeta(order = 9, formField = false)
+    @Enumerated(STRING)
     private Status statusCode;
-    
-    
-    @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "contact", fetch = LAZY)
     private Set<Task> tasks = new HashSet<>();
     
     
     public enum Status {
-        ACTIVE,
-        INACTIVE,
-        DISABLED
+        NEW, ACTIVE, INACTIVE, DISABLED
     }
 
     
-    
     // ----------------------------------------------------- setters and getters
-
     public String getFirstName() {
         return firstName;
     }
@@ -162,4 +153,5 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
+
 }

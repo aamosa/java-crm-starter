@@ -26,20 +26,11 @@ import com.customer.syn.model.BaseEntity;
 public final class Utils {
     
     private static final Logger log = LoggerFactory.getLogger(Utils.class);
+
+    private Utils() { /* prevent instantiation :p */ }
+
     
-    /** prevent instantiation :p */
-    private Utils() {}
-    
-    
-    
-    // ------------------------------------------------------- helper methods
-    
-    public static <T extends BaseEntity<Number>, I> T findInListById(List<T> list, I Id) {
-        return list.stream().filter(i -> i.getId().equals(Id)).findFirst().orElse(null);
-    }
-    
-    
-    
+    // ------------------------------------------------------- util methods
     public static List<String> fieldNames(Class<?> clazz) {
         List<String> fields = new ArrayList<>();
         try {
@@ -61,13 +52,11 @@ public final class Utils {
         }
         return fields;
     }
-    
-    
+
     
     public static String[] nonFinalorNonStaticFieldnames(Class<?> bean) {
         Field[] fields = bean.getDeclaredFields();
         String[] fieldNames = new String[fields.length];
-        
         int i = 0;
         for (Field field : fields) {
             if (!Modifier.isFinal(field.getModifiers()) 
@@ -78,8 +67,7 @@ public final class Utils {
         }
         return fieldNames;
     } 
-    
-    
+
     
     public static Field getField(Class<?> clazz, String name) 
             throws NoSuchFieldException {
@@ -95,8 +83,7 @@ public final class Utils {
             }
         }
     }
-    
-    
+
     
     public static ArrayList<String> fieldNamesList(Class<?> clazz, EntityManager em) {
         ArrayList<String> list = new ArrayList<>();
@@ -108,14 +95,18 @@ public final class Utils {
         }
         return list;
     }
-    
-    
-    
-    public static <T, ID> T findById(Class<T> type, ID id, String pUnit) {
+
+
+    public static <T extends BaseEntity<Number>, I> T findInListById(List<T> list, I Id) {
+        return list.stream().filter(i -> i.getId().equals(Id)).findFirst().orElse(null);
+    }
+
+
+    public static <T, ID> T findById(Class<T> type, ID id, String name) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         try {
-            emf = Persistence.createEntityManagerFactory(pUnit);
+            emf = Persistence.createEntityManagerFactory(name);
             em = emf.createEntityManager();
             return em.find(type, id);
         } 
@@ -137,10 +128,11 @@ public final class Utils {
     }
     
     
-    /**    
+    /*
         public void getBeanFromEL() {
             FacesContext facesContext = FacesContext.getCurrentInstance();
-            ContactBacking bean = facesContext.getApplication().evaluateExpressionGet(facesContext, "#{contactBacking}", ContactBacking.class);
+            ContactBacking bean = facesContext.getApplication()
+                .evaluateExpressionGet(facesContext, "#{contactBacking}", ContactBacking.class);
             log.info("Bean is: " + bean);
             Map map = facesContext.getExternalContext().getRequestMap();
             Map viewMap = facesContext.getViewRoot().getViewMap();

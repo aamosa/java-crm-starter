@@ -3,6 +3,7 @@ package com.customer.syn.model;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.EnumType.STRING;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,7 +12,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -33,24 +33,17 @@ public class User extends BaseEntity<Long> implements Serializable {
     @Column(unique = true)
     private String email;
     
-    @ViewMeta(order = 2)
-    private String firstName;
-    
-    @ViewMeta(order = 3)
-    private String lastName;
-    
-    @Transient
-    private boolean editable;
-    
-    @ViewMeta(order = 1,
-              formField = false)
-    @Enumerated(EnumType.STRING)
+    @Transient private boolean editable;
+    @ViewMeta(order = 3) private String lastName;
+    @ViewMeta(order = 2) private String firstName;
+
+    @ViewMeta(order = 1, formField = false)
+    @Enumerated(STRING)
     private Status status = Status.ACTIVE;
 
     @NotNull
     @Size(min = 3, max = 30)
-    @Column(nullable = false,
-            unique = true)
+    @Column(nullable = false, unique = true)
     @ViewMeta(order = 5)
     private String userName;
 
@@ -59,28 +52,20 @@ public class User extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 6)
     private String password;
 
-    @ViewMeta(order = 8,
-              formField = false)
+    @ViewMeta(order = 8, formField = false)
     @Column(updatable = false)
     private Instant lastLogin;
-    
 
-    @ViewMeta(order = 7,
-              formField = false)
-    @ManyToMany(fetch = EAGER,
-                cascade = { PERSIST, MERGE })
+    @ViewMeta(order = 7, formField = false)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(name = "users_roles",
-               joinColumns = 
-                   @JoinColumn(name = "user_id",
-                               nullable = false),
-               inverseJoinColumns = 
-                   @JoinColumn(name = "role_id"))
+               joinColumns = @JoinColumn(name = "user_id", nullable = false),
+               inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
     
     
     // ------------------------------------------------------------- constructors
-    
-    public User() {}
+    public User() { /* no-args constructor */ }
     
     
     public User(String firstName, String lastName, String userName, String password) {
@@ -92,7 +77,6 @@ public class User extends BaseEntity<Long> implements Serializable {
     
     
     // ------------------------------------------------------------- utility methods
-    
     public void addRole(Role role) {
         getRoles().add(role);
         role.getUsers().add(this);
@@ -114,7 +98,6 @@ public class User extends BaseEntity<Long> implements Serializable {
     
     
     // ------------------------------------------------------------- setters and getters
-
     public String getFirstName() {
         return firstName;
     }

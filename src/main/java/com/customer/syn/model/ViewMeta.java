@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ViewMeta {
     
-    public int order() default 99;
-    
-    public boolean formField() default true;
+    int order() default 99;
+
+    boolean formField() default true;
 }

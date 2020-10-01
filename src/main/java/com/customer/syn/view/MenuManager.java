@@ -25,7 +25,7 @@ public class MenuManager implements Serializable {
     private static final long serialVersionUID = 54L;
     private static final Logger log = LoggerFactory.getLogger(MenuManager.class);
 
-    private Status[] status;
+    // private Status[] status;
     private List<User> users;
     private Set<Role> rolesMenu;
     private List<ValueLabelHolder<String>> navMenu;
@@ -97,11 +97,7 @@ public class MenuManager implements Serializable {
     }
 
     public Status[] getStatus() {
-        if (status == null) {
-            status = Status.values();
-        }
-        return status;
+        return Status.values();
     }
-    
 
 }

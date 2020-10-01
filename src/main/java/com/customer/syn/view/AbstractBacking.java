@@ -4,6 +4,7 @@ import static java.lang.String.join;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.*;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
@@ -14,7 +15,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -22,13 +22,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
-import com.customer.syn.component.ValueLabelHolder;
-import org.hibernate.sql.Select;
 import org.primefaces.model.menu.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,16 +57,18 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected List<E> values;
     protected List<E> entities;
     protected List<ColumnModel> tableColumns;
-    protected Map<String, String> formFields;
+    // protected Map<String, String> formFields;
+    protected List<String> formFields;
     protected Map<String, String> attributeNames;
     protected List<SearchModel.Field> searchFields;
     protected List<SearchModel.SelectModel> searchOptions;
 
+    private static final Class ANNOTATED_CLASS = ViewMeta.class;
     private static final String EDIT_LOG = "[edit invoked, entity = {}]";
     private static final String UPDATE_MSG = "%s with Id: %d has been updated.";
     private static final String DELETE_MSG = "%s with Id: %d has been deleted.";
-    private static final String CREATE_MSG = "New %s has been created successfully.";
     protected static final String NO_SELECTION = "Please make a selection first.";
+    private static final String CREATE_MSG = "New %s has been created successfully.";
 
     
     // ---------------------------------------------------------- constructors
@@ -98,14 +96,19 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected abstract void doSearch(String value);
 
-    
+
     @PostConstruct
     public void setup() {
         entities = getService().fetchAll(); // TODO: add paging and lazy loading
         searchOptions = searchManager.getSearchOptions(getEntityName());
         searchFields = searchManager.getSearchFields(getEntityName());
-        attributeNames = getViewMeta(getEntityClass());
-        formFields = getFormFieldsMap(getEntityClass()); 
+
+        attributeNames = attributesMapping(getEntityClass(), ANNOTATED_CLASS);
+        formFields = formFieldPropertyNames(getEntityClass(), ANNOTATED_CLASS);
+
+        log.debug("[ attributesNames = {} ]", attributeNames.toString());
+        log.debug("[ formFields = {} ]", formFields);
+
         createTableColumns(getEntityClass());
         setPage("list");
     }
@@ -121,7 +124,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
-
+    // ---------------------------------------------------------- crud operations
     public void view() {
         if (isSelected()) {
             setCurrentEntity(getCurrentSelected());
@@ -196,31 +199,23 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
                 values = getEntities();
                 break;
             default:
-                // delegate to subclass for specific search
+                // delegate to subclass for entity specific search
                 doSearch(getSearchOption());
                 break;
         }
     }
-    
-    
-    protected void addMsg(String msg) {
-        ec.getFlash().setKeepMessages(true);
-        FacesMessage message = new FacesMessage(msg);
-        fc.addMessage(null, message);
-    }
-    
-    
+
+
     // ---------------------------------------------------------- private methods
+    private Class<?> getEntityClass() {
+        return entityClass;
+    }
+
     private String getEntityName() {
         return entityClass.getSimpleName().toLowerCase();
     }
 
 
-    private Class<?> getEntityClass() {
-        return entityClass;
-    }
-
-    
     private void createTableColumns(final Class<?> bean) {
         tableColumns = new ArrayList<>();
         for (Map.Entry<String, String> e : getAttributeNames().entrySet()) {
@@ -229,54 +224,31 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
 
-    private Map<String, String> getFormFieldsMap(final Class<?> bean) {
-        Map<String, String> map = attributeNames;
-        return getViewMetaforForm(bean).stream().filter(map::containsKey)
-                .collect(Collectors.toMap(Function.identity(),
-                        map::get, (u, v) -> {
-                            throw new IllegalStateException();
-                        }, LinkedHashMap::new));
+    private List<String> formFieldPropertyNames(final Class<?> clazz,
+                                                final Class<ViewMeta> aclazz) {
+        return getAnnotatedFields(clazz, aclazz).stream()
+                .filter(f -> f.getAnnotation(aclazz).formField())
+                .map(Field::getName)
+                .collect(Collectors.toList());
     }
 
-
-    private static List<String> getViewMetaforForm(final Class<?> bean) {
-        List<Field> fields = getSortedFields(bean);
-        List<String> formFields = new ArrayList<>();
-        for (Field f : fields) {
-            ViewMeta meta = f.getAnnotation(ViewMeta.class);
-            if (meta != null && meta.formField()) {
-                formFields.add(f.getName());
-            }
-        }
-        return formFields;
-    }
-
-
-    private static Map<String, String> getViewMeta(final Class<?> bean) {
-        List<Field> fields = getSortedFields(bean);
+    // create an object attribute name mappping with user-friendly names
+    private Map<String, String> attributesMapping(final Class<?> clazz,
+                                                  final Class<? extends Annotation> aclazz) {
         Map<String, String> map = new LinkedHashMap<>();
-        for (Field f : fields) {
-            if (f.getAnnotation(ViewMeta.class) != null) {
-                map.put(f.getName(), capitalize(join(" ",
-                        splitByCharacterTypeCamelCase(f.getName()))));
-            }
+        for (Field field : sortFields(getAnnotatedFields(clazz, aclazz))) {
+            map.put(field.getName(), capitalize(join(" ",
+                    splitByCharacterTypeCamelCase(field.getName()))));
         }
         return map;
     }
 
-
-    private static List<Field> getSortedFields(final Class<?> bean) {
-        Class<?> node = bean;
-        List<Field> fields = new ArrayList<>();
-        while(node != Object.class || node.getSuperclass() != null) {
-            fields.addAll(Arrays.asList(node.getDeclaredFields()));
-            node = node.getSuperclass();
-        }
-
-        Collections.sort(fields, new Comparator<Field>() {
+    // sort fields annotated with @ViewMeta using it's order field TODO:
+    private List<Field> sortFields(List<Field> list) {
+        Collections.sort(list, new Comparator<Field>() {
             @Override
             public int compare(Field o1, Field o2) {
-                ViewMeta s1 = o1.getAnnotation(ViewMeta.class);
+                ViewMeta  s1 = o1.getAnnotation(ViewMeta.class);
                 ViewMeta s2 = o2.getAnnotation(ViewMeta.class);
                 if (s1 != null && s2 != null)
                     return Integer.compare(s1.order(), s2.order());
@@ -284,7 +256,38 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
                     return 0;
             }
         });
+        return list;
+    }
+
+
+    // ---------------------------------------------------------- helper methods
+    public static List<Field> getAnnotatedFields(final Class<?> clazz,
+                                                 final Class<? extends Annotation> aClazz) {
+        List list = new ArrayList<>();
+        for (Field field : getClassFields(clazz)) {
+            if (field.getAnnotation(aClazz) != null) {
+                list.add(field);
+            }
+        }
+        return list;
+    }
+
+    // get all of the class object's declared fields including inherited fields
+    public static List<Field> getClassFields(final Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        Class<?> node = clazz;
+        while(node != Object.class || node.getSuperclass() != null) {
+            fields.addAll(Arrays.asList(node.getDeclaredFields()));
+            node = node.getSuperclass();
+        }
         return fields;
+    }
+
+    // TODO: make it a utility method
+    public void addMsg(String msg) {
+        ec.getFlash().setKeepMessages(true);
+        FacesMessage message = new FacesMessage(msg);
+        fc.addMessage(null, message);
     }
 
 
@@ -345,7 +348,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         return tableColumns;
     }
 
-    public Map<String, String> getFormFields() {
+    public List<String> getFormFields() {
         return formFields;
     }
 

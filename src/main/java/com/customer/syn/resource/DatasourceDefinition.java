@@ -24,16 +24,13 @@ public class DatasourceDefinition {
 
     @Resource(lookup = "java:app/jdbc/h2_datasource")
     private DataSource dataSource;
+    @Inject UserService userService;
+    @Inject private Pbkdf2PasswordHash hash;
 
-    @Inject
-    UserService userService;
-
-    @Inject
-    private Pbkdf2PasswordHash hash;
 
     @PostConstruct
     public void init() {
-        User user = new User("Admin", "Web", "ADMIN", "passw0rd");
+        User user = new User("Admin", "Web", "ADMIN", "secret123");
         user.addRole(new Role("ALLOW_ACCESS", user));
         userService.save(user);
     }

@@ -7,15 +7,15 @@
         xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
         xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
-    <c:set var="id" value="${not empty id ? id : fn:replace(label,' ','')}" />
+    <c:set var="id" value="${not empty id ? id : fn:replace(fn:toLowerCase(label),' ','')}" />
     <c:set var="rendered" value="${empty rendered ? true : rendered}" />
     <c:set var="required" value="${empty required ? false : required}" />
     <c:set var="readonly" value="${empty readonly ? false : readonly}" />
+
     <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}" />
     <c:choose>
         <c:when test="#{type eq 'DATE'}">
-            <h:inputText id="#{id}"
-                         label="#{label}"
+            <h:inputText id="#{id}" label="#{label}"
                          value="#{value}"
                          rendered="#{rendered}"
                          required="#{required}"
@@ -25,14 +25,16 @@
                 <c:if test="${required}">
                     <f:attribute name="requiredMessage" value="#{requiredMessage}" />
                 </c:if>
-
                 <ui:insert />
-
             </h:inputText>
         </c:when>
+        <c:when test="#{type eq 'SELECT'}">
+            <h:selectOneMenu value="#{}">
+                <f:selectItems value="#{}" />
+            </h:selectOneMenu>
+        </c:when>
         <c:otherwise>
-            <h:inputText id="#{id}"
-                         label="#{label}"
+            <h:inputText id="#{id}" label="#{label}"
                          styleClass="#{component.valid ? styleClass : 'invalid'}"
                          value="#{value}"
                          rendered="#{rendered}"

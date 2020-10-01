@@ -6,7 +6,12 @@ import java.util.List;
 class SearchModel {
 
     public enum DataType {
-        TEXT("text"), DATE("date"), NUMBER("number");
+        TEXT("text"),
+        DATE("date"),
+        NUMBER("number"),
+        SELECT("select"),
+        CHECKBOX("checkbox");
+
         String value;
 
         DataType(String value) {
