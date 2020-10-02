@@ -18,10 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.customer.syn.model.Role;
 
 
-/** Custom faces-convertor implementation */
-@SuppressWarnings("rawtypes")
-@FacesConverter(value = "roleConverter",
-                managed = true)
+/** FacesConvertor implementation for Role entity */
+@FacesConverter(value = "roleConverter", managed = true)
 public class RoleConverter implements Converter {
 
     @Inject private FacesContext fc;
@@ -37,7 +35,9 @@ public class RoleConverter implements Converter {
     public Object getAsObject(FacesContext facescontext, UIComponent component, String value) {
         if (value == null || value.isEmpty()) return null;
         try {
-            log.debug("[string value = {}, to object conversion]", value);
+            if (log.isDebugEnabled()) {
+                log.debug("[string  = {}, to object conversion]", value);
+            }
             return em.find(Role.class, Long.valueOf(value));
         } 
         catch (NumberFormatException e) {
@@ -52,7 +52,9 @@ public class RoleConverter implements Converter {
     public String getAsString(FacesContext facescontext, UIComponent component, Object value) {
         if (value == null) return "";
         if (value instanceof Role) {
-            log.debug("[object value = {}, to string conversion]", value);
+            if (log.isDebugEnabled()) {
+                log.debug("[object = {}, to string conversion]", value);
+            }
             return String.valueOf( ((Role) value).getId() );
         } 
         else {

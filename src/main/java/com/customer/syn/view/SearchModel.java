@@ -10,7 +10,8 @@ class SearchModel {
         DATE("date"),
         NUMBER("number"),
         SELECT("select"),
-        CHECKBOX("checkbox");
+        CHECKBOX("checkbox"),
+        SECRET("secret");
 
         String value;
 
@@ -77,7 +78,6 @@ class SearchModel {
         }
 
     }
-
 
 
     public static class Field {

@@ -68,7 +68,7 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     
     public List<E> fetchAll() {
         if (log.isDebugEnabled()) {
-            log.debug("[fetching entities for {}]", getEntityName());
+            log.debug("[ fetching all {} entities ]", getEntityName());
         }
         return em.createQuery("from " + getEntityName(), getClazz())
                 .getResultList();

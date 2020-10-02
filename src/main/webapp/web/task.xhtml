@@ -4,25 +4,24 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:syn="http://syn.customer.com/jsf"
         xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:syn="http://syn.customer.com/jsf"
         xmlns:p="http://primefaces.org/ui">
 
-    <ui:param name="backingBean" value="#{taskBacking}" />
-    <ui:define name="title">Tasks</ui:define>
+    <ui:param name="backingBean" value="#{taskBacking}"/>
     <ui:define name="header-stuff">
         <syn:search-form
                 backingBean="#{taskBacking}"
                 selectValue="#{taskBacking.searchOption}"
                 selectModel="#{taskBacking.searchOptions}"
-                fieldModel="#{taskBacking.searchFields}" />
+                fieldModel="#{taskBacking.searchFields}"/>
     </ui:define>
 
     <ui:define name="content-stuff">
         <h:panelGroup id="page" layout="block">
             <ui:include src="#{taskBacking.page}.xhtml">
-                <ui:param name="entity" value="#{taskBacking.currentEntity}" />
-                <ui:param name="entityName" value="task" />
+                <ui:param name="entity" value="#{taskBacking.currentEntity}"/>
+                <ui:param name="entityName" value="task"/>
             </ui:include>
         </h:panelGroup>
     </ui:define>

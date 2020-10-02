@@ -232,7 +232,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
                 .collect(Collectors.toList());
     }
 
-    // create an object attribute name mappping with user-friendly names
+    // create an attribute name mappping with user-friendly names
     private Map<String, String> attributesMapping(final Class<?> clazz,
                                                   final Class<? extends Annotation> aclazz) {
         Map<String, String> map = new LinkedHashMap<>();

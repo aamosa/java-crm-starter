@@ -1,6 +1,5 @@
 package com.customer.syn.view;
 
-import com.customer.syn.component.ValueLabelHolder;
 import com.customer.syn.model.Contact.Status;
 import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
@@ -14,21 +13,18 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-@Named(value = "menuBacking")
 @ApplicationScoped
+@Named(value = "menuBacking")
 public class MenuManager implements Serializable {
 
     private static final long serialVersionUID = 54L;
     private static final Logger log = LoggerFactory.getLogger(MenuManager.class);
 
-    // private Status[] status;
     private List<User> users;
     private Set<Role> rolesMenu;
-    private List<ValueLabelHolder<String>> navMenu;
+    private static final Map<String, String> NAV_MENU = new HashMap<>();
 
     @Inject private FacesContext fc;
     @Inject private UserService userService;
@@ -40,7 +36,8 @@ public class MenuManager implements Serializable {
 
     
     @PostConstruct
-    public void init() {  // TODO: load from config file or db here
+    public void init() {
+        // TODO: load from config file or db here
         loadNavMenu();
         loadSelects();
         if (log.isDebugEnabled()) {
@@ -50,42 +47,49 @@ public class MenuManager implements Serializable {
 
 
     private void loadNavMenu() {
-        navMenu = new ArrayList<>();
-        navMenu.add(new ValueLabelHolder<>("Contacts", getServletPath().concat("contact.xhtml")));
-        navMenu.add(new ValueLabelHolder<>("Users", getServletPath().concat("user.xhtml")));
-        navMenu.add(new ValueLabelHolder<>("Tasks", getServletPath().concat("task.xhtml")));
+        // TODO:
+        NAV_MENU.put(getPath().concat("contact.xhtml"), "Contacts");
+        NAV_MENU.put(getPath().concat("user.xhtml"), "Users");
+        NAV_MENU.put(getPath().concat("task.xhtml"), "Tasks");
     }
 
 
     private void loadSelects() {
-        loadUserMenu();
-        loadRoleMenu();
-    }
-
-
-    private void loadUserMenu() {   // TODO: reload when new entity created
+        // TODO: reload when new entity created
         if (this.users == null) {
             this.users = userService.fetchAll();
         }
-    }
 
-
-    private void loadRoleMenu() {
         if (this.rolesMenu == null) {
             this.rolesMenu = userService.getRoles();
         }
     }
 
 
-    private String getServletPath() {
+    private String getPath() {
         String path = fc.getExternalContext().getRequestServletPath();
-        return path != null ? path.substring(0, path.lastIndexOf('/')+1) : "";
+        if (log.isDebugEnabled()) {
+            log.debug("[ path = {} ]", path);
+        }
+        String viewId = fc.getViewRoot().getViewId();
+        if (path != null) {
+            path = path.substring(0, path.lastIndexOf('/') + 1);
+            return path;
+        }
+        else {
+            return "";
+        }
+    }
+
+
+    public String pageTitle(String viewId) {
+        return NAV_MENU.get(viewId);
     }
     
     
     // ---------------------------------------------------------------- getters
-    public List<ValueLabelHolder<String>> getMenu() {
-        return navMenu;
+    public Map<String, String> getMenu() {
+        return NAV_MENU;
     }
 
     public List<User> getUsers() {

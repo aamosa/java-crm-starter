@@ -1,41 +1,35 @@
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:syn="http://syn.customer.com/jsf"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
-    xmlns:p="http://primefaces.org/ui">
-
-   <div id="header-wrapper" class="box-shadow">
-      <div id="nav-container">
-         <div id="user-bar">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+        xmlns:p="http://primefaces.org/ui">
+<div id="header-wrapper" class="box-shadow">
+    <div id="nav-container">
+        <div id="user-bar">
             <div class="fields">
-               <ui:repeat value="#{menuBacking.menu}"
-                          var="m">
-                    <h:link styleClass="#{view.viewId eq m.value ? 'selected' : ''} tab"
-                            value="#{m.label}"
-                            outcome="#{m.value}" />
-               </ui:repeat>
-               
-               <c:if test="#{not empty request.userPrincipal}">
-                  <h:form>
-                     <h:commandLink action="#{login.logout}"
-                                    value="Logout"
-                                    styleClass="tab" />
-                  </h:form>
-               </c:if>
+                <ui:repeat value="#{menuBacking.menu}" var="entry">
+                    <h:link styleClass="#{view.viewId eq entry.key ? 'selected' : ''} tab"
+                            value="#{entry.value}"
+                            outcome="#{entry.key}" />
+                </ui:repeat>
+                <c:if test="#{not empty request.userPrincipal}">
+                    <h:form>
+                        <h:commandLink action="#{login.logout}" value="Logout" styleClass="tab" />
+                    </h:form>
+                </c:if>
             </div>
             <div class="fields right">Logged in as: #{request.userPrincipal.name}</div>
-         </div>
-      </div>
-      
-      <div id="header-block" class="lite-bg">
-         <div id="header-container">
-            <ui:insert name="header-stuff"></ui:insert>
-         </div>
-            <ui:insert name="subcommand" />
-      </div>
-   </div>
+        </div>
+    </div>
+    <div id="header-block" class="lite-bg">
+        <div id="header-container">
+            <ui:insert name="header-stuff" />
+        </div>
+        <ui:insert name="subcommand" />
+    </div>
+</div>
 </ui:composition>

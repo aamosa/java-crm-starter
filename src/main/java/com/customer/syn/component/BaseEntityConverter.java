@@ -18,35 +18,40 @@ import com.customer.syn.model.BaseEntity;
 @FacesConverter(forClass = BaseEntity.class, managed = true)
 public class BaseEntityConverter implements Converter<BaseEntity<Number>> {
 
-    private final Logger log = LoggerFactory.getLogger(BaseEntityConverter.class);
-
     @PersistenceContext protected EntityManager em;
+    private static final String ID_ERR = "Invalid entity Id";
+    private static final Logger log = LoggerFactory.getLogger(BaseEntityConverter.class);
+
 
     @Override
     public String getAsString(FacesContext ctx, UIComponent component, BaseEntity<Number> entity) {
         if (entity == null) return "";
         if (entity.getId() != null) {
-            log.debug("converting to string Id {}", entity.getId());
+            if (log.isDebugEnabled()) {
+                log.debug("[Id = {}, to string conversion]", entity.getId());
+            }
             return entity.getId().toString();
         } 
         else {
-            throw new ConverterException("Invalid Id.");
+            throw new ConverterException(ID_ERR);
         }
     }
     
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public BaseEntity<Number> getAsObject(FacesContext ctx, UIComponent component, String Id) {
         if (Id == null || Id.isEmpty()) return null;
         ValueExpression value = component.getValueExpression("value");
         Class<?> type = value.getType(ctx.getELContext());
         try {
-            log.debug("converting to object Id {} of type {}", Long.valueOf(Id), type);
+            if (log.isDebugEnabled()) {
+                log.debug("[string = {}, to object {} conversion]", Long.valueOf(Id), type);
+            }
             return (BaseEntity<Number>) em.find(type, Long.valueOf(Id));
         } 
         catch (Exception e) {
-            throw new ConverterException("Invalid Id", e);
+            throw new ConverterException(e);
         }
     }
     
