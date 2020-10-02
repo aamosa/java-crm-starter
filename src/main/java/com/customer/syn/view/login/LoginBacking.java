@@ -30,22 +30,13 @@ public class LoginBacking implements Serializable {
 
     private static final long serialVersionUID = 3L;
 
-    @NotNull
-    private String user;
-    
-    @NotNull
-    private String pass;
-    
-    @Inject
-    private FacesContext fc;
-    
-    @Inject
-    private SecurityContext securityContext;
+    @NotNull private String user;
+    @NotNull private String pass;
+    @Inject private FacesContext fc;
+    @Inject private ExternalContext ec;
+    @Inject private SecurityContext securityContext;
 
-    @Inject
-    private ExternalContext ec;
-    
-    private static final String LOGOUT_REDIRECT = "login.xhtml";
+    private static final String LOGOUT_URL = "login.xhtml";
     private static final String SUCCESS_URL = "/web/index.xhtml";
 
 
@@ -66,9 +57,7 @@ public class LoginBacking implements Serializable {
         else if (status == SUCCESS) {
             ec.redirect(ec.getRequestContextPath() + SUCCESS_URL);
         } 
-        else if (status == NOT_DONE) {
-            /* do nothing here */
-        }
+        else if (status == NOT_DONE) { /* do nothing here */ }
     }
 
     
@@ -77,12 +66,11 @@ public class LoginBacking implements Serializable {
         HttpServletRequest request = (HttpServletRequest) ec.getRequest();
         request.logout();
         request.getSession().invalidate();
-        ec.redirect(LOGOUT_REDIRECT);
+        ec.redirect(LOGOUT_URL);
     }
 
     
     // ------------------------------------------------------- setters and getters
-
     public String getUser() {
         return user;
     }

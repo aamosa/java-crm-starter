@@ -5,25 +5,6 @@ import java.util.List;
 
 class SearchModel {
 
-    public enum DataType {
-        TEXT("text"),
-        DATE("date"),
-        NUMBER("number"),
-        SELECT("select"),
-        CHECKBOX("checkbox"),
-        SECRET("secret");
-
-        String value;
-
-        DataType(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
-
     // ------------------------------------------------------ constructors
     public SearchModel() { /* no-arg constructor */ }
 
@@ -86,11 +67,11 @@ class SearchModel {
         private String label;
         private String renderFor;
         private boolean show;
-        private DataType type;
+        private MenuManager.DataType type;
 
         public Field() { /* no-arg constructor */ }
 
-        public Field(String value, String label, DataType type, boolean show) {
+        public Field(String value, String label, MenuManager.DataType type, boolean show) {
             this.value = value;
             this.label = label;
             this.type = type;
@@ -139,11 +120,11 @@ class SearchModel {
             this.show = show;
         }
 
-        public DataType getType() {
+        public MenuManager.DataType getType() {
             return type;
         }
 
-        public void setType(DataType type) {
+        public void setType(MenuManager.DataType type) {
             this.type = type;
         }
 

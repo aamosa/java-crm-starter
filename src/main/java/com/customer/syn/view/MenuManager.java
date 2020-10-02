@@ -4,12 +4,12 @@ import com.customer.syn.model.Contact.Status;
 import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
 import com.customer.syn.service.UserService;
+import com.customer.syn.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -26,10 +26,8 @@ public class MenuManager implements Serializable {
     private Set<Role> rolesMenu;
     private static final Map<String, String> NAV_MENU = new HashMap<>();
 
-    @Inject private FacesContext fc;
     @Inject private UserService userService;
     @Inject private SearchManager searchManager;
-
 
     // ---------------------------------------------------------------- constructors
     public MenuManager() { /* no-args constructor */ }
@@ -48,9 +46,9 @@ public class MenuManager implements Serializable {
 
     private void loadNavMenu() {
         // TODO:
-        NAV_MENU.put(getPath().concat("contact.xhtml"), "Contacts");
-        NAV_MENU.put(getPath().concat("user.xhtml"), "Users");
-        NAV_MENU.put(getPath().concat("task.xhtml"), "Tasks");
+        NAV_MENU.put(Utils.getPath().concat("contact.xhtml"), "Contacts");
+        NAV_MENU.put(Utils.getPath().concat("user.xhtml"), "Users");
+        NAV_MENU.put(Utils.getPath().concat("task.xhtml"), "Tasks");
     }
 
 
@@ -66,26 +64,30 @@ public class MenuManager implements Serializable {
     }
 
 
-    private String getPath() {
-        String path = fc.getExternalContext().getRequestServletPath();
-        if (log.isDebugEnabled()) {
-            log.debug("[ path = {} ]", path);
-        }
-        String viewId = fc.getViewRoot().getViewId();
-        if (path != null) {
-            path = path.substring(0, path.lastIndexOf('/') + 1);
-            return path;
-        }
-        else {
-            return "";
-        }
-    }
-
-
     public String pageTitle(String viewId) {
-        return NAV_MENU.get(viewId);
+            return NAV_MENU.get(viewId);
+        }
+
+
+    public enum DataType {
+        TEXT("text"),
+        DATE("date"),
+        NUMBER("number"),
+        SELECT("select"),
+        CHECKBOX("checkbox"),
+        SECRET("secret");
+
+        String value;
+
+        DataType(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
-    
+
     
     // ---------------------------------------------------------------- getters
     public Map<String, String> getMenu() {
@@ -103,5 +105,6 @@ public class MenuManager implements Serializable {
     public Status[] getStatus() {
         return Status.values();
     }
+
 
 }

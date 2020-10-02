@@ -16,11 +16,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class SearchManager {
@@ -51,8 +48,8 @@ public class SearchManager {
     }
 
 
-    public SearchModel.DataType[] getDataTypes() {
-        return SearchModel.DataType.values();
+    public MenuManager.DataType[] getDataTypes() {
+        return MenuManager.DataType.values();
     }
 
 
@@ -155,7 +152,7 @@ public class SearchManager {
                 }
             }
             SearchModel.Field field = new SearchModel.Field(value, label,
-                    SearchModel.DataType.valueOf(type.toUpperCase()), isDefault);
+                    MenuManager.DataType.valueOf(type.toUpperCase()), isDefault);
             if (log.isDebugEnabled()) {
                 log.debug("[label = {} value = {} type = {} default = {}]",
                         label, value, type, isDefault);

@@ -29,7 +29,7 @@
             </h:inputText>
         </c:when>
         <c:when test="#{type eq 'SECRET'}">
-            <h:inputSecret id="#{id}"
+            <h:inputSecret id="#{id}" label="#{label}"
                            value="#{value}"
                            rendered="#{rendered}"
                            required="#{required}"

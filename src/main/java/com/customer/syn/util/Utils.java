@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -31,6 +32,13 @@ public final class Utils {
 
     
     // ------------------------------------------------------- util methods
+    public static String getPath() {
+        String path = FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestServletPath();
+        return path.substring(0, path.lastIndexOf('/') + 1);
+    }
+
+
     public static List<String> fieldNames(Class<?> clazz) {
         List<String> fields = new ArrayList<>();
         try {
@@ -89,10 +97,8 @@ public final class Utils {
         ArrayList<String> list = new ArrayList<>();
         Metamodel metamodel = em.getMetamodel();
         ManagedType<?> type = metamodel.managedType(clazz);
-        
-        for (Attribute<?, ?> attr : type.getAttributes()) {
+        for (Attribute<?, ?> attr : type.getAttributes())
             list.add(attr.getName());
-        }
         return list;
     }
 
@@ -126,7 +132,7 @@ public final class Utils {
             }
         }
     }
-    
+
     
     /*
         public void getBeanFromEL() {
