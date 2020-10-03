@@ -65,8 +65,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     private static final Class ANNOTATED_CLASS = ViewMeta.class;
     private static final String EDIT_LOG = "[edit invoked, entity = {}]";
-    private static final String UPDATE_MSG = "%s with Id: %d has been updated.";
-    private static final String DELETE_MSG = "%s with Id: %d has been deleted.";
+    private static final String UPDATE_MSG = "%s with Id %d has been updated.";
+    private static final String DELETE_MSG = "%s with Id %d has been deleted.";
     protected static final String NO_SELECTION = "Please make a selection first.";
     private static final String CREATE_MSG = "New %s has been created successfully.";
 
@@ -218,9 +218,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     private void createTableColumns(final Class<?> bean) {
         tableColumns = new ArrayList<>();
-        for (Map.Entry<String, String> e : getAttributeNames().entrySet()) {
+        for (Map.Entry<String, String> e : getAttributeNames().entrySet())
             tableColumns.add(new ColumnModel(e.getValue(), e.getKey()));
-        }
     }
 
 

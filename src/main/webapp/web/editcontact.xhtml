@@ -11,46 +11,46 @@
             <h:form id="editform">
                 <h:panelGroup layout="block" id="eblk" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.firstName}"
-                               label="First Name" />
+                               label="First Name"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="eblk1" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.lastName}"
-                               label="Last Name" />
+                               label="Last Name"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="eblk2" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.email}"
-                               label="Email" />
+                               label="Email"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="eblk3" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.phone}"
-                               label="Phone" />
+                               label="Phone"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="eblk4" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.streetAddress}"
-                               label="Street Address" />
+                               label="Street Address"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="eblk5" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.city}"
-                               label="City" />
+                               label="City"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="eblk6" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.state}"
-                               label="State" />
+                               label="State"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="eblk7" styleClass="row">
                     <syn:input value="#{contactBacking.currentEntity.zipCode}"
-                               label="Zip Code" />
+                               label="Zip Code"/>
                 </h:panelGroup>
 
                 <h:panelGroup layout="block" id="eblk8" styleClass="row">
                     <label>Status</label>
                     <h:selectOneMenu value="#{contactBacking.currentEntity.statusCode}">
-                        <f:selectItems value="#{menuBacking.status}" />
+                        <f:selectItems value="#{menuBacking.status}"/>
                     </h:selectOneMenu>
                 </h:panelGroup>
 
                 <h:commandButton id="save" value="Save" styleClass="tab"
-                                 action="#{contactBacking.update(entity)}" />
+                                 action="#{contactBacking.update(entity)}"/>
             </h:form>
         </div>
     </div>

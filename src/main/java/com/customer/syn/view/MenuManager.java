@@ -1,6 +1,6 @@
 package com.customer.syn.view;
 
-import com.customer.syn.model.Contact.Status;
+import com.customer.syn.model.Enums.Status;
 import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
 import com.customer.syn.service.UserService;

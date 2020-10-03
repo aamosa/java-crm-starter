@@ -1,5 +1,6 @@
 package com.customer.syn.model;
 
+import static javax.persistence.GenerationType.IDENTITY;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -7,7 +8,6 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
@@ -17,7 +17,7 @@ import javax.persistence.PreUpdate;
 public abstract class BaseEntity<I extends Number> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(updatable = false)
     protected I id;
 
@@ -65,7 +65,6 @@ public abstract class BaseEntity<I extends Number> {
   
     
     // ------------------------------------------------------- setters and getters
-
 //    public I getVersion() {
 //        return this.version;
 //    }
@@ -76,10 +75,6 @@ public abstract class BaseEntity<I extends Number> {
     
     public I getId() {
         return id;
-    }
-
-    protected void setId(I id) {
-        this.id = id;
     }
 
     public LocalDateTime getCreatedAt() {

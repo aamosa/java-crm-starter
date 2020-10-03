@@ -1,17 +1,15 @@
 package com.customer.syn.model;
 
+import static com.customer.syn.model.Enums.Status.NEW;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.EnumType.STRING;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -35,8 +33,12 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 5)
     private String city;
     
-    @ViewMeta(order = 8)
-    private String phone;
+    //@ViewMeta(order = 8)
+    @ElementCollection
+    @CollectionTable(name = "PHONE")
+    @MapKeyEnumerated(STRING)
+    @Column(name = "PHONE_NUMBER")
+    private Map<Enums.PhoneType, String> phones = new HashMap<>();
     
     @ViewMeta(order = 6)
     private String state;
@@ -54,17 +56,12 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     
     @ViewMeta(order = 9, formField = false)
     @Enumerated(STRING)
-    private Status statusCode;
+    private Enums.Status statusCode = NEW;
 
     @OneToMany(mappedBy = "contact", fetch = LAZY)
     private Set<Task> tasks = new HashSet<>();
-    
-    
-    public enum Status {
-        NEW, ACTIVE, INACTIVE, DISABLED
-    }
 
-    
+
     // ----------------------------------------------------- setters and getters
     public String getFirstName() {
         return firstName;
@@ -122,19 +119,11 @@ public class Contact extends BaseEntity<Long> implements Serializable {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Status getStatusCode() {
+    public Enums.Status getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(Status statusCode) {
+    public void setStatusCode(Enums.Status statusCode) {
         this.statusCode = statusCode;
     }
 

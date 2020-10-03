@@ -22,11 +22,11 @@
           <f:facet name="header">
             <p:menuButton value="Actions">
                <p:menuitem value="View" actionListener="#{backingBean.view}"
-                           update="someTable :grwl :page" />
+                           update="@namingcontainer :grwl :page" />
                <p:menuitem value="Edit" actionListener="#{backingBean.edit}"
-                           update="someTable :grwl :page" />
+                           update="@namingcontainer :grwl :page" />
                <p:menuitem value="Delete" actionListener="#{backingBean.delete}"
-                           update="someTable :grwl :page" />
+                           update="@namingcontainer :grwl :page" />
                <p:menuitem value="Create New" actionListener="#{backingBean.initialize}"
                            update=":page" />
             </p:menuButton>

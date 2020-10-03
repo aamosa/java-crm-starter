@@ -39,7 +39,7 @@ public class Task extends BaseEntity<Long> implements Serializable {
     
     @NotNull
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CREATED_BY", nullable = false)
+    @JoinColumn(name = "CREATED_BY")
     private User createdBy;
     
     @ManyToOne(fetch = LAZY)

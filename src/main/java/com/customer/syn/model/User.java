@@ -4,6 +4,7 @@ import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.EnumType.STRING;
+import static com.customer.syn.model.Enums.Status.NEW;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -21,8 +22,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.customer.syn.model.Contact.Status;
-
 @Entity
 public class User extends BaseEntity<Long> implements Serializable {
 
@@ -39,7 +38,7 @@ public class User extends BaseEntity<Long> implements Serializable {
 
     @ViewMeta(order = 1, formField = false)
     @Enumerated(STRING)
-    private Status status = Status.ACTIVE;
+    private Enums.Status status = NEW;
 
     @NotNull
     @Size(min = 3, max = 30)
@@ -146,11 +145,11 @@ public class User extends BaseEntity<Long> implements Serializable {
         this.lastLogin = lastLogin;
     }
 
-    public Status getStatus() {
+    public Enums.Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(Enums.Status status) {
         this.status = status;
     }
 
