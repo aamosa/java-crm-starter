@@ -1,5 +1,6 @@
 package com.customer.syn.service;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,23 +27,32 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
     }
     
     
-    public Optional<User> findByUsernameAndPass(String username, String password) {
+    public Optional<User> findByUserAndPass(String username, String password) {
         User user = null;
         try {
-            user = getEntityManager().createQuery(USER_PASS_QUERY, User.class)
+            user = getEntityManager()
+                    .createQuery(USER_PASS_QUERY, User.class)
                     .setParameter("user", username)
-                    .setParameter("pass", password)
-                    .getSingleResult();
-        } 
+                    .setParameter("pass", password).getSingleResult();
+            // initialize proxy
+            user.getRoles().size();
+        }
         catch (Exception e) { /* TODO: */ }
         return Optional.ofNullable(user);
+    }
+
+
+    public void updateLogin(User user) {
+        user.setLastLogin(Instant.now());
+        super.update(user);
     }
     
     
     public User findByUsername(String username) {
         User user = null;
         try {
-            user = getEntityManager().createQuery(USER_QUERY, User.class)
+            user = getEntityManager()
+                    .createQuery(USER_QUERY, User.class)
                     .setParameter("username", username)
                     .getSingleResult();
         } 

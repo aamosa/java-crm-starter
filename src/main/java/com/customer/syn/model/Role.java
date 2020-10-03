@@ -1,7 +1,5 @@
 package com.customer.syn.model;
 
-import static javax.persistence.FetchType.EAGER;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +7,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+
 
 @Entity
 public class Role extends BaseEntity<Long> implements Serializable {
@@ -18,14 +17,12 @@ public class Role extends BaseEntity<Long> implements Serializable {
     @Column(nullable = false)
     private String roleName;
     
-    @ManyToMany(mappedBy = "roles", 
-                fetch = EAGER)
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
     
 
     // ------------------------------------------------------- constructors
-
-    public Role() {}
+    public Role() { /* no-args constructor */ }
     
    
     public Role(String role) {
@@ -45,7 +42,6 @@ public class Role extends BaseEntity<Long> implements Serializable {
     }
     
     // ------------------------------------------------------- setters and getters
-
     public String getRoleName() {
         return roleName;
     }

@@ -18,29 +18,26 @@ public class Task extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 149L;
 
-    @NotNull
     @ViewMeta(order = 1)
-    private String note;
+    @NotNull private String note;
     
     @ViewMeta(order = 3, formField = false)
     private LocalDate dueDate;
     
     @ViewMeta(order = 4, formField = false)
     private LocalDateTime completedDate;
-    
-    @NotNull
-    @ViewMeta(order = 2, formField = false)
+
     @Enumerated(STRING)
-    private Status status = Status.OPEN;
+    @ViewMeta(order = 2, formField = false)
+    @NotNull private Status status = Status.OPEN;
     
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CONTACT_ID")
     private Contact contact;
-    
-    @NotNull
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CREATED_BY")
-    private User createdBy;
+    @NotNull private User createdBy;
     
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "ASSIGNED_TO")
@@ -61,9 +58,7 @@ public class Task extends BaseEntity<Long> implements Serializable {
     
     
     public enum Status {
-        OPEN,
-        PENDING,
-        COMPLETED
+        OPEN, PENDING, COMPLETED
     }
     
     

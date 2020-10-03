@@ -18,22 +18,21 @@ import javax.validation.constraints.NotNull;
 public class Contact extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = -14L;
-    
-    @NotNull
-    @ViewMeta(order = 1)
-    private String firstName;
-    
-    @NotNull
+
+    @Transient private boolean editable;
+
     @ViewMeta(order = 2)
-    private String lastName;
-    
+    @NotNull private String lastName;
+
+    @ViewMeta(order = 1)
+    @NotNull private String firstName;
+
     @ViewMeta(order = 4)
     private String streetAddress;
     
     @ViewMeta(order = 5)
     private String city;
     
-    //@ViewMeta(order = 8)
     @ElementCollection
     @CollectionTable(name = "PHONE")
     @MapKeyEnumerated(STRING)
@@ -43,20 +42,17 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 6)
     private String state;
     
-    @Digits(fraction = 0, integer = 5)
     @ViewMeta(order = 7)
+    @Digits(fraction = 0, integer = 5)
     private String zipCode;
-    
-    @Email
-    @Column(unique = true)
-    @ViewMeta(order = 3)
-    private String email;
 
-    @Transient private boolean editable;
-    
+    @ViewMeta(order = 3)
+    @Column(unique = true)
+    @Email private String email;
+
     @ViewMeta(order = 9, formField = false)
     @Enumerated(STRING)
-    private Enums.Status statusCode = NEW;
+    private Enums.Status status = NEW;
 
     @OneToMany(mappedBy = "contact", fetch = LAZY)
     private Set<Task> tasks = new HashSet<>();
@@ -119,12 +115,12 @@ public class Contact extends BaseEntity<Long> implements Serializable {
         this.email = email;
     }
 
-    public Enums.Status getStatusCode() {
-        return statusCode;
+    public Enums.Status getStatus() {
+        return status;
     }
 
-    public void setStatusCode(Enums.Status statusCode) {
-        this.statusCode = statusCode;
+    public void setStatus(Enums.Status status) {
+        this.status = status;
     }
 
     public boolean isEditable() {

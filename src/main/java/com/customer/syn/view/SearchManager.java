@@ -26,7 +26,7 @@ public class SearchManager {
 
     @PostConstruct
     public void init() {
-        // parse config and create search model - xml is not so bad :P
+        // parse config and create search model
         SearchParser parser = new SearchParser("/searchfields.xml");
         if (log.isDebugEnabled()) {
             log.debug("[{} postconstruct initialized]", getClass());
@@ -168,7 +168,7 @@ public class SearchManager {
             return Collections.EMPTY_MAP;
         }
 
-        // add base/common  model to all select model mappings
+        // add base/common model to all select model mappings
         private void baseify(Map<String, List<SearchModel.SelectModel>> map) {
             List<SearchModel.SelectModel> list = map.get(BASE_CLASS);
             map.entrySet().stream().filter(e -> !e.getKey().equals(BASE_CLASS))

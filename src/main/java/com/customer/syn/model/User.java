@@ -1,6 +1,6 @@
 package com.customer.syn.model;
 
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.EnumType.STRING;
@@ -37,29 +37,25 @@ public class User extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 2) private String firstName;
 
     @ViewMeta(order = 1, formField = false)
-    @Enumerated(STRING)
-    private Enums.Status status = NEW;
+    @Enumerated(STRING) private Enums.Status status = NEW;
 
-    @NotNull
+    @ViewMeta(order = 5)
     @Size(min = 3, max = 30)
     @Column(nullable = false, unique = true)
-    @ViewMeta(order = 5)
-    private String userName;
+    @NotNull private String userName;
 
-    @NotNull
-    @Size(min = 4, max = 30)
     @ViewMeta(order = 6)
-    private String password;
+    @Size(min = 4, max = 30)
+    @NotNull private String password;
 
+    //@Column(updatable = false)
     @ViewMeta(order = 8, formField = false)
-    @Column(updatable = false)
     private Instant lastLogin;
 
-    @ViewMeta(order = 7, formField = false)
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
-    @JoinTable(name = "users_roles",
-               joinColumns = @JoinColumn(name = "user_id", nullable = false),
-               inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(fetch = LAZY, cascade = { PERSIST, MERGE })
+    @JoinTable(name = "USERS_ROLES",
+               joinColumns = @JoinColumn(name = "USER_ID", nullable = false),
+               inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
     private Set<Role> roles = new HashSet<>();
     
     

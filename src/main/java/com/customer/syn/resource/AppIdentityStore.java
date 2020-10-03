@@ -1,5 +1,6 @@
 package com.customer.syn.resource;
 
+import static javax.security.enterprise.identitystore.CredentialValidationResult.INVALID_RESULT;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,27 +19,26 @@ import com.customer.syn.service.UserService;
 @ApplicationScoped
 public class AppIdentityStore implements IdentityStore {
 
-    @Inject
-    UserService userService;
+    @Inject private UserService userService;
 
-    
+
     @Override
     public CredentialValidationResult validate(Credential credential) {
         UsernamePasswordCredential upc = (UsernamePasswordCredential) credential;
         String userName = upc.getCaller();
         Password pass = upc.getPassword();
-        Optional<User> optionalUser = userService.findByUsernameAndPass(userName,
-                String.valueOf(pass.getValue()));
-        
+        Optional<User> optionalUser = userService.findByUserAndPass(userName,
+                String.valueOf(pass.getValue()));   // TODO: password is plain-text
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            userService.updateLogin(user);
             return new CredentialValidationResult(user.getUserName(),
-                    user.getRoles().stream()
-                            .map(Role::getRoleName)
+                    user.getRoles().stream().map(Role::getRoleName)
                             .collect(Collectors.toSet()));
-        } 
+        }
         else {
-            return CredentialValidationResult.INVALID_RESULT;
+            return INVALID_RESULT;
         }
     }
     
