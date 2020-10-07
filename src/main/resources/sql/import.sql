@@ -1,20 +1,18 @@
 -- contacts
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('HOWARD','WOLOWITZ', '1001 APPLETREE ROAD','SAN FRANCISCO','CA','90016','howardw@example.com', 'ACTIVE', '2019-01-22 09:51:42.324', '2019-01-21 04:11:21.224');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('SHELDON','COOPER', '1010 GOOGLE WAY','PASADENA','CA','91103','sheldon@google.com','DISABLED', '2019-02-05 20:12:12.150', '2019-02-02 19:22:52.124');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('LEONARD','HOFSTANDER', '1001 GOOGLE WAY','PASADENA','CA','91102','leonard@google.com', 'ACTIVE', '2019-02-10 20:11:13.144', '2019-02-06 07:12:22.161');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('RAJESH','KOOTHRAPPALI', '1100 REDWOOD BLVD','PASADENA','CA','91103','rajr@google.com', 'INACTIVE', '2020-02-03 15:11:13.144', '2019-12-03 08:12:31.110');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('AMY','FOWLER', '1201 MOUNTAINVIEW DR','PASADENA','CA','91102','amyfowler@gmail.com', 'ACTIVE', '2020-03-23 18:22:01.141', '2019-03-15 11:43:10.110');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('WILL','WHEATON', '1131 MENSA ST','GLENDALE','CA','93202','w.wheaton101@gmail.com', 'ACTIVE', '2020-04-01 18:22:01.141', '2019-04-01 13:46:12.301');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('LESLIE','WINKLE', '223 ATOM DR','PALO ALTO','CA','92257','l_winkle22@google.com', 'ACTIVE', '2020-02-11 19:33:59.101', '2020-01-21 11:10:32.131');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('EMILY','SWEENY', '2102 SILICON WAY DR','PASADENA','CA','91103','emily_sweeny92@gmail.com', 'DISABLED', '2019-10-12 19:33:55.421', '2019-09-10 11:01:05.150');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('MARY','COOPER', '4415 PALM TREE CIRCLE','PALO ALTO','CA','90103','cooper_mary1974@yahoo.com', 'ACTIVE', '2020-01-30 06:13:25.104', '2020-01-04 10:11:35.111');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('PRIYA','KOOTHRAPPALI', '1100 REDWOOD BLVD','PASADENA','CA','91103','priya_k303@gmail.com','INACTIVE', '2019-12-22 09:16:25.421', '2019-12-12 13:11:09.109');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('BRUCE','BANNER', '123 AVENGER LANE','HOLLYWOOD','CA','90068','hulk123@avengers.net', 'ACTIVE', '2020-04-03 17:01:21.431', '2020-03-21 06:12:13.004');
-INSERT INTO `contact` (firstName, lastName, streetAddress, city, state, zipCode, email, status, updatedAt, createdAt) VALUES ('BERNADETTE','ROSTENKOWSKI', '4036 ORCHARD CREEK LN.','SAN JOSA','CA','95050', 'bernyrostenkowski@gmail.com', 'ACTIVE', '2020-03-19 17:10:01.141', '2019-03-12 12:03:19.110');
+INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('LEONARD','HOFSTANDER','leonard@google.com','ACTIVE', '2019-02-10 20:11:13.144', '2019-02-06 07:12:22.161');
+INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('RAJESH','KOOTHRAPPALI','rajr@google.com','INACTIVE', '2020-02-03 15:11:13.144', '2019-12-03 08:12:31.110');
+INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('HOWARD','WOLOWITZ','howardw@example.com','ACTIVE', '2019-01-22 09:51:42.324', '2019-01-21 04:11:21.224');
+INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('WILL','WHEATON','w.wheaton101@gmail.com','ACTIVE', '2020-04-01 18:22:01.141', '2019-04-01 13:46:12.301');
+INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('SHELDON','COOPER','sheldon@google.com','DISABLED', '2019-02-05 20:12:12.150', '2019-02-02 19:22:52.124');
+INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('AMY','FOWLER','amyfowler@gmail.com','ACTIVE', '2020-03-23 18:22:01.141', '2019-03-15 11:43:10.110');
+
+-- address
+INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countyCode) VALUES (1,'5168 ELECTRON BLVD','PASADENA','90103','CA','United States','USA');
+INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countyCode) VALUES (1,'446 EINSTEIN WAY','SAN JOSE','90014','CA','United States','USA');
 
 -- users
-INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('Joe', 'Doe', 'joe.doe@crm.com', 'JDOE', 'password1', '2020-01-05 11:16:25.421', '2019-12-05 11:01:19.109');
-INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('John', 'User', 'john.user@crm.com', 'JUSER', 'password2', '2019-12-23 10:26:21.001', '2019-12-01 15:11:09.003');
+INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('JOHN', 'ROSS', 'jross@crm.com', 'JROSS', 'password2', '2019-12-23 10:26:21.001', '2019-12-01 15:11:09.003');
+INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('JOE', 'GUMBI', 'jgumbi@crm.com', 'JGUMBI', 'password1', '2020-01-05 11:16:25.421', '2019-12-05 11:01:19.109');
 
 -- roles
 INSERT INTO `role` (roleName, updatedAt, createdAt) VALUES ('ADMIN', '2019-02-19 12:19:17.000', '2019-01-01 07:10:09.003');
@@ -26,6 +24,7 @@ INSERT INTO `task` (note, status, contact_id, created_by, assigned_to, dueDate, 
 INSERT INTO `task` (note, status, contact_id, created_by, assigned_to, dueDate, completedDate, createdAt, updatedAt) VALUES ('Need to finish up the TPS reports, ASAP!', 'OPEN', 1, 1, 1, '2020-10-11', null, '2020-08-02 11:12:18.019', '2020-08-24 17:33:19.011');
 
 -- phones
+INSERT INTO `PHONE` (contact_id, phone_number, phones_key) VALUES (1, '9195551236', 'MOBILE');
 INSERT INTO `PHONE` (contact_id, phone_number, phones_key) VALUES (2, '9725184400', 'WORK');
 INSERT INTO `PHONE` (contact_id, phone_number, phones_key) VALUES (2, '9727722424', 'HOME');
 INSERT INTO `PHONE` (contact_id, phone_number, phones_key) VALUES (2, '9727723350', 'MOBILE');

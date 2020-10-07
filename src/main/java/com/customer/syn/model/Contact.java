@@ -1,7 +1,6 @@
 package com.customer.syn.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -30,28 +29,15 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 9)
     @Enumerated(STRING) private Enums.Status status = NEW;
 
-    @ViewMeta(order = 4)
-    private String streetAddress;
-    
-    @ViewMeta(order = 5)
-    private String city;
-    
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS")
+    private Set<Address> addresses = new HashSet<>();
+
     @ElementCollection
     @CollectionTable(name = "PHONE")
     @MapKeyEnumerated(STRING)
     @Column(name = "PHONE_NUMBER")
     private Map<Enums.PhoneType, String> phones = new HashMap<>();
-
-    @ElementCollection
-    @CollectionTable(name = "CONTACT_ADDRESS")
-    private Set<Address> addresses = new HashSet<>();
-    
-    @ViewMeta(order = 6)
-    private String state;
-    
-    @ViewMeta(order = 7)
-    @Digits(fraction = 0, integer = 5)
-    private String zipCode;
 
     @ViewMeta(order = 3)
     @Column(unique = true)
@@ -78,38 +64,6 @@ public class Contact extends BaseEntity<Long> implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getStreetAddress() {
-        return streetAddress;
-    }
-
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -124,14 +78,6 @@ public class Contact extends BaseEntity<Long> implements Serializable {
 
     public void setStatus(Enums.Status status) {
         this.status = status;
-    }
-
-    public boolean isEditable() {
-        return editable;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
     }
 
     public Set<Task> getTasks() {

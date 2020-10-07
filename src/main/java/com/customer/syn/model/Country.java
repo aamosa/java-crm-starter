@@ -6,19 +6,19 @@ import java.util.Objects;
 @Embeddable
 public class Country {
 
-    private String name;
+    private String country;
     private String countryCode;
 
 
     public Country() { /* no-args constructor */ }
 
-
-    public String getName() {
-        return name;
+    // ----------------------------------------------------- setters and getters
+    public String getCountry() {
+        return country;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getCountryCode() {
@@ -29,6 +29,7 @@ public class Country {
         this.countryCode = countryCode;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -36,12 +37,12 @@ public class Country {
         if (!(o instanceof Country))
             return false;
         Country country = (Country) o;
-        return Objects.equals(name, country.name) &&
+        return Objects.equals(this.country, country.country) &&
                 Objects.equals(countryCode, country.countryCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, countryCode);
+        return Objects.hash(country, countryCode);
     }
 }

@@ -4,6 +4,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
 
 @Embeddable
 public class Address {
@@ -11,18 +12,17 @@ public class Address {
     private String city;
     private String address1;
     private String address2;
-    private String postalCode;
+    @Max(16) private String postalCode;
     private String stateProvince;
     @Embedded private Country country;
 
-    @ManyToOne
     @JoinColumn(name = "CONTACT_ID")
-    private Contact contact;
+    @ManyToOne private Contact contact;
 
 
     public Address() { /* no-args constructors */ }
 
-
+    // ----------------------------------------------------- setters and getters
     public String getCity() {
         return city;
     }
@@ -62,5 +62,6 @@ public class Address {
     public void setStateProvince(String stateProvince) {
         this.stateProvince = stateProvince;
     }
+
 
 }

@@ -42,12 +42,6 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
     }
 
 
-    public void updateLogin(User user) {
-        user.setLastLogin(Instant.now());
-        super.update(user);
-    }
-    
-    
     public User findByUsername(String username) {
         User user = null;
         try {
@@ -58,6 +52,12 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
         } 
         catch (Exception e) { /* TODO: */ }
         return user;
+    }
+
+
+    public void updateLogin(User user) {
+        user.setLastLogin(Instant.now());
+        super.update(user);
     }
     
     
