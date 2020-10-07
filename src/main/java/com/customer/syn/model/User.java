@@ -48,7 +48,6 @@ public class User extends BaseEntity<Long> implements Serializable {
     @Size(min = 4, max = 30)
     @NotNull private String password;
 
-    //@Column(updatable = false)
     @ViewMeta(order = 8, formField = false)
     private Instant lastLogin;
 

@@ -28,7 +28,7 @@ public class AppIdentityStore implements IdentityStore {
         String userName = upc.getCaller();
         Password pass = upc.getPassword();
         Optional<User> optionalUser = userService.findByUserAndPass(userName,
-                String.valueOf(pass.getValue()));   // TODO: password is plain-text
+                String.valueOf(pass.getValue()));   // TODO: password
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -36,8 +36,7 @@ public class AppIdentityStore implements IdentityStore {
             return new CredentialValidationResult(user.getUserName(),
                     user.getRoles().stream().map(Role::getRoleName)
                             .collect(Collectors.toSet()));
-        }
-        else {
+        } else {
             return INVALID_RESULT;
         }
     }

@@ -1,18 +1,18 @@
 package com.customer.syn.model;
 
-import static com.customer.syn.model.Enums.Status.NEW;
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.EnumType.STRING;
+import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import static com.customer.syn.model.Enums.Status.NEW;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 public class Contact extends BaseEntity<Long> implements Serializable {
@@ -27,6 +27,9 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 1)
     @NotNull private String firstName;
 
+    @ViewMeta(order = 9)
+    @Enumerated(STRING) private Enums.Status status = NEW;
+
     @ViewMeta(order = 4)
     private String streetAddress;
     
@@ -38,6 +41,10 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @MapKeyEnumerated(STRING)
     @Column(name = "PHONE_NUMBER")
     private Map<Enums.PhoneType, String> phones = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "CONTACT_ADDRESS")
+    private Set<Address> addresses = new HashSet<>();
     
     @ViewMeta(order = 6)
     private String state;
@@ -49,10 +56,6 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 3)
     @Column(unique = true)
     @Email private String email;
-
-    @ViewMeta(order = 9, formField = false)
-    @Enumerated(STRING)
-    private Enums.Status status = NEW;
 
     @OneToMany(mappedBy = "contact", fetch = LAZY)
     private Set<Task> tasks = new HashSet<>();
