@@ -31,6 +31,7 @@ public class Contact extends BaseEntity<Long> implements Serializable {
 
     @ElementCollection
     @CollectionTable(name = "ADDRESS")
+    @JoinColumn(name = "CONTACT_ID")
     private Set<Address> addresses = new HashSet<>();
 
     @ElementCollection

@@ -28,8 +28,8 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     private Task task;
     private Long contactId;
     private String userName;
-    private String assgnUserName;
     private User assignedUser;
+    private String assgnUserName;
     private Map<String, String> detailAttrs;
 
     @Inject private FacesContext fc;
@@ -55,13 +55,14 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
 
     @Override
     protected void doSearch(String value) {
-        // TODO:
+        /* TODO: */
     }
 
     
     @Override
     public void view() {
-        Tuple t = taskService.getTasksDTOList(getCurrentSelected().getId()).get(0); // get first result
+        // get first result
+        Tuple t = taskService.getTasksDTOList(getCurrentSelected().getId()).get(0);
         detailAttrs = new LinkedHashMap<>();
         detailAttrs.put("Task Id", t.get("id").toString());
         detailAttrs.put("Note", t.get("note").toString());
@@ -80,8 +81,8 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
         super.edit(task);
     }
     
-    
-    public String save() {
+
+    public String save() {  // TOOD:
         Long contactId = Long.valueOf(fc.getExternalContext()
                 .getRequestParameterMap().get("contactId"));
         if (log.isDebugEnabled()) {

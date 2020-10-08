@@ -12,8 +12,8 @@
             <c:forEach items="#{backingBean.formFields}"
                        var="field"
                        varStatus="loop">
-                <syn:input value="#{backingBean[entityName][field.key]}"
-                           label="#{field.value}" />
+                <syn:input value="#{backingBean[entityName][field]}"
+                           label="#{field}" />
             </c:forEach>
 
             <c:if test="#{entityName eq 'user'}">
@@ -41,11 +41,11 @@
                 </h:selectOneMenu>
             </c:if>
 
-            <h:panelGroup id="btnPanel" layout="block" styleClass="row">
-                <h:commandButton action="#{backingBean.save}" id="sve"
+            <h:panelGroup id="bnPl" layout="block" styleClass="row">
+                <h:commandButton action="#{backingBean.save}" id="svb"
                                  value="Create"
                                  styleClass="tab" />
-                <h:button id="rst" value="Reset" styleClass="tab" />
+                <h:button id="rtb" value="Reset" styleClass="tab" />
             </h:panelGroup>
         </h:form>
 

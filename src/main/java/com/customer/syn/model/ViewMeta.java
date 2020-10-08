@@ -12,4 +12,6 @@ public @interface ViewMeta {
     int order() default 99;
 
     boolean formField() default true;
+
+    String formType() default "";
 }

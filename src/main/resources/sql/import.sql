@@ -7,8 +7,8 @@ INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt)
 INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('AMY','FOWLER','amyfowler@gmail.com','ACTIVE', '2020-03-23 18:22:01.141', '2019-03-15 11:43:10.110');
 
 -- address
-INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countyCode) VALUES (1,'5168 ELECTRON BLVD','PASADENA','90103','CA','United States','USA');
-INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countyCode) VALUES (1,'446 EINSTEIN WAY','SAN JOSE','90014','CA','United States','USA');
+INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countryCode) VALUES (1,'5168 ELECTRON BLVD','PASADENA','90103','CA','United States','USA');
+INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countryCode) VALUES (1,'446 EINSTEIN WAY','SAN JOSE','90014','CA','United States','USA');
 
 -- users
 INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('JOHN', 'ROSS', 'jross@crm.com', 'JROSS', 'password2', '2019-12-23 10:26:21.001', '2019-12-01 15:11:09.003');

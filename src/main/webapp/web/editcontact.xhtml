@@ -1,56 +1,23 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:syn="http://syn.customer.com/jsf"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                xmlns:p="http://primefaces.org/ui">
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:p="http://primefaces.org/ui">
 
     <div class="canvas box-shadow og-fnt lt-gry-bg">
         <div class="full-width">
-            <h:form id="editform">
-                <h:panelGroup layout="block" id="eblk" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.firstName}"
-                               label="First Name"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="eblk1" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.lastName}"
-                               label="Last Name"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="eblk2" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.email}"
-                               label="Email"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="eblk3" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.phone}"
-                               label="Phone"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="eblk4" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.streetAddress}"
-                               label="Street Address"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="eblk5" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.city}"
-                               label="City"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="eblk6" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.state}"
-                               label="State"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="eblk7" styleClass="row">
-                    <syn:input value="#{contactBacking.currentEntity.zipCode}"
-                               label="Zip Code"/>
-                </h:panelGroup>
-
-                <h:panelGroup layout="block" id="eblk8" styleClass="row">
-                    <label>Status</label>
-                    <h:selectOneMenu value="#{contactBacking.currentEntity.status}">
-                        <f:selectItems value="#{menuBacking.status}"/>
-                    </h:selectOneMenu>
-                </h:panelGroup>
-
-                <h:commandButton id="save" value="Save" styleClass="tab"
-                                 action="#{contactBacking.update(entity)}"/>
+            <h:form id="eform">
+                <c:forEach items="#{backingBean.formFields}"
+                           var="field">
+                    <syn:input value="#{backingBean.currentSelected[field]}"
+                               label="#{field}"/>
+                </c:forEach>
+                <h:commandButton action="#{backingBean.update(backingBean.currentSelected)}"
+                                 styleClass="tab" id="svb"
+                                 value="Save"/>
             </h:form>
         </div>
     </div>

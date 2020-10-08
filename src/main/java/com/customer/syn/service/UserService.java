@@ -59,6 +59,12 @@ public class UserService extends BaseRepositoryImpl<User, Long> {
         user.setLastLogin(Instant.now());
         super.update(user);
     }
+
+
+    public User findUserByRole(Role role){
+        /* TODO: */
+        return null;
+    }
     
     
 }

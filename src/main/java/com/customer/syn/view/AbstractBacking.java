@@ -106,9 +106,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         attributeNames = attributesMapping(getEntityClass(), ANNOTATED_CLASS);
         formFields = formFieldPropertyNames(getEntityClass(), ANNOTATED_CLASS);
 
-        log.debug("[ attributesNames = {} ]", attributeNames.toString());
-        log.debug("[ formFields = {} ]", formFields);
-
         createTableColumns(getEntityClass());
         setPage("list");
     }
@@ -242,7 +239,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         return map;
     }
 
-    // sort fields annotated with @ViewMeta using it's order field TODO:
+    // sort fields annotated with @ViewMeta using its order field TODO:
     private List<Field> sortFields(List<Field> list) {
         Collections.sort(list, new Comparator<Field>() {
             @Override

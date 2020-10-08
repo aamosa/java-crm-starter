@@ -27,26 +27,25 @@ public class User extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 92L;
 
-    @Email
     @ViewMeta(order = 4)
     @Column(unique = true)
-    private String email;
+    @Email private String email;
     
     @Transient private boolean editable;
     @ViewMeta(order = 3) private String lastName;
     @ViewMeta(order = 2) private String firstName;
 
-    @ViewMeta(order = 1, formField = false)
+    @ViewMeta(order = 1)
     @Enumerated(STRING) private Enums.Status status = NEW;
 
     @ViewMeta(order = 5)
     @Size(min = 3, max = 30)
     @Column(nullable = false, unique = true)
-    @NotNull private String userName;
+    private String userName;
 
     @ViewMeta(order = 6)
     @Size(min = 4, max = 30)
-    @NotNull private String password;
+    private String password;
 
     @ViewMeta(order = 8, formField = false)
     private Instant lastLogin;
@@ -163,5 +162,6 @@ public class User extends BaseEntity<Long> implements Serializable {
     public void setEditable(boolean editable) {
         this.editable = editable;
     }
+
 
 }
