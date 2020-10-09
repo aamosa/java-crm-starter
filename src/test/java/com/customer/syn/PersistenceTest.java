@@ -1,6 +1,8 @@
 package com.customer.syn;
 
 import com.customer.syn.model.Contact;
+import com.customer.syn.service.BaseRepositoryImpl;
+import com.customer.syn.service.BasicRepository;
 import com.customer.syn.service.ContactService;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -20,15 +22,17 @@ public class PersistenceTest {
 
     @Deployment
     public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class)
-                .addPackages(true, PersistenceTest.class.getPackage())
-                .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+        WebArchive web = ShrinkWrap.create(WebArchive.class)
+                .addPackage("com.customer.syn.model")
+                .addClasses(ContactService.class, BaseRepositoryImpl.class, BasicRepository.class)
+                .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsWebInfResource("web.xml");
+        System.out.println(web.toString()); // TOOD: remove this
+        return web;
     }
 
-    @EJB
-    ContactService contactService;
+    @EJB ContactService contactService;
 
 
     @Test
