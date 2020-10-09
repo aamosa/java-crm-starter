@@ -76,7 +76,6 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     
     @Override
     public void edit(Task task) {
-        // task = taskService.update(task);
         task = taskService.getTaskContactAndUsers(task.getId());
         super.edit(task);
     }

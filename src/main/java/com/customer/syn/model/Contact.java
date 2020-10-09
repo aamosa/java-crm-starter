@@ -26,8 +26,15 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order = 1)
     @NotNull private String firstName;
 
+    @ViewMeta(order = 3)
+    @Column(unique = true)
+    @Email private String email;
+
     @ViewMeta(order = 9)
     @Enumerated(STRING) private Enums.Status status = NEW;
+
+    @OneToMany(mappedBy = "contact", fetch = LAZY)
+    private Set<Task> tasks = new HashSet<>();
 
     @ElementCollection
     @CollectionTable(name = "ADDRESS")
@@ -40,15 +47,27 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     @Column(name = "PHONE_NUMBER")
     private Map<Enums.PhoneType, String> phones = new HashMap<>();
 
-    @ViewMeta(order = 3)
-    @Column(unique = true)
-    @Email private String email;
 
-    @OneToMany(mappedBy = "contact", fetch = LAZY)
-    private Set<Task> tasks = new HashSet<>();
+    // ----------------------------------------------------- constructors
+    public Contact() { /* no-args constructor */ }
+
+
+    public Contact(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
 
     // ----------------------------------------------------- setters and getters
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
+
+    public Map<Enums.PhoneType, String> getPhones() {
+        return phones;
+    }
+
     public String getFirstName() {
         return firstName;
     }

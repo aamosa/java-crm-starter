@@ -18,11 +18,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.validation.constraints.PastOrPresent;
 
 import org.primefaces.model.menu.MenuItem;
@@ -174,9 +176,14 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     
     
     public void delete(E e) {
-        getService().deleteById(e.getId());
-        values.remove(e);
-        addMsg(format(DELETE_MSG, getEntityName(), e.getId()));
+        try {
+            getService().deleteById(e.getId());
+            values.remove(e);
+            addMsg(format(DELETE_MSG, getEntityName(), e.getId()));
+        }
+        catch (EJBException ex) {
+            addMsg(ex.getCause().toString());
+        }
     }
 
 

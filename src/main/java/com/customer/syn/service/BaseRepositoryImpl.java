@@ -10,7 +10,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
+import org.hibernate.JDBCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,7 +112,7 @@ public abstract class BaseRepositoryImpl<E extends BaseEntity<I>, I extends Numb
     }
     
     
-    public void deleteById(I id) {
+    public void deleteById(I id)  {
         getEntityManager().remove(findByID(id));
         if (log.isDebugEnabled())
             log.debug(LOG_MSG, id, "deleted");

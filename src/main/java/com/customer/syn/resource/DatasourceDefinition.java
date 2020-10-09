@@ -13,8 +13,8 @@ import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
 import com.customer.syn.service.UserService;
 
-@Singleton
 @Startup
+@Singleton
 @DataSourceDefinition(name = "java:app/jdbc/h2_datasource",
                       className = "org.h2.jdbcx.JdbcDataSource",
                       url = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
