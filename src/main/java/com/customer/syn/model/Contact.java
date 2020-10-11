@@ -20,31 +20,31 @@ public class Contact extends BaseEntity<Long> implements Serializable {
 
     @Transient private boolean editable;
 
-    @ViewMeta(order = 2)
+    @ViewMeta(order=2)
     @NotNull private String lastName;
 
-    @ViewMeta(order = 1)
+    @ViewMeta(order=1)
     @NotNull private String firstName;
 
-    @ViewMeta(order = 3)
-    @Column(unique = true)
+    @ViewMeta(order=3)
+    @Column(unique=true)
     @Email private String email;
 
-    @ViewMeta(order = 9)
+    @ViewMeta(order=9)
     @Enumerated(STRING) private Enums.Status status = NEW;
 
-    @OneToMany(mappedBy = "contact", fetch = LAZY)
+    @OneToMany(mappedBy="contact", fetch=LAZY)
     private Set<Task> tasks = new HashSet<>();
 
     @ElementCollection
-    @CollectionTable(name = "ADDRESS")
-    @JoinColumn(name = "CONTACT_ID")
+    @CollectionTable(name="ADDRESS")
+    @JoinColumn(name="CONTACT_ID")
     private Set<Address> addresses = new HashSet<>();
 
     @ElementCollection
-    @CollectionTable(name = "PHONE")
+    @CollectionTable(name="PHONE")
     @MapKeyEnumerated(STRING)
-    @Column(name = "PHONE_NUMBER")
+    @Column(name="PHONE_NUMBER")
     private Map<Enums.PhoneType, String> phones = new HashMap<>();
 
 
@@ -64,8 +64,16 @@ public class Contact extends BaseEntity<Long> implements Serializable {
         return addresses;
     }
 
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
+    }
+
     public Map<Enums.PhoneType, String> getPhones() {
         return phones;
+    }
+
+    public void setPhones(Map<Enums.PhoneType, String> phones) {
+        this.phones = phones;
     }
 
     public String getFirstName() {

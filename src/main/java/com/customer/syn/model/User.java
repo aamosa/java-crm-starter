@@ -27,33 +27,33 @@ public class User extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 92L;
 
-    @ViewMeta(order = 4)
-    @Column(unique = true)
+    @ViewMeta(order=4)
+    @Column(unique=true)
     @Email private String email;
     
     @Transient private boolean editable;
-    @ViewMeta(order = 3) private String lastName;
-    @ViewMeta(order = 2) private String firstName;
+    @ViewMeta(order=3) private String lastName;
+    @ViewMeta(order=2) private String firstName;
 
-    @ViewMeta(order = 1)
+    @ViewMeta(order=1)
     @Enumerated(STRING) private Enums.Status status = NEW;
 
-    @ViewMeta(order = 5)
-    @Size(min = 3, max = 30)
-    @Column(nullable = false, unique = true)
+    @ViewMeta(order=5)
+    @Size(min=3, max=30)
+    @Column(nullable=false, unique=true)
     private String userName;
 
-    @ViewMeta(order = 6)
-    @Size(min = 4, max = 30)
+    @ViewMeta(order=6)
+    @Size(min=4, max=30)
     private String password;
 
-    @ViewMeta(order = 8, formField = false)
+    @ViewMeta(order=8, formField=false)
     private Instant lastLogin;
 
-    @ManyToMany(fetch = LAZY, cascade = { PERSIST, MERGE })
-    @JoinTable(name = "USERS_ROLES",
-               joinColumns = @JoinColumn(name = "USER_ID", nullable = false),
-               inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    @ManyToMany(fetch=LAZY, cascade={PERSIST, MERGE})
+    @JoinTable(name="USERS_ROLES",
+               joinColumns=@JoinColumn(name="USER_ID", nullable= false),
+               inverseJoinColumns=@JoinColumn(name="ROLE_ID"))
     private Set<Role> roles = new HashSet<>();
     
     

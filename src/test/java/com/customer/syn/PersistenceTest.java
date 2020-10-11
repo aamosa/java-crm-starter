@@ -22,13 +22,13 @@ public class PersistenceTest {
 
     @Deployment
     public static WebArchive createDeployment() {
-        WebArchive web = ShrinkWrap.create(WebArchive.class)
+        WebArchive web = ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackage("com.customer.syn.model")
                 .addClasses(ContactService.class, BaseRepositoryImpl.class, BasicRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsWebInfResource("web.xml");
-        System.out.println(web.toString()); // TOOD: remove this
+        System.out.println(web.toString()); // TOOD:
         return web;
     }
 

@@ -18,11 +18,11 @@
       <javaee.api.version>8.0</javaee.api.version>
       <primefaces.version>7.0</primefaces.version>
       <hibernate.version>5.4.1.Final</hibernate.version>
+      <payara.autodeploy>${autodeploy}</payara.autodeploy>
+      <payara.embedded.version>5.2020.4</payara.embedded.version>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
-      <payara.embedded.version>5.2020.4</payara.embedded.version>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <payara.autodeploy>c:\\devtools\\payara5\\glassfish\\domains\\domain1\\autodeploy</payara.autodeploy>
    </properties>
 
    <dependencies>
@@ -62,6 +62,12 @@
          <groupId>org.apache.commons</groupId>
          <artifactId>commons-lang3</artifactId>
          <version>3.9</version>
+      </dependency>
+
+      <dependency>
+         <groupId>commons-beanutils</groupId>
+         <artifactId>commons-beanutils</artifactId>
+         <version>1.9.4</version>
       </dependency>
 
       <dependency>
@@ -107,7 +113,7 @@
       <profile>
          <id>arquillian-embedded</id>
          <activation>
-            <activeByDefault>true</activeByDefault>
+            <activeByDefault>false</activeByDefault>
          </activation>
          <dependencies>
             <dependency>
