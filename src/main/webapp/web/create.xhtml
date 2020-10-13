@@ -30,8 +30,7 @@
             </c:if>
 
             <c:if test="#{entityName eq 'task'}">
-                <syn:input value="#{backingBean.contactId}"
-                           label="Contact Id" />
+                <syn:input value="#{backingBean.contactId}" label="Contact Id" />
                 <syn:input value="#{backingBean.createdUserId}" label="User Id" />
                 <h:selectOneMenu id="asgnusr" value="#{backingBean.assignedUser}">
                     <f:selectItems value="#{backingBean.userList}"

@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -24,14 +25,14 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
-import javax.persistence.PersistenceException;
 import javax.validation.constraints.PastOrPresent;
 
+import com.customer.syn.model.Contact;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.primefaces.model.menu.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.customer.syn.component.ColumnModel;
 import com.customer.syn.model.BaseEntity;
 import com.customer.syn.model.ViewMeta;
 import com.customer.syn.service.BaseRepositoryImpl;
@@ -65,6 +66,10 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected List<SearchModel.Field> searchFields;
     protected List<SearchModel.SelectModel> searchOptions;
 
+
+    private static final Map<Class<?>, List<FormModel>> META_MAPPING = new ConcurrentHashMap<>();
+
+
     private static final Class ANNOTATED_CLASS = ViewMeta.class;
     private static final String EDIT_LOG = "[edit invoked, entity = {}]";
     private static final String UPDATE_MSG = "%s with Id %d has been updated.";
@@ -80,7 +85,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
                     .getGenericSuperclass();
             this.entityClass = (Class<?>) type.getActualTypeArguments()[0];
             if (log.isDebugEnabled()) {
-                log.debug("[{} constructor initialized]", getClass().getSimpleName());
+                log.debug("[{} constructor initialized]", getClass());
             }
         }
         catch (Exception e) {
@@ -110,7 +115,46 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
         createTableColumns(getEntityClass());
         setPage("list");
+
+        META_MAPPING.computeIfAbsent(getEntityClass(),
+            k -> doFormModel(k, ANNOTATED_CLASS));
+        log.debug("META_MAP = [{}]", META_MAPPING.toString());
+
+        // inspection
+        log.debug("property descriptors for Contact.class = {}",
+                Arrays.toString(PropertyUtils.getPropertyDescriptors(Contact.class)));
+
+        log.debug("[ get class fields for {} = {} ]",
+            getEntityClass(), getClassFields(getEntityClass()));
     }
+
+
+    /**
+     * 1. if entry does not exist for (Class<?>) key then compute the value for that key:
+     *      a. create list of FormModel objects
+     *      b. mapping for list to key. Map<Class<?>, List<FormModel>>
+     *      c. call from subclass for lookup of specific list of models for that entity.
+     * 2. create / edit UI: if getId == null (check in preRenderEvent ?)
+     *      then assume create new entity, else render for edit of existing entity.
+     */
+    private List<FormModel> doFormModel(Class<?> clazz, Class<? extends ViewMeta> aClass) {
+        List<FormModel> list = new ArrayList<>();
+        for (Field f : getAnnotatedFields(clazz, aClass)) {
+            FormModel model = new FormModel();
+            model.setLabel(capitalize(join(" ",
+                splitByCharacterTypeCamelCase(f.getName()))));
+            model.setValue(f.getName());
+            if (!isEmpty(f.getAnnotation(aClass).collectionType())) {
+                model.setCollectionType(f.getAnnotation(aClass).collectionType());
+            }
+            list.add(model);
+        }
+        log.debug("{}", list.toString());
+        return list;
+
+    }
+
+
 
 
     public void menuChange(ActionEvent event) {
@@ -211,15 +255,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
 
     // ---------------------------------------------------------- private methods
-    private Class<?> getEntityClass() {
-        return entityClass;
-    }
-
-    private String getEntityName() {
-        return entityClass.getSimpleName().toLowerCase();
-    }
-
-
     private void createTableColumns(final Class<?> bean) {
         tableColumns = new ArrayList<>();
         for (Map.Entry<String, String> e : getAttributeNames().entrySet())
@@ -263,14 +298,24 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
 
+    private Class<?> getEntityClass() {
+        return entityClass;
+    }
+
+
+    private String getEntityName() {
+        return entityClass.getSimpleName().toLowerCase();
+    }
+
+
     // ---------------------------------------------------------- helper methods
+    // get list of fields with the specified annotation
     public static List<Field> getAnnotatedFields(final Class<?> clazz,
                                                  final Class<? extends Annotation> aClazz) {
         List list = new ArrayList<>();
         for (Field field : getClassFields(clazz)) {
-            if (field.getAnnotation(aClazz) != null) {
+            if (field.getAnnotation(aClazz) != null)
                 list.add(field);
-            }
         }
         return list;
     }

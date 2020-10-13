@@ -1,4 +1,4 @@
-package com.customer.syn.component;
+package com.customer.syn.view;
 
 import java.io.Serializable;
 

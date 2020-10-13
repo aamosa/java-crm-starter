@@ -122,9 +122,10 @@ public class SearchManager {
             if (entity != null) {
                 select.setClazz(entity);
             }
-            if (log.isDebugEnabled()) {
-                log.debug("[label = {} class name = {}]", label, entity);
-            }
+            // debugging
+            // if (log.isDebugEnabled()) {
+            //     log.debug("[label = {} class name = {}]", label, entity);
+            // }
             return select;
         }
 
@@ -153,10 +154,11 @@ public class SearchManager {
             }
             SearchModel.Field field = new SearchModel.Field(value, label,
                     MenuManager.DataType.valueOf(type.toUpperCase()), isDefault);
-            if (log.isDebugEnabled()) {
-                log.debug("[label = {} value = {} type = {} default = {}]",
-                        label, value, type, isDefault);
-            }
+            // debugging
+            // if (log.isDebugEnabled()) {
+            //     log.debug("[label = {} value = {} type = {} default = {}]",
+            //             label, value, type, isDefault);
+            // }
             return field;
         }
 

@@ -40,7 +40,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
 
     @Override
     protected void doSearch(String value) {
-        if (value != null && "searchContactName".equals(value)) {
+        if ("searchContactName".equals(value)) {
             if (getfName() != null && !getfName().trim().isEmpty()
                     && !getlName().trim().isEmpty()) {
                 values = getService().findByFullName(getfName(), getlName());

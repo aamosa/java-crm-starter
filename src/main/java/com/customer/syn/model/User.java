@@ -50,9 +50,9 @@ public class User extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order=8, formField=false)
     private Instant lastLogin;
 
-    @ManyToMany(fetch=LAZY, cascade={PERSIST, MERGE})
+    @ManyToMany(fetch=LAZY, cascade={ PERSIST, MERGE })
     @JoinTable(name="USERS_ROLES",
-               joinColumns=@JoinColumn(name="USER_ID", nullable= false),
+               joinColumns=@JoinColumn(name="USER_ID", nullable=false),
                inverseJoinColumns=@JoinColumn(name="ROLE_ID"))
     private Set<Role> roles = new HashSet<>();
     

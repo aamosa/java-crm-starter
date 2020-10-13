@@ -14,4 +14,6 @@ public @interface ViewMeta {
     boolean formField() default true;
 
     String formType() default "text";
+
+    String collectionType() default "";
 }

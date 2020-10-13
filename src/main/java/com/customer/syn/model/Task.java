@@ -18,32 +18,36 @@ public class Task extends BaseEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 149L;
 
-    @ViewMeta(order = 1)
+    @ViewMeta(order=1)
     @NotNull private String note;
     
-    @ViewMeta(order = 3, formField = false)
+    @ViewMeta(order=3, formField=false)
     private LocalDate dueDate;
     
-    @ViewMeta(order = 4, formField = false)
+    @ViewMeta(order=4, formField=false)
     private LocalDateTime completedDate;
 
     @Enumerated(STRING)
-    @ViewMeta(order = 2, formField = false)
-    @NotNull private Status status = Status.OPEN;
+    @ViewMeta(order=2, formField=false)
+    @NotNull private Status status = Status.NEW;
     
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CONTACT_ID")
+    @ManyToOne(fetch=LAZY)
+    @JoinColumn(name="CONTACT_ID")
     private Contact contact;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CREATED_BY")
+    @ManyToOne(fetch=LAZY)
+    @JoinColumn(name="CREATED_BY")
     @NotNull private User createdBy;
     
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ASSIGNED_TO")
+    @ManyToOne(fetch=LAZY)
+    @JoinColumn(name="ASSIGNED_TO")
     private User assignedTo;
 
-    
+
+    public enum Status {
+        NEW, OPEN, PENDING, COMPLETED
+    }
+
     // ------------------------------------------------------------------ constructors
     public Task() { /* no-args constructor */ }
 
@@ -55,13 +59,7 @@ public class Task extends BaseEntity<Long> implements Serializable {
         this.assignedTo = assignedUser;
         this.status = Status.OPEN;
     }
-    
-    
-    public enum Status {
-        OPEN, PENDING, COMPLETED
-    }
-    
-    
+
     // ------------------------------------------------------------------ setters and getters
     public String getNote() {
         return note;
