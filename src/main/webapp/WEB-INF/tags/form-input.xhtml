@@ -5,7 +5,8 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:c="http://java.sun.com/jsp/jstl/core"
         xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
-        xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+        xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:p="http://primefaces.org/ui">
 
     <c:set var="id" value="${not empty id ? id : fn:replace(fn:toLowerCase(label),' ','')}"/>
     <c:set var="rendered" value="${empty rendered ? true : rendered}"/>
@@ -39,6 +40,18 @@
             <h:selectOneMenu value="#{}">
                 <f:selectItems value="#{}"/>
             </h:selectOneMenu>
+        </c:when>
+        <c:when test="#{type eq 'MULTIPLE'}">
+            <p:selectManyCheckbox id="fk1"
+                                  layout="pageDirection"
+                                  converter=""
+                                  required="true"
+                                  value="#{}">
+                <f:selectItems value="#{}"
+                               var="r"
+                               itemLabel="#{r.name}"
+                               itemValue="#{r}"/>
+            </p:selectManyCheckbox>
         </c:when>
         <c:otherwise>
             <h:inputText id="#{id}" label="#{label}"

@@ -110,6 +110,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         searchOptions = searchManager.getSearchOptions(getEntityName());
         searchFields = searchManager.getSearchFields(getEntityName());
 
+        // TODO: can get rid of these
         attributeNames = attributesMapping(getEntityClass(), ANNOTATED_CLASS);
         formFields = formFieldPropertyNames(getEntityClass(), ANNOTATED_CLASS);
 
@@ -118,14 +119,12 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
         META_MAPPING.computeIfAbsent(getEntityClass(),
             k -> doFormModel(k, ANNOTATED_CLASS));
-        log.debug("META_MAP = [{}]", META_MAPPING.toString());
 
-        // inspection
-        log.debug("property descriptors for Contact.class = {}",
-                Arrays.toString(PropertyUtils.getPropertyDescriptors(Contact.class)));
-
-        log.debug("[ get class fields for {} = {} ]",
-            getEntityClass(), getClassFields(getEntityClass()));
+        // log.debug("META_MAP = [{}]", META_MAPPING.toString());
+        // log.debug("property descriptors for Contact.class = {}",
+        //         Arrays.toString(PropertyUtils.getPropertyDescriptors(Contact.class)));
+        // log.debug("[ get class fields for {} = {} ]",
+        //     getEntityClass(), getClassFields(getEntityClass()));
     }
 
 
@@ -153,8 +152,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         return list;
 
     }
-
-
 
 
     public void menuChange(ActionEvent event) {

@@ -24,10 +24,9 @@ public class MenuManager implements Serializable {
 
     private List<User> users;
     private Set<Role> rolesMenu;
+    @Inject private UserService userService;
     private static final Map<String, String> NAV_MENU = new HashMap<>();
 
-    @Inject private UserService userService;
-    @Inject private SearchManager searchManager;
 
     // ---------------------------------------------------------------- constructors
     public MenuManager() { /* no-args constructor */ }
@@ -45,7 +44,7 @@ public class MenuManager implements Serializable {
 
 
     private void loadNavMenu() {
-        // TODO:
+        // TODO: rework
         NAV_MENU.put(Utils.getPath().concat("contact.xhtml"), "Contacts");
         NAV_MENU.put(Utils.getPath().concat("user.xhtml"), "Users");
         NAV_MENU.put(Utils.getPath().concat("task.xhtml"), "Tasks");
@@ -53,7 +52,7 @@ public class MenuManager implements Serializable {
 
 
     private void loadSelects() {
-        // TODO: reload when new entity created
+        // TODO: refresh when new user persisted
         if (this.users == null) {
             this.users = userService.fetchAll();
         }
@@ -75,7 +74,8 @@ public class MenuManager implements Serializable {
         NUMBER("number"),
         SELECT("select"),
         CHECKBOX("checkbox"),
-        SECRET("secret");
+        SECRET("secret"),
+        MULTIPLE("multiple");
 
         String value;
 
@@ -89,7 +89,7 @@ public class MenuManager implements Serializable {
     }
 
     
-    // ---------------------------------------------------------------- getters
+    // ---------------------------------------------------------------- read-only getters
     public Map<String, String> getMenu() {
         return NAV_MENU;
     }

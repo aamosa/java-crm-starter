@@ -14,7 +14,7 @@
                 backingBean="#{taskBacking}"
                 selectValue="#{taskBacking.searchOption}"
                 selectModel="#{taskBacking.searchOptions}"
-                fieldModel="#{taskBacking.searchFields}" />
+                fieldModel="#{taskBacking.searchFields}"/>
     </ui:define>
 
     <ui:define name="content-stuff">
@@ -25,13 +25,13 @@
                         <h:panelGroup layout="block" id="tnb" styleClass="row">
                             <syn:input value="#{taskBacking.task.note}"
                                        label="Task Note"
-                                       styleClass="bgin" />
+                                       styleClass="bgin"/>
                         </h:panelGroup>
                         <h:panelGroup layout="block" id="dtb" styleClass="row">
                             <syn:input value="#{taskBacking.task.dueDate}"
                                        label="Due Date"
                                        type="date">
-                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
                             </syn:input>
                         </h:panelGroup>
                         <h:panelGroup layout="block" id="aub" styleClass="row">
@@ -40,14 +40,14 @@
                                 <f:selectItems value="#{menuBacking.users}"
                                                var="u"
                                                itemValue="#{u}"
-                                               itemLabel="#{u.firstName} #{u.lastName}" />
+                                               itemLabel="#{u.firstName} #{u.lastName}"/>
                             </h:selectOneMenu>
                         </h:panelGroup>
                         <h:commandButton id="save"
                                          action="#{taskBacking.save}"
                                          value="Save"
                                          styleClass="tab">
-                            <f:param name="contactId" value="#{param['conId']}" />
+                            <f:param name="contactId" value="#{param['conId']}"/>
                         </h:commandButton>
                     </h:form>
                 </div>
