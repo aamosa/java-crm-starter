@@ -1,5 +1,9 @@
 package com.customer.syn.resource;
 
+import com.customer.syn.model.Role;
+import com.customer.syn.model.User;
+import com.customer.syn.service.UserService;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.annotation.sql.DataSourceDefinition;
@@ -9,31 +13,30 @@ import javax.inject.Inject;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.sql.DataSource;
 
-import com.customer.syn.model.Role;
-import com.customer.syn.model.User;
-import com.customer.syn.service.UserService;
-
 @Startup
 @Singleton
-@DataSourceDefinition(name = "java:app/jdbc/h2_datasource",
-                      className = "org.h2.jdbcx.JdbcDataSource",
-                      url = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
-                      user = "sa",
-                      password = "")
+@DataSourceDefinition(
+    name = "java:app/jdbc/h2_datasource",
+	className = "org.h2.jdbcx.JdbcDataSource",
+	url = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+	user = "sa",
+	password = "")
 public class DatasourceDefinition {
 
-    @Resource(lookup = "java:app/jdbc/h2_datasource")
-    private DataSource dataSource;
-    @Inject UserService userService;
-    @Inject private Pbkdf2PasswordHash hash;
+	@Resource(lookup = "java:app/jdbc/h2_datasource")
+	private DataSource dataSource;
+
+	@Inject UserService userService;
+	@Inject private Pbkdf2PasswordHash hash;
 
 
-    @PostConstruct
-    public void init() {
-        User user = new User("Admin", "Web", "ADMIN", "secret123");
-        user.addRole(new Role("ALLOW_ACCESS", user));
-        userService.save(user);
-    }
+	@PostConstruct
+	public void init() {
+		User user = new User("BOBBY", "CROOZ", "ADMIN", "secret");
+		user.setEmail("admin@localhost");
+		user.addRole(new Role("ALLOW_ACCESS", user));
+		userService.save(user);
+	}
 
 //    private void initHashParams() {
 //        Map<String, String> params = new HashMap<>();

@@ -7,7 +7,6 @@ public class Enums {
         NEW, ACTIVE, INACTIVE, DISABLED
     }
 
-
     public enum PhoneType {
         HOME, WORK, MOBILE
     }

@@ -19,32 +19,33 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 public class User extends BaseEntity<Long> implements Serializable {
 
-	private static final long serialVersionUID = 92L;
+	private static final long serialVersionUID = 3184776518741L;
 
 	@ViewMeta(order=4)
 	@Column(unique=true)
-	@Email private String email;
+	@Email @NotNull private String email;
 
 	@Transient private boolean editable;
 	@ViewMeta(order=3) private String lastName;
 	@ViewMeta(order=2) private String firstName;
 
-	@ViewMeta(order=1)
+	@ViewMeta(order=1, formField=false)
 	@Enumerated(STRING) private Enums.Status status = NEW;
 
 	@ViewMeta(order=5)
 	@Size(min=3, max=30)
 	@Column(nullable=false, unique=true)
-	private String userName;
+	@NotNull private String userName;
 
 	@ViewMeta(order=6)
 	@Size(min=4, max=30)
-	private String password;
+	@NotNull private String password;
 
 	@ViewMeta(order=8, formField=false)
 	private Instant lastLogin;
@@ -67,13 +68,11 @@ public class User extends BaseEntity<Long> implements Serializable {
 		this.password = password;
 	}
 
-
 	// ------------------------------------------------------------- utility methods
 	public void addRole(Role role) {
 		getRoles().add(role);
 		role.getUsers().add(this);
 	}
-
 
 	public void addRoles(Set<Role> roles) {
 		setRoles(roles);
@@ -82,12 +81,10 @@ public class User extends BaseEntity<Long> implements Serializable {
 		}
 	}
 
-
 	public void removeRole(Role role) {
 		getRoles().remove(role);
 		// role.getUsers().remove(this);
 	}
-
 
 	// ------------------------------------------------------------- setters and getters
 	public String getFirstName() {
@@ -162,5 +159,23 @@ public class User extends BaseEntity<Long> implements Serializable {
 		this.editable = editable;
 	}
 
+	@Override
+	public String toString() {
+		return userName;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof User)
+			&& (id != null) ? id.equals(((User) object).id)
+			: (object == this);
+	}
+
+	@Override
+	public int hashCode() {
+		return (id != null)
+			? (User.class.hashCode() + id.hashCode())
+			: super.hashCode();
+	}
 
 }

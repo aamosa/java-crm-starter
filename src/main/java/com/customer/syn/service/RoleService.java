@@ -5,7 +5,4 @@ import javax.ejb.Stateless;
 import com.customer.syn.model.Role;
 
 @Stateless
-public class RoleService extends BaseRepositoryImpl<Role, Long> {
-
-
-}
+public class RoleService extends BaseService<Role, Long> { }

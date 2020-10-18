@@ -12,19 +12,30 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import javax.persistence.metamodel.PluralAttribute;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @ApplicationScoped
 @Named(value = "menuBacking")
 public class MenuManager implements Serializable {
 
-    private static final long serialVersionUID = 54L;
+    private static final long serialVersionUID = 219321578524L;
     private static final Logger log = LoggerFactory.getLogger(MenuManager.class);
 
     private List<User> users;
     private Set<Role> rolesMenu;
     @Inject private UserService userService;
+    @PersistenceContext private EntityManager em;
+
     private static final Map<String, String> NAV_MENU = new HashMap<>();
 
 
@@ -34,11 +45,27 @@ public class MenuManager implements Serializable {
     
     @PostConstruct
     public void init() {
-        // TODO: load from config file or db here
-        loadNavMenu();
+        loadNavMenu(); // TODO: load from config file or db here
         loadSelects();
+        getMetaModel();
         if (log.isDebugEnabled()) {
             log.debug("[{} postconstruct initialized]", getClass());
+        }
+    }
+
+    // debugging
+    private void getMetaModel() {
+        Metamodel model = em.getMetamodel();
+        for (EntityType<?> type : model.getEntities()) {
+            // log.debug("Javatype = {}", type.getJavaType().toString());
+            for (Attribute<?, ?> attribute : type.getAttributes()) {
+                if (attribute.isCollection()) {
+                    PluralAttribute pa = (PluralAttribute) attribute;
+                    // log.debug(" plural attribute - element type = {}", pa.getElementType());
+                } else {
+                    // log.debug("attribute = {}", attribute.toString());
+                }
+            }
         }
     }
 
@@ -52,43 +79,18 @@ public class MenuManager implements Serializable {
 
 
     private void loadSelects() {
-        // TODO: refresh when new user persisted
-        if (this.users == null) {
+        if (this.users == null) { // TODO: refresh it
             this.users = userService.fetchAll();
         }
-
         if (this.rolesMenu == null) {
             this.rolesMenu = userService.getRoles();
         }
     }
 
-
     public String pageTitle(String viewId) {
-            return NAV_MENU.get(viewId);
-        }
-
-
-    public enum DataType {
-        TEXT("text"),
-        DATE("date"),
-        NUMBER("number"),
-        SELECT("select"),
-        CHECKBOX("checkbox"),
-        SECRET("secret"),
-        MULTIPLE("multiple");
-
-        String value;
-
-        DataType(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
+        return NAV_MENU.get(viewId);
     }
 
-    
     // ---------------------------------------------------------------- read-only getters
     public Map<String, String> getMenu() {
         return NAV_MENU;

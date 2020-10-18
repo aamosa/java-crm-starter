@@ -16,9 +16,9 @@ public class Address {
     private String stateProvince;
     @Embedded private Country country;
 
-    @JoinColumn(name = "CONTACT_ID")
-    @ManyToOne private Contact contact;
-
+     @ManyToOne
+     @JoinColumn(name="contact_id")
+     private Contact contact;
 
     public Address() { /* no-args constructors */ }
 

@@ -1,5 +1,7 @@
 package com.customer.syn.view;
 
+import com.customer.syn.model.FormInputType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,11 +69,11 @@ class SearchModel {
         private String label;
         private String renderFor;
         private boolean show;
-        private MenuManager.DataType type;
+        private FormInputType type;
 
         public Field() { /* no-arg constructor */ }
 
-        public Field(String value, String label, MenuManager.DataType type, boolean show) {
+        public Field(String value, String label, FormInputType type, boolean show) {
             this.value = value;
             this.label = label;
             this.type = type;
@@ -120,11 +122,11 @@ class SearchModel {
             this.show = show;
         }
 
-        public MenuManager.DataType getType() {
+        public FormInputType getType() {
             return type;
         }
 
-        public void setType(MenuManager.DataType type) {
+        public void setType(FormInputType type) {
             this.type = type;
         }
 

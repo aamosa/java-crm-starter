@@ -12,12 +12,12 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Role extends BaseEntity<Long> implements Serializable {
 
-    private static final long serialVersionUID = 6L;
+    private static final long serialVersionUID = 6978778L;
 
-    @Column(nullable = false)
+    @Column(nullable=false)
     private String roleName;
     
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy="roles")
     private Set<User> users = new HashSet<>();
     
 

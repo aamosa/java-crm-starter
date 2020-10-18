@@ -1,22 +1,12 @@
 package com.customer.syn.view;
 
-import static java.lang.String.join;
-import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.*;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+import com.customer.syn.model.BaseEntity;
+import com.customer.syn.model.FormInputType;
+import com.customer.syn.model.ViewMeta;
+import com.customer.syn.service.BaseService;
+import org.primefaces.model.menu.MenuItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -25,27 +15,32 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import javax.persistence.*;
 import javax.validation.constraints.PastOrPresent;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
-import com.customer.syn.model.Contact;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.primefaces.model.menu.MenuItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.customer.syn.model.BaseEntity;
-import com.customer.syn.model.ViewMeta;
-import com.customer.syn.service.BaseRepositoryImpl;
-
+import static com.customer.syn.model.FormInputType.TEXT;
+import static com.customer.syn.model.FormInputType.TEXTBOX;
+import static java.lang.String.format;
+import static java.lang.String.join;
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
 
 /** Base backing class with common functionality */
 public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number> {
-    
+
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Inject private FacesContext fc;
     @Inject private ExternalContext ec;
     @Inject private SearchManager searchManager;
+    @PersistenceContext private EntityManager em;
 
     protected I Id;
     protected E currentEntity;
@@ -59,16 +54,13 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected List<E> values;
     protected List<E> entities;
-    protected List<ColumnModel> tableColumns;
-    // protected Map<String, String> formFields;
-    protected List<String> formFields;
-    protected Map<String, String> attributeNames;
+    protected List<ColumnModel> columnList;
+
+    protected List<FormModel> formFields;
+    // protected Map<String, String> attributeNames;
+
     protected List<SearchModel.Field> searchFields;
     protected List<SearchModel.SelectModel> searchOptions;
-
-
-    private static final Map<Class<?>, List<FormModel>> META_MAPPING = new ConcurrentHashMap<>();
-
 
     private static final Class ANNOTATED_CLASS = ViewMeta.class;
     private static final String EDIT_LOG = "[edit invoked, entity = {}]";
@@ -77,7 +69,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected static final String NO_SELECTION = "Please make a selection first.";
     private static final String CREATE_MSG = "New %s has been created successfully.";
 
-    
+    private static final Map<Class<?>, List<FormModel>> META_MAPPING = new ConcurrentHashMap<>();
+
     // ---------------------------------------------------------- constructors
     protected AbstractBacking() {
         try {
@@ -97,71 +90,103 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         this.entityClass = clazz;
     }
 
-
     // ---------------------------------------------------------- abstract methods
-    protected abstract <R extends BaseRepositoryImpl<E, I>> R getService();
+    protected abstract <S extends BaseService<E, I>> S getService();
 
     protected abstract void doSearch(String value);
 
-
     @PostConstruct
     public void setup() {
-        entities = getService().fetchAll(); // TODO: add paging and lazy loading
+        // TODO: add paging and lazy loading
+        entities = getService().fetchAll();
+        // backing data for entity specific search menu
         searchOptions = searchManager.getSearchOptions(getEntityName());
         searchFields = searchManager.getSearchFields(getEntityName());
-
-        // TODO: can get rid of these
-        attributeNames = attributesMapping(getEntityClass(), ANNOTATED_CLASS);
-        formFields = formFieldPropertyNames(getEntityClass(), ANNOTATED_CLASS);
-
-        createTableColumns(getEntityClass());
+        // backing data for form fields
+        formFields = setFormFields();
+        // dynamic columns for datatable component
+        columnList = setColumns();
         setPage("list");
 
-        META_MAPPING.computeIfAbsent(getEntityClass(),
-            k -> doFormModel(k, ANNOTATED_CLASS));
-
-        // log.debug("META_MAP = [{}]", META_MAPPING.toString());
-        // log.debug("property descriptors for Contact.class = {}",
-        //         Arrays.toString(PropertyUtils.getPropertyDescriptors(Contact.class)));
-        // log.debug("[ get class fields for {} = {} ]",
-        //     getEntityClass(), getClassFields(getEntityClass()));
+        log.debug("FORMFIELDS: {}", formFields);
+        log.debug("META_MAPPING {}", META_MAPPING);
     }
 
 
-    /**
-     * 1. if entry does not exist for (Class<?>) key then compute the value for that key:
-     *      a. create list of FormModel objects
-     *      b. mapping for list to key. Map<Class<?>, List<FormModel>>
-     *      c. call from subclass for lookup of specific list of models for that entity.
-     * 2. create / edit UI: if getId == null (check in preRenderEvent ?)
-     *      then assume create new entity, else render for edit of existing entity.
-     */
-    private List<FormModel> doFormModel(Class<?> clazz, Class<? extends ViewMeta> aClass) {
+    private List<FormModel> setFormFields() {
+        List<FormModel> list = META_MAPPING.computeIfAbsent(getEntityClass(),
+            k -> createModel(k, ANNOTATED_CLASS));
+        return list.stream().filter(f -> f.isField())
+            .collect(Collectors.toList());
+    }
+
+    private List<ColumnModel> setColumns() {
+        List<ColumnModel> list = new ArrayList<>();
+        for (FormModel model : META_MAPPING.get(getEntityClass())) {
+            // trust me
+            list.add(new ColumnModel(model.getLabel(), (String) model.getValue()));
+        }
+        return list;
+    }
+
+    private List<FormModel> createModel(Class<?> clazz, Class<ViewMeta> annotated) {
         List<FormModel> list = new ArrayList<>();
-        for (Field f : getAnnotatedFields(clazz, aClass)) {
+        for (Field f : sortFields(getAnnotatedFields(clazz, annotated))) {
             FormModel model = new FormModel();
-            model.setLabel(capitalize(join(" ",
-                splitByCharacterTypeCamelCase(f.getName()))));
+            model.setLabel(splitCamelCase(f.getName()));
             model.setValue(f.getName());
-            if (!isEmpty(f.getAnnotation(aClass).collectionType())) {
-                model.setCollectionType(f.getAnnotation(aClass).collectionType());
+            model.setField(f.getAnnotation(ViewMeta.class).formField());
+            if (f.getAnnotation(ViewMeta.class).formField()) {
+                // create form field for property
+                processInputType(f, model);
             }
             list.add(model);
         }
-        log.debug("{}", list.toString());
         return list;
+    }
 
+    private void processInputType(Field field, FormModel model) {
+        FormInputType type = field.getAnnotation(ViewMeta.class).type();
+        if (EnumSet.<FormInputType>range(TEXT, TEXTBOX).contains(type)) {
+            // simple property
+            model.setType(type);
+        }
+        else {
+            // collection-valued property
+            model.setType(type);
+            processCollectionTypes(field, model);
+        }
+    }
+
+    private void processCollectionTypes(Field field, FormModel model) {
+        if (field.getAnnotation(ManyToOne.class) != null) {
+            processManyToOne(field, model);
+        }
+        else if (field.getAnnotation(ManyToMany.class) != null) {
+            // TODO: Many To Many collections
+        }
+        else if (field.getAnnotation(ElementCollection.class) != null) {
+            // TODO: parent / child embeddables collection
+        }
+        else if (field.getAnnotation(OneToMany.class) != null) {
+            // TODO: parent / child entities collection
+        }
+    }
+
+    private void processManyToOne(Field field, FormModel model) {
+        Class<?> type = field.getType();
+        log.debug("reference type: {}", type);
+        // get all referenced entities for select
+        List list = em.createQuery("from " + type.getName(), type)
+            .getResultList();
+        model.setReferencedValue(list);
     }
 
 
     public void menuChange(ActionEvent event) {
         try {
             MenuItem item = (MenuItem) event.getSource();
-            log.debug("[value = {}]", item.getValue());
-        }
-        catch (Exception e) {
-            log.error("{}", e);
-        }
+        } catch (Exception e) { /* ignore */ }
     }
 
     // ---------------------------------------------------------- crud operations
@@ -175,7 +200,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
-
     public void edit() {
         if (isSelected()) {
             edit(getCurrentSelected());
@@ -185,27 +209,23 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
-    
     protected void edit(E e) {
         setCurrentEntity(e);
         if (log.isDebugEnabled())
             log.debug(EDIT_LOG, e);
     }
-    
-    
+
     public void save(E e) {
         getService().save(e);
         addMsg(format(CREATE_MSG, getEntityName()));
     }
-    
-    
+
     public String update(E e) {
         getService().update(e);
         addMsg(format(UPDATE_MSG, getEntityName(), e.getId()));
         return null;
     }
 
-    
     public void delete() {
         if (isSelected()) {
             delete(getCurrentSelected());
@@ -214,8 +234,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             addMsg(NO_SELECTION);
         }
     }
-    
-    
+
     public void delete(E e) {
         try {
             getService().deleteById(e.getId());
@@ -227,7 +246,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
-
     public void search() {
         switch (getSearchOption()) {
             case "searchId":
@@ -238,42 +256,25 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
                     values = Collections.EMPTY_LIST;
                 break;
             case "searchCreatedDate":
-                values = getService().findByCreatedDateRange(searchDateFrom, searchDateTo);
+                values = getService().findByCreatedDateRange(searchDateFrom,
+                    searchDateTo);
                 break;
             case "searchDisplayAll":
                 values = getEntities();
                 break;
             default:
-                // delegate to subclass for entity specific search
-                doSearch(getSearchOption());
+                doSearch(getSearchOption()); // delegate to subclass
                 break;
         }
     }
 
-
     // ---------------------------------------------------------- private methods
-    private void createTableColumns(final Class<?> bean) {
-        tableColumns = new ArrayList<>();
-        for (Map.Entry<String, String> e : getAttributeNames().entrySet())
-            tableColumns.add(new ColumnModel(e.getValue(), e.getKey()));
-    }
-
-
-    private List<String> formFieldPropertyNames(final Class<?> clazz,
-                                                final Class<ViewMeta> aclazz) {
-        return getAnnotatedFields(clazz, aclazz).stream()
-                .filter(f -> f.getAnnotation(aclazz).formField())
-                .map(Field::getName)
-                .collect(Collectors.toList());
-    }
-
-    // create an attribute name mappping with user-friendly names
+    // create an attribute name mapping with user-friendly names
     private Map<String, String> attributesMapping(final Class<?> clazz,
                                                   final Class<? extends Annotation> aclazz) {
         Map<String, String> map = new LinkedHashMap<>();
         for (Field field : sortFields(getAnnotatedFields(clazz, aclazz))) {
-            map.put(field.getName(), capitalize(join(" ",
-                    splitByCharacterTypeCamelCase(field.getName()))));
+            map.put(field.getName(), splitCamelCase(field.getName()));
         }
         return map;
     }
@@ -294,22 +295,16 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         return list;
     }
 
-
-    private Class<?> getEntityClass() {
-        return entityClass;
-    }
-
-
-    private String getEntityName() {
-        return entityClass.getSimpleName().toLowerCase();
-    }
-
-
     // ---------------------------------------------------------- helper methods
+    // split javaBean style string
+    private static String splitCamelCase(String value) {
+        return capitalize(join(" ", splitByCharacterTypeCamelCase(value)));
+    }
+
     // get list of fields with the specified annotation
     public static List<Field> getAnnotatedFields(final Class<?> clazz,
                                                  final Class<? extends Annotation> aClazz) {
-        List list = new ArrayList<>();
+        List<Field> list = new ArrayList<>();
         for (Field field : getClassFields(clazz)) {
             if (field.getAnnotation(aClazz) != null)
                 list.add(field);
@@ -335,7 +330,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         fc.addMessage(null, message);
     }
 
-
     // ---------------------------------------------------------- setters and getters
     public I getId() {
         return Id;
@@ -343,6 +337,14 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     public void setId(I Id) {
         this.Id = Id;
+    }
+
+    private Class<?> getEntityClass() {
+        return entityClass;
+    }
+
+    private String getEntityName() {
+        return entityClass.getSimpleName().toLowerCase();
     }
 
     public List<E> getValues() {
@@ -385,15 +387,16 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         return entities;
     }
 
-    public Map<String, String> getAttributeNames() {
-        return attributeNames;
+    public List<FormModel> getAttributeNames() {
+        // value should be mapped since it was loaded in postconstruct
+        return Collections.unmodifiableList(META_MAPPING.get(getEntityClass()));
     }
 
-    public List<ColumnModel> getTableColumns() {
-        return tableColumns;
+    public List<ColumnModel> getColumnList() {
+        return columnList;
     }
 
-    public List<String> getFormFields() {
+    public List<FormModel> getFormFields() {
         return formFields;
     }
 
@@ -412,7 +415,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     public void setCurrentSelected(E currentSelected) {
         this.currentSelected = currentSelected;
     }
-    
+
     public boolean isSelected() {
         return this.currentSelected != null;
     }

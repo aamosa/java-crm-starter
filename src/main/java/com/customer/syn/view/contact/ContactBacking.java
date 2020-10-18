@@ -1,29 +1,27 @@
 package com.customer.syn.view.contact;
 
-import java.io.Serializable;
-import java.util.List;
+import com.customer.syn.model.Contact;
+import com.customer.syn.model.Task;
+import com.customer.syn.service.BaseService;
+import com.customer.syn.service.ContactService;
+import com.customer.syn.view.AbstractBacking;
 
-import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
-
-import com.customer.syn.model.Contact;
-import com.customer.syn.model.Task;
-import com.customer.syn.service.BaseRepositoryImpl;
-import com.customer.syn.service.ContactService;
-import com.customer.syn.view.AbstractBacking;
+import java.io.Serializable;
+import java.util.List;
 
 @Named
 @ViewScoped
 public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
 
-    private static final long serialVersionUID = 12L;
+    private static final long serialVersionUID = 1221579874527L;
     
     private String fName;
-    @NotNull private String lName;
     private Contact contact;
+    @NotNull private String lName;
     private List<Task> assignedTasks;
     @Inject private ContactService contactService;
 
@@ -31,12 +29,15 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
 
-
     @Override
-    protected BaseRepositoryImpl<Contact, Long> getService() {
+    protected BaseService<Contact, Long> getService() {
         return contactService;
     }
 
+    public void initialize() {
+        contact = new Contact();
+        setPage("create");
+    }
 
     @Override
     protected void doSearch(String value) {
@@ -51,20 +52,10 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         }
     }
 
-
-    public void initialize() {
-        contact = new Contact();
-        setPage("create");
-        if (log.isDebugEnabled())
-            log.debug("[{} instantiated]", contact);
-    }
-
-
     @Override
     public void view() {
         if (isSelected()) {
-            setAssignedTasks(contactService.findTasksforContact(
-                    getCurrentSelected()));
+            setAssignedTasks(contactService.findTasksforContact(getCurrentSelected()));
             setCurrentEntity(getCurrentSelected());
             setPage("detail");
         }
@@ -72,8 +63,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
             addMsg(NO_SELECTION);
         }
     }
-    
-    
+
     @Override
     public void edit() {
         if (isSelected()) {
@@ -84,20 +74,17 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
             addMsg(NO_SELECTION);
         }
     }
-   
-    
+
     @Override
     public String update(Contact contact) {
         super.update(contact);
         return "index?faces-redirect=true";
     }
-     
-    
+
     public String save() {
         super.save(contact);
         return "index?faces-redirect=true&includeViewParams=true";
     }
-    
 
     // --------------------------------------------------------- setters and getters
     public String getfName() {

@@ -20,32 +20,31 @@ public class Contact extends BaseEntity<Long> implements Serializable {
 
 	@Transient private boolean editable;
 
-	@ViewMeta(order=2)
+	@ViewMeta(order=3)
 	@NotNull private String lastName;
 
-	@ViewMeta(order=1)
+	@ViewMeta(order=2)
 	@NotNull private String firstName;
 
-	@ViewMeta(order=3)
+	@ViewMeta(order=4)
 	@Column(unique=true)
 	@Email private String email;
 
-	@ViewMeta(order=9)
+	@ViewMeta(order=1, formField=false)
 	@Enumerated(STRING) private Enums.Status status = NEW;
 
 	@OneToMany(mappedBy="contact", fetch=LAZY)
 	private Set<Task> tasks = new HashSet<>(0);
 
 	@ElementCollection
-	@CollectionTable(name="ADDRESS")
-	@JoinColumn(name="CONTACT_ID")
-	private Set<Address> addresses = new HashSet<>();
+	@CollectionTable(name="address")
+	@JoinColumn(name="contact_id")
+	private Set<Address> addresses = new HashSet<>(0);
 
 	@ElementCollection
-	@CollectionTable(name="PHONE")
-	@MapKeyEnumerated(STRING)
-	@Column(name="PHONE_NUMBER")
-	private Map<Enums.PhoneType, String> phones = new HashMap<>();
+	@CollectionTable(name="phone")
+	@MapKeyEnumerated(STRING) @Column(name="phone_number")
+	private Map<Enums.PhoneType, String> phones = new HashMap<>(0);
 
 
 	// ----------------------------------------------------- constructors
@@ -115,5 +114,11 @@ public class Contact extends BaseEntity<Long> implements Serializable {
 	public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
 	}
+
+	@Override
+	public String toString() {
+		return firstName + " " + lastName;
+	}
+
 
 }

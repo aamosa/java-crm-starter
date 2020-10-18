@@ -27,8 +27,7 @@ public class MyServletListener implements ServletContextListener {
 			.iterator();
 		while (it.hasNext()) {
 			if (it.next().getValue().getClassName()
-			      .equals(FacesServlet.class.getName()))
-			{
+			      .equals(FacesServlet.class.getName())) {
 				fc.getApplication().getViewHandler()
 				  .getViews(fc, "/", ViewVisitOption.RETURN_AS_MINIMAL_IMPLICIT_OUTCOME)
 				  .forEach(v -> log.debug("{}", v));

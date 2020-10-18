@@ -4,26 +4,20 @@ import java.io.Serializable;
 
 public class ColumnModel implements Serializable {
     
-    private static final long serialVersionUID = 5L;
+    private static final long serialVersionUID = 517511546983L;
     
     private String type;
     private String header;
     private String property;
 
-    
     // ---------------------------------------------------- constructors
+    public ColumnModel() { /* no-args constructor */ }
+
     public ColumnModel(String header, String property) {
         this.header = header;
         this.property = property;
     }
-    
-    public ColumnModel(String header, String property, String type) {
-        this.header = header;
-        this.property = property;
-        this.type = type;
-    }
-    
-    
+
     // ---------------------------------------------------- setters and getters
     public String getType() {
         return type;

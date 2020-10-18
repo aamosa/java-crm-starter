@@ -1,7 +1,7 @@
 package com.customer.syn;
 
 import com.customer.syn.model.Contact;
-import com.customer.syn.service.BaseRepositoryImpl;
+import com.customer.syn.service.BaseService;
 import com.customer.syn.service.BasicRepository;
 import com.customer.syn.service.ContactService;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -24,7 +24,7 @@ public class PersistenceTest {
     public static WebArchive createDeployment() {
         WebArchive web = ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackage("com.customer.syn.model")
-                .addClasses(ContactService.class, BaseRepositoryImpl.class, BasicRepository.class)
+                .addClasses(ContactService.class, BaseService.class, BasicRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsWebInfResource("web.xml");

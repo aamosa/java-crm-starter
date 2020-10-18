@@ -4,6 +4,7 @@ import static com.customer.syn.view.SearchModel.SelectModel.BASE_CLASS;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
+import com.customer.syn.model.FormInputType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +49,8 @@ public class SearchManager {
 	}
 
 
-	public MenuManager.DataType[] getDataTypes() {
-		return MenuManager.DataType.values();
+	public FormInputType[] getDataTypes() {
+		return FormInputType.values();
 	}
 
 
@@ -153,7 +154,7 @@ public class SearchManager {
 				}
 			}
 			SearchModel.Field field = new SearchModel.Field(value, label,
-				MenuManager.DataType.valueOf(type.toUpperCase()), isDefault);
+				FormInputType.valueOf(type.toUpperCase()), isDefault);
 			// debugging
 			// if (log.isDebugEnabled()) {
 			//     log.debug("[label = {} value = {} type = {} default = {}]",

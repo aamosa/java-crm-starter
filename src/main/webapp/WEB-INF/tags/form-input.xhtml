@@ -16,8 +16,7 @@
     <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}"/>
     <c:choose>
         <c:when test="#{type eq 'DATE'}">
-            <h:inputText id="#{id}" label="#{label}"
-                         value="#{value}"
+            <h:inputText id="#{id}" label="#{label}" value="#{value}"
                          rendered="#{rendered}"
                          required="#{required}"
                          readonly="#{readonly}"
@@ -26,7 +25,9 @@
                 <c:if test="${required}">
                     <f:attribute name="requiredMessage" value="#{requiredMessage}"/>
                 </c:if>
-                <ui:insert/>
+                <ui:insert name="dateconverter">
+                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                </ui:insert>
             </h:inputText>
         </c:when>
         <c:when test="#{type eq 'SECRET'}">
@@ -37,11 +38,14 @@
                            styleClass="#{component.valid ? styleClass : 'invalid'}"/>
         </c:when>
         <c:when test="#{type eq 'SELECT'}">
-            <h:selectOneMenu value="#{}">
-                <f:selectItems value="#{}"/>
+            <h:selectOneMenu value="#{value}">
+                <f:selectItems value="#{reference}"
+                               var="e"
+                               itemValue="#{e}"
+                               itemLabel="#{e}"/>
             </h:selectOneMenu>
         </c:when>
-        <c:when test="#{type eq 'MULTIPLE'}">
+        <c:when test="#{type eq 'MULTISELECT'}">
             <p:selectManyCheckbox id="fk1"
                                   layout="pageDirection"
                                   converter=""

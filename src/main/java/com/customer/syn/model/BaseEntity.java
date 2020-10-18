@@ -16,25 +16,23 @@ import javax.persistence.PreUpdate;
 @MappedSuperclass
 public abstract class BaseEntity<I extends Number> {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(updatable = false)
+    @Column(updatable=false)
+    @ViewMeta(order=1, formField=false)
+    @Id @GeneratedValue(strategy=IDENTITY)
     protected I id;
 
 //    @Version
 //    protected I version;
     
-    @ViewMeta(formField = false)
-    @Column(nullable = false,
-            updatable = false)
+    @ViewMeta(formField=false)
+    @Column(nullable=false, updatable=false)
     protected Instant createdAt;
 
-    
-    @ViewMeta(formField = false)
-    @Column(nullable = false)
+    @ViewMeta(formField=false)
+    @Column(nullable= false)
     protected Instant updatedAt;
-    
 
+    // ------------------------------------------------------- lifecycle hooks
     @PrePersist
     public void onPersist() {
         setCreatedAt(Instant.now());
@@ -45,25 +43,22 @@ public abstract class BaseEntity<I extends Number> {
     public void onUpdate() {
         setUpdatedAt(Instant.now());
     }
-    
-    
+
     /* Note: default hashCode based on the surrogate Id */
     @Override
     public int hashCode() {
         return getId() != null ? Objects.hash(getId()) : super.hashCode(); 
     }
     
-    
     /* Note: default equality based on the surrogate Id */
     @Override
-    public boolean equals(Object otherEntity) {
-        if (otherEntity == null) return false;
-        if (this == otherEntity) return true;
-        if (getClass() != otherEntity.getClass()) return false;
-        return getId().equals( ((BaseEntity<?>) otherEntity).getId());
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (this == o) return true;
+        if (this.getClass() != o.getClass()) return false;
+        return getId().equals( ((BaseEntity<?>) o).getId());
     }
-  
-    
+
     // ------------------------------------------------------- setters and getters
 //    public I getVersion() {
 //        return this.version;

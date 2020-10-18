@@ -11,11 +11,12 @@
         <h6 class="border-bottom mid-fnt full-width">Details</h6>
         <div class="swag">
             <ui:repeat value="#{backingBean.attributeNames}"
-                       var="field" varStatus="loop">
+                       var="field"
+                       varStatus="loop">
                 <ui:fragment rendered="#{loop.index le 7}">
                     <p class="row">
-                        <strong>#{field.value}:</strong>
-                        <span>#{entity[field.key]}</span>
+                        <strong>#{field.label}:</strong>
+                        <span>#{entity[field.value]}</span>
                     </p>
                 </ui:fragment>
             </ui:repeat>
@@ -28,8 +29,8 @@
                         varStatus="loop"
                         offset="8">
                     <p class="row">
-                        <strong>#{field.value}:</strong>
-                        <span>#{entity[field.key]}</span>
+                        <strong>#{field.label}:</strong>
+                        <span>#{entity[field.value]}</span>
                     </p>
                 </ui:repeat>
             </div>
