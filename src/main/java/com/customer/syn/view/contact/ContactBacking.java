@@ -29,7 +29,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
 
-    @Override
     protected BaseService<Contact, Long> getService() {
         return contactService;
     }

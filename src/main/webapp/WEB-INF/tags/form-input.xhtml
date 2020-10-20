@@ -12,7 +12,6 @@
     <c:set var="rendered" value="${empty rendered ? true : rendered}"/>
     <c:set var="required" value="${empty required ? false : required}"/>
     <c:set var="readonly" value="${empty readonly ? false : readonly}"/>
-
     <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}"/>
     <c:choose>
         <c:when test="#{type eq 'DATE'}">
@@ -39,27 +38,23 @@
         </c:when>
         <c:when test="#{type eq 'SELECT'}">
             <h:selectOneMenu value="#{value}">
-                <f:selectItems value="#{reference}"
-                               var="e"
-                               itemValue="#{e}"
-                               itemLabel="#{e}"/>
+                <f:selectItems value="#{reference}" var="e"
+                               itemValue="#{e}" itemLabel="#{e}"/>
             </h:selectOneMenu>
         </c:when>
-        <c:when test="#{type eq 'MULTISELECT'}">
-            <p:selectManyCheckbox id="fk1"
+        <c:when test="#{type eq 'CHECKBOX'}">
+            <h:selectManyCheckbox id="pmnchk"
                                   layout="pageDirection"
-                                  converter=""
                                   required="true"
-                                  value="#{}">
-                <f:selectItems value="#{}"
-                               var="r"
-                               itemLabel="#{r.name}"
-                               itemValue="#{r}"/>
-            </p:selectManyCheckbox>
+                                  value="#{value}">
+                <f:selectItems value="#{reference}" var="r"
+                               itemLabel="#{r}" itemValue="#{r}"/>
+            </h:selectManyCheckbox>
         </c:when>
         <c:otherwise>
-            <h:inputText id="#{id}" label="#{label}"
-                         styleClass="#{component.valid ? styleClass : 'invalid'}"
+            <h:inputText styleClass="#{component.valid ? styleClass : 'invalid'}"
+                         id="#{id}"
+                         label="#{label}"
                          value="#{value}"
                          rendered="#{rendered}"
                          required="#{required}"

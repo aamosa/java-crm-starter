@@ -1,22 +1,20 @@
 package com.customer.syn.service;
 
-import static java.lang.String.format;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-
-import org.hibernate.JDBCException;
+import com.customer.syn.model.BaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.customer.syn.model.BaseEntity;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static java.lang.String.format;
+import static java.time.ZoneOffset.UTC;
 
 
 /** Common operations used by base entities */
@@ -49,6 +47,24 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends Number> imp
         }
     }
 
+    // ---------------------------------------------------------------- persist operations
+    public void save(E entity) {
+        if (entity.getId() == null) {
+            em.persist(entity);
+            if (log.isDebugEnabled())
+                log.debug(LOG_MSG, entity.getId(), "persisted");
+        }
+        else {
+            update(entity);
+        }
+    }
+
+    public void saveAll(Iterable<E> it) {
+        for (E entity: it) {
+            save(entity);
+        }
+    }
+
     // ---------------------------------------------------------------- find operations
     public E findByID(I id) {
         return em.find(getClazz(), id); 
@@ -67,49 +83,36 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends Number> imp
             log.debug("[get all {} entities]", getEntityName());
         }
         return em.createQuery("from " + getEntityName(), getClazz())
-                .getResultList();
+            .getResultList();
+    }
+
+    public Set entitySet(Class<E> entity) {
+        return new HashSet<>(em.createQuery("from " + entity.getName(), entity)
+            .getResultList());
     }
 
     public boolean exists(E entity) {
         return em.createQuery(format(GET_COUNT, getEntityName()), Long.class)
-                 .setParameter("id", entity.getId())
-                 .getSingleResult() == 1;
+            .setParameter("id", entity.getId())
+            .getSingleResult() == 1;
     }
 
     public List<E> findByFullName(String fName, String lName) {
         return em.createQuery(format(FULL_NAME, getEntityName()), getClazz())
-                 .setParameter("firstName", fName)
-                 .setParameter("lastName", lName).getResultList();
+            .setParameter("firstName", fName)
+            .setParameter("lastName", lName).getResultList();
     }
 
     public List<E> findByLastName(String lName) {
         return em.createQuery(format(LAST_NAME, getEntityName()), getClazz())
-                 .setParameter("lastName", lName).getResultList();
+            .setParameter("lastName", lName).getResultList();
     }
 
     public List<E> findByCreatedDateRange(LocalDate from, LocalDate to) {
         return em.createQuery(format(DATE_RANGE, getEntityName()), getClazz())
-                 .setParameter("from", from.atStartOfDay().toInstant(ZoneOffset.UTC))
-                 .setParameter("to", to.atStartOfDay().toInstant(ZoneOffset.UTC))
-                 .getResultList();
-    }
-
-    // ---------------------------------------------------------------- persist operations
-    public void save(E entity) {
-        if (entity.getId() == null && !exists(entity)) {
-            em.persist(entity);
-            if (log.isDebugEnabled())
-                log.debug(LOG_MSG, entity.getId(), "persisted");
-        }
-        else {
-            update(entity);
-        }
-    }
-
-    public void saveAll(Iterable<E> it) {
-        for (E entity: it) {
-            save(entity);
-        }
+            .setParameter("from", from.atStartOfDay().toInstant(UTC))
+            .setParameter("to", to.atStartOfDay().toInstant(UTC))
+            .getResultList();
     }
 
     // ---------------------------------------------------------------- update operations

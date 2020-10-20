@@ -25,7 +25,6 @@ public class DatasourceDefinition {
 
 	@Resource(lookup = "java:app/jdbc/h2_datasource")
 	private DataSource dataSource;
-
 	@Inject UserService userService;
 	@Inject private Pbkdf2PasswordHash hash;
 

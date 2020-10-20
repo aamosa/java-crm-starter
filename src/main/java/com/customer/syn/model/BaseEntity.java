@@ -72,6 +72,10 @@ public abstract class BaseEntity<I extends Number> {
         return id;
     }
 
+    public void setId(I id) {
+        this.id = id;
+    }
+
     public LocalDateTime getCreatedAt() {
         return LocalDateTime.ofInstant(createdAt, ZoneOffset.UTC);
     }

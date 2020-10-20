@@ -1,31 +1,29 @@
 package com.customer.syn.model;
 
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.EnumType.STRING;
-import static com.customer.syn.model.Enums.Status.NEW;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import static com.customer.syn.model.Enums.Status.NEW;
+import static com.customer.syn.model.FormInputType.CHECKBOX;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 public class User extends BaseEntity<Long> implements Serializable {
 
 	private static final long serialVersionUID = 3184776518741L;
+	@Transient private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@ViewMeta(order=4)
 	@Column(unique=true)
@@ -50,12 +48,12 @@ public class User extends BaseEntity<Long> implements Serializable {
 	@ViewMeta(order=8, formField=false)
 	private Instant lastLogin;
 
+	@ViewMeta(order=9, type=CHECKBOX)
 	@ManyToMany(fetch=LAZY, cascade={ PERSIST, MERGE })
-	@JoinTable(name="USERS_ROLES",
-		joinColumns=@JoinColumn(name="USER_ID", nullable=false),
-		inverseJoinColumns=@JoinColumn(name="ROLE_ID"))
+	@JoinTable(name="users_roles",
+		joinColumns=@JoinColumn(name="user_id", nullable=false),
+		inverseJoinColumns=@JoinColumn(name="role_id"))
 	private Set<Role> roles = new HashSet<>();
-
 
 	// ------------------------------------------------------------- constructors
 	public User() { /* no-args constructor */ }
@@ -144,10 +142,12 @@ public class User extends BaseEntity<Long> implements Serializable {
 	}
 
 	public Set<Role> getRoles() {
+		log.debug("getroles invoked");  // TODO
 		return this.roles;
 	}
 
 	public void setRoles(Set<Role> roles) {
+		log.debug("setroles invoked"); // TODO
 		this.roles = roles;
 	}
 

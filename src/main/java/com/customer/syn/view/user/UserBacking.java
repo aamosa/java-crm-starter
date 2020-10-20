@@ -2,6 +2,8 @@ package com.customer.syn.view.user;
 
 import com.customer.syn.model.Role;
 import com.customer.syn.model.User;
+import com.customer.syn.service.BaseService;
+import com.customer.syn.service.RoleService;
 import com.customer.syn.service.UserService;
 import com.customer.syn.view.AbstractBacking;
 
@@ -9,10 +11,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Named
 @ViewScoped
@@ -22,17 +21,19 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     
     private User user;
     private String userName;
-    private List<Role> userRoles;
+    // private List<Role> userRoles;
     private Set<Role> selectedRoles;
     @Inject private UserService userService;
+    @Inject private RoleService roleService;
 
     // ------------------------------------------------------ constructors
     public UserBacking() { /* no-arg constructor */ }
 
     @Override
-    protected UserService getService() {
+    protected BaseService<User, Long> getService() {
         return userService;
     }
+
 
     public void initialize() {
         user = new User();
@@ -43,7 +44,8 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     protected void doSearch(String value) {
         if ("searchUserName".equals(value)) {
             if (!getUserName().isEmpty()) {
-                User user = getService().findByUsername(getUserName());
+                User user = ( (UserService) getService()).findByUsername(
+                    getUserName());
                 if (user != null) values = Arrays.asList(user);
             }
         }
@@ -66,14 +68,13 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
     }
 
     public String save() {
+        log.debug("[assigned roles: {}]", user.getRoles()); // detached
+        userService.save(user);
+
         // userService.save(user);
-        if (getUserRoles() != null
-            && getUserRoles().size() > 0) {
-            user.addRoles(new HashSet<>(getUserRoles()));
-            if (log.isDebugEnabled())
-                log.debug("[selected roles = {}]", getUserRoles());
-        }
-        super.save(user);
+        // if (getUserRoles() != null
+        //     && getUserRoles().size() > 0) {
+        //     user.addRoles(new HashSet<>(getUserRoles()));
         return "user?faces-redirect=true&includeViewParams=true";
     }
 
@@ -94,20 +95,20 @@ public class UserBacking extends AbstractBacking<User, Long> implements Serializ
         this.userName = userName;
     }
 
-    public List<Role> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(List<Role> userRoles) {
-        this.userRoles = userRoles;
-    }
-
-    public Set<Role> getSelectedRoles() {
-        return selectedRoles;
-    }
-
-    public void setSelectedRoles(Set<Role> selectedRoles) {
-        this.selectedRoles = selectedRoles;
-    }
+    // public List<Role> getUserRoles() {
+    //     return userRoles;
+    // }
+    //
+    // public void setUserRoles(List<Role> userRoles) {
+    //     this.userRoles = userRoles;
+    // }
+    //
+    // public Set<Role> getSelectedRoles() {
+    //     return selectedRoles;
+    // }
+    //
+    // public void setSelectedRoles(Set<Role> selectedRoles) {
+    //     this.selectedRoles = selectedRoles;
+    // }
 
 }

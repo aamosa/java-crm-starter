@@ -89,10 +89,12 @@ public class FormModel {
 	public String toString() {
 		return "FormModel{" +
 			"value=" + value +
-			", type='" + type + '\'' +
 			", label='" + label + '\'' +
+			", isField=" + isField +
+			", type=" + type +
 			", collectionType='" + collectionType + '\'' +
-			", referrencedValue=" + referencedValue +
+			", referencedValue=" + referencedValue +
 			'}';
 	}
+
 }

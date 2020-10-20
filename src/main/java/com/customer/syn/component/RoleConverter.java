@@ -25,43 +25,43 @@ public class RoleConverter implements Converter {
     @Inject private FacesContext fc;
     @PersistenceContext private EntityManager em;
 
-    private static final String ID_ERR = "Invalid entity Id";
-    private static final String CONV_ERR = "Conversion Error";
+    private static final String ID_ERR = "Entity Id is invalid.";
+    private static final String CONV_ERR = "Conversion error";
     private final Logger log = LoggerFactory.getLogger(RoleConverter.class);
 
 
     // --------------------------------------------- conversion methods
     @Override
+    public String getAsString(FacesContext facescontext, UIComponent component, Object value) {
+        if (value == null) return "";
+        if (value instanceof Role) {
+            if (log.isDebugEnabled()) {
+                log.debug("[object: {}, to string conversion]", value);
+            }
+            return String.valueOf(((Role) value).getId() );
+        }
+        else {
+            fc.addMessage(null, new FacesMessage(SEVERITY_ERROR, CONV_ERR, CONV_ERR));
+            throw new ConverterException();
+        }
+    }
+
+    @Override
     public Object getAsObject(FacesContext facescontext, UIComponent component, String value) {
         if (value == null || value.isEmpty()) return null;
         try {
             if (log.isDebugEnabled()) {
-                log.debug("[string  = {}, to object conversion]", value);
+                log.debug("[string: {}, to object conversion]", value);
             }
             return em.find(Role.class, Long.valueOf(value));
         } 
         catch (NumberFormatException e) {
-            fc.addMessage(null, 
-                    new FacesMessage(SEVERITY_ERROR, ID_ERR, ID_ERR));
+            fc.addMessage(null, new FacesMessage(SEVERITY_ERROR, ID_ERR, ID_ERR));
             throw new ConverterException();
         }
     }
 
     
-    @Override
-    public String getAsString(FacesContext facescontext, UIComponent component, Object value) {
-        if (value == null) return "";
-        if (value instanceof Role) {
-            if (log.isDebugEnabled()) {
-                log.debug("[object = {}, to string conversion]", value);
-            }
-            return String.valueOf( ((Role) value).getId() );
-        } 
-        else {
-            fc.addMessage(null,
-                    new FacesMessage(SEVERITY_ERROR, CONV_ERR, CONV_ERR));
-            throw new ConverterException(CONV_ERR);
-        }
-    }
+
 
 }

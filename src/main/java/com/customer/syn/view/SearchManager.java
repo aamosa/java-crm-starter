@@ -1,9 +1,5 @@
 package com.customer.syn.view;
 
-import static com.customer.syn.view.SearchModel.SelectModel.BASE_CLASS;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
-
 import com.customer.syn.model.FormInputType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +16,10 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.*;
 
+import static com.customer.syn.view.SearchModel.SelectModel.BASE_CLASS;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 @ApplicationScoped
 public class SearchManager {
 
@@ -34,11 +34,9 @@ public class SearchManager {
 		}
 	}
 
-
 	public List<SearchModel.SelectModel> getSearchOptions(String key) {
 		return Collections.unmodifiableList(SearchParser.getMapping().get(key));
 	}
-
 
 	public List<SearchModel.Field> getSearchFields(String key) {
 		List<SearchModel.SelectModel> list = SearchParser.getMapping().get(key);
@@ -48,11 +46,9 @@ public class SearchManager {
 			           Collections::unmodifiableList));
 	}
 
-
 	public FormInputType[] getDataTypes() {
 		return FormInputType.values();
 	}
-
 
 	// ---------------------------------------------------------- private nested class
 	private static class SearchParser {
@@ -64,7 +60,6 @@ public class SearchManager {
 		private static final String DEFAULT = "default";
 		private static final String ENTITY_CLASS = "entityClass";
 		private static final Map<String, List<SearchModel.SelectModel>> SELECT_MAPPING = new HashMap<>();
-
 
 		// ------------------------------------------------------ constructor
 		public SearchParser(String file) {
@@ -84,7 +79,6 @@ public class SearchManager {
 			}
 		}
 
-
 		private void parse(XMLEventReader reader) throws XMLStreamException {
 			Deque<String> stack = new ArrayDeque<>();
 			SearchModel.SelectModel selectModel = null;
@@ -96,11 +90,12 @@ public class SearchManager {
 					if (name.equals(SELECT)) {
 						selectModel = parseSelect(element);
 						SELECT_MAPPING.computeIfAbsent(selectModel.getClazz(), k -> new ArrayList<>())
-						              .add(selectModel);
+							.add(selectModel);
 						stack.push(name);
 					}
 					else if (name.equals(FIELD)) {
-						if (stack.size() > 0) {     // add child field tag to the parent select
+						// add child field tag to the parent select
+						if (stack.size() > 0) {
 							SearchModel.Field f = parseField(element);
 							selectModel.addFieldToRender(f);
 							f.setRenderFor(selectModel.getValue());
@@ -108,8 +103,7 @@ public class SearchManager {
 					}
 				}
 				if (event.isEndElement()
-					&& event.asEndElement().getName().getLocalPart()
-					        .equals(SELECT)) {
+					&& event.asEndElement().getName().getLocalPart().equals(SELECT)) {
 					if (stack.size() > 0) { stack.poll(); }
 				}
 			}
@@ -123,10 +117,6 @@ public class SearchManager {
 			if (entity != null) {
 				select.setClazz(entity);
 			}
-			// debugging
-			// if (log.isDebugEnabled()) {
-			//     log.debug("[label = {} class name = {}]", label, entity);
-			// }
 			return select;
 		}
 
@@ -153,13 +143,8 @@ public class SearchManager {
 						break;
 				}
 			}
-			SearchModel.Field field = new SearchModel.Field(value, label,
-				FormInputType.valueOf(type.toUpperCase()), isDefault);
-			// debugging
-			// if (log.isDebugEnabled()) {
-			//     log.debug("[label = {} value = {} type = {} default = {}]",
-			//             label, value, type, isDefault);
-			// }
+			SearchModel.Field field = new SearchModel.Field(value, label, FormInputType.valueOf(
+				type.toUpperCase()), isDefault);
 			return field;
 		}
 

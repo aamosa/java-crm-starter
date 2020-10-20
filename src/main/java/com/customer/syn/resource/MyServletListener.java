@@ -19,22 +19,23 @@ public class MyServletListener implements ServletContextListener {
 
 	private final Logger log = LoggerFactory.getLogger(MyServletListener.class);
 
-	@Override
-	public void contextInitialized(ServletContextEvent event) {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		Iterator<? extends Map.Entry<String, ? extends ServletRegistration>> it = event
-			.getServletContext().getServletRegistrations().entrySet()
-			.iterator();
-		while (it.hasNext()) {
-			if (it.next().getValue().getClassName()
-			      .equals(FacesServlet.class.getName())) {
-				fc.getApplication().getViewHandler()
-				  .getViews(fc, "/", ViewVisitOption.RETURN_AS_MINIMAL_IMPLICIT_OUTCOME)
-				  .forEach(v -> log.debug("{}", v));
+	/*
+		@Override
+		public void contextInitialized(ServletContextEvent event) {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			Iterator<? extends Map.Entry<String, ? extends ServletRegistration>> it = event
+				.getServletContext().getServletRegistrations().entrySet()
+				.iterator();
+			while (it.hasNext()) {
+				if (it.next().getValue().getClassName().equals(
+					FacesServlet.class.getName())) {
+					fc.getApplication().getViewHandler().getViews(
+						fc, "/", ViewVisitOption.RETURN_AS_MINIMAL_IMPLICIT_OUTCOME)
+						.forEach(v -> log.debug("{}", v));
+				}
 			}
 		}
-	}
-
+	 */
 
 }
 

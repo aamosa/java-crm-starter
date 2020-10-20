@@ -2,6 +2,7 @@ package com.customer.syn.view;
 
 import com.customer.syn.model.BaseEntity;
 import com.customer.syn.model.FormInputType;
+import com.customer.syn.model.Role;
 import com.customer.syn.model.ViewMeta;
 import com.customer.syn.service.BaseService;
 import org.primefaces.model.menu.MenuItem;
@@ -10,12 +11,16 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.persistence.*;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.PluralAttribute;
 import javax.validation.constraints.PastOrPresent;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -54,11 +59,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected List<E> values;
     protected List<E> entities;
-    protected List<ColumnModel> columnList;
-
     protected List<FormModel> formFields;
-    // protected Map<String, String> attributeNames;
-
+    protected List<ColumnModel> columnList;
     protected List<SearchModel.Field> searchFields;
     protected List<SearchModel.SelectModel> searchOptions;
 
@@ -91,7 +93,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     // ---------------------------------------------------------- abstract methods
-    protected abstract <S extends BaseService<E, I>> S getService();
+    protected abstract BaseService<E, I> getService();
 
     protected abstract void doSearch(String value);
 
@@ -107,11 +109,9 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         // dynamic columns for datatable component
         columnList = setColumns();
         setPage("list");
-
-        log.debug("FORMFIELDS: {}", formFields);
-        log.debug("META_MAPPING {}", META_MAPPING);
+        log.debug("<< formfields: >>: {}", formFields);
+        // log.debug("META_MAPPING {}", META_MAPPING);
     }
-
 
     private List<FormModel> setFormFields() {
         List<FormModel> list = META_MAPPING.computeIfAbsent(getEntityClass(),
@@ -154,16 +154,18 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         else {
             // collection-valued property
             model.setType(type);
-            processCollectionTypes(field, model);
+            processCollectionType(field, model);
         }
     }
 
-    private void processCollectionTypes(Field field, FormModel model) {
+    private void processCollectionType(Field field, FormModel model) {
         if (field.getAnnotation(ManyToOne.class) != null) {
+            // ManyToOne
             processManyToOne(field, model);
         }
         else if (field.getAnnotation(ManyToMany.class) != null) {
-            // TODO: Many To Many collections
+            // ManyToMany collection-valued property
+            processManyToMany(field, model);
         }
         else if (field.getAnnotation(ElementCollection.class) != null) {
             // TODO: parent / child embeddables collection
@@ -177,9 +179,27 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         Class<?> type = field.getType();
         log.debug("reference type: {}", type);
         // get all referenced entities for select
-        List list = em.createQuery("from " + type.getName(), type)
-            .getResultList();
+        List list = em.createQuery("from " + type.getName(), type).getResultList();
         model.setReferencedValue(list);
+    }
+
+    private void processManyToMany(Field field, FormModel model) {
+        Class<?> collectionFieldType = getCollectionAttribute(field);
+        Class<?> clazz = getImplClass(field);
+        // Set entitySet =  getService().entitySet(collectionFieldType);
+        List list = em.createQuery("from " + collectionFieldType.getName(), collectionFieldType)
+            .getResultList();
+        model.setCollectionType(clazz.getCanonicalName());
+        model.setReferencedValue(list);
+        log.debug("[collection field: {}]", collectionFieldType);
+        // testing only
+        // Iterator it = set.iterator();
+        // while (it.hasNext()) {
+        //     Object o = it.next();
+        //     log.debug("set object: {}", o);
+        //     Role role = (Role) o;
+        //     log.debug("after downcasting: {}", role.getId());
+        // }
     }
 
 
@@ -269,14 +289,33 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     // ---------------------------------------------------------- private methods
-    // create an attribute name mapping with user-friendly names
-    private Map<String, String> attributesMapping(final Class<?> clazz,
-                                                  final Class<? extends Annotation> aclazz) {
-        Map<String, String> map = new LinkedHashMap<>();
-        for (Field field : sortFields(getAnnotatedFields(clazz, aclazz))) {
-            map.put(field.getName(), splitCamelCase(field.getName()));
+    private <T extends BaseEntity> Class<T> getCollectionAttribute(Field field) {
+        EntityType<?> type = em.getMetamodel().entity(getEntityClass());
+        Attribute<?, ?> attribute = type.getAttribute(field.getName());
+        if (attribute.isCollection()) {
+            PluralAttribute pa = (PluralAttribute) attribute;
+            return pa.getElementType().getJavaType();
         }
-        return map;
+        return null;
+    }
+
+    // get the actual collection implementation class of the field
+    private Class<?> getImplClass(Field field)
+    throws FacesException {
+        try {
+            Object entity = Class.forName(getEntityClass().getName()).newInstance();
+            field.setAccessible(true);
+            Class<?> implClazz = field.get(entity).getClass();
+            if (log.isDebugEnabled()) {
+                log.debug("[entity: {} field implementation class: {}]", entity.getClass(),
+                    implClazz);
+            }
+            field.setAccessible(false);
+            return implClazz;
+        }
+        catch (Exception e) {
+            throw new FacesException(e);
+        }
     }
 
     // sort fields annotated with @ViewMeta using its order field TODO:
@@ -296,7 +335,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     // ---------------------------------------------------------- helper methods
-    // split javaBean style string
+    // split JavaBean style string
     private static String splitCamelCase(String value) {
         return capitalize(join(" ", splitByCharacterTypeCamelCase(value)));
     }

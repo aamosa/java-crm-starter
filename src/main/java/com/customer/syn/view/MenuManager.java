@@ -42,33 +42,15 @@ public class MenuManager implements Serializable {
     // ---------------------------------------------------------------- constructors
     public MenuManager() { /* no-args constructor */ }
 
-    
     @PostConstruct
     public void init() {
         loadNavMenu(); // TODO: load from config file or db here
         loadSelects();
-        getMetaModel();
+        // getMetaModel();
         if (log.isDebugEnabled()) {
             log.debug("[{} postconstruct initialized]", getClass());
         }
     }
-
-    // debugging
-    private void getMetaModel() {
-        Metamodel model = em.getMetamodel();
-        for (EntityType<?> type : model.getEntities()) {
-            // log.debug("Javatype = {}", type.getJavaType().toString());
-            for (Attribute<?, ?> attribute : type.getAttributes()) {
-                if (attribute.isCollection()) {
-                    PluralAttribute pa = (PluralAttribute) attribute;
-                    // log.debug(" plural attribute - element type = {}", pa.getElementType());
-                } else {
-                    // log.debug("attribute = {}", attribute.toString());
-                }
-            }
-        }
-    }
-
 
     private void loadNavMenu() {
         // TODO: rework
@@ -77,9 +59,8 @@ public class MenuManager implements Serializable {
         NAV_MENU.put(Utils.getPath().concat("task.xhtml"), "Tasks");
     }
 
-
     private void loadSelects() {
-        if (this.users == null) { // TODO: refresh it
+        if (this.users == null) { // TODO: refresh
             this.users = userService.fetchAll();
         }
         if (this.rolesMenu == null) {
