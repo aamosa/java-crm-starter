@@ -89,8 +89,8 @@ public class SearchManager {
 					String name = element.getName().getLocalPart();
 					if (name.equals(SELECT)) {
 						selectModel = parseSelect(element);
-						SELECT_MAPPING.computeIfAbsent(selectModel.getClazz(), k -> new ArrayList<>())
-							.add(selectModel);
+						SELECT_MAPPING.computeIfAbsent(selectModel.getClazz(),
+							k -> new ArrayList<>()).add(selectModel);
 						stack.push(name);
 					}
 					else if (name.equals(FIELD)) {
@@ -143,24 +143,28 @@ public class SearchManager {
 						break;
 				}
 			}
-			SearchModel.Field field = new SearchModel.Field(value, label, FormInputType.valueOf(
+			return
+				new SearchModel.Field(value, label, FormInputType.valueOf(
 				type.toUpperCase()), isDefault);
-			return field;
 		}
+
 
 		// ------------------------------------------------------ helper methods
 		public static Map<String, List<SearchModel.SelectModel>> getMapping() {
 			if (SELECT_MAPPING.size() > 0) {
 				return Collections.unmodifiableMap(SELECT_MAPPING);
 			}
-			return Collections.EMPTY_MAP;
+			return
+				Collections.EMPTY_MAP;
 		}
 
 		// add base/common model to all select model mappings
 		private void baseify(Map<String, List<SearchModel.SelectModel>> map) {
 			List<SearchModel.SelectModel> list = map.get(BASE_CLASS);
-			map.entrySet().stream().filter(e -> !e.getKey().equals(BASE_CLASS))
-			   .forEach(e -> e.getValue().addAll(list));
+			map.entrySet()
+				.stream().filter(e -> !e.getKey()
+				.equals(BASE_CLASS))
+				.forEach(e -> e.getValue().addAll(list));
 		}
 
 		// convenience wrapper

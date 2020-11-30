@@ -23,16 +23,17 @@ public class PersistenceTest {
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive web = ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackage("com.customer.syn.model")
-                .addClasses(ContactService.class, BaseService.class, BasicRepository.class)
-                .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource("web.xml");
-        System.out.println(web.toString()); // TOOD:
+            .addPackage("com.customer.syn.model")
+            .addClasses(ContactService.class, BaseService.class, BasicRepository.class)
+            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+            .addAsWebInfResource("web.xml");
+        System.out.println(web.toString()); // TODO:
         return web;
     }
 
-    @EJB ContactService contactService;
+    @EJB
+    ContactService contactService;
 
 
     @Test

@@ -77,12 +77,14 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
         try {
             contactId = Long.valueOf(fc.getExternalContext().getRequestParameterMap()
                 .get("contactId"));
-        } catch (Exception e) { /* ignore */ }
+        }
+        catch (Exception e) { /* ignore */ }
+
         if (contactId == null) {
             contactId = Long.valueOf(1L); // cheap test
         }
         if (log.isDebugEnabled()) {
-            log.debug("[contact id = {}]", contactId);
+            log.debug("[contact id: {}]", contactId);
         }
         taskService.save(task, contactId, loggedUser);
         return "task?faces-redirect=true";

@@ -1,8 +1,8 @@
 package com.customer.syn.view;
 
+import com.customer.syn.model.Address;
 import com.customer.syn.model.BaseEntity;
 import com.customer.syn.model.FormInputType;
-import com.customer.syn.model.Role;
 import com.customer.syn.model.ViewMeta;
 import com.customer.syn.service.BaseService;
 import org.primefaces.model.menu.MenuItem;
@@ -30,8 +30,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static com.customer.syn.model.FormInputType.TEXT;
-import static com.customer.syn.model.FormInputType.TEXTBOX;
+import static com.customer.syn.model.FormInputType.*;
 import static java.lang.String.format;
 import static java.lang.String.join;
 import static org.apache.commons.lang3.StringUtils.capitalize;
@@ -64,14 +63,18 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected List<SearchModel.Field> searchFields;
     protected List<SearchModel.SelectModel> searchOptions;
 
-    private static final Class ANNOTATED_CLASS = ViewMeta.class;
-    private static final String EDIT_LOG = "[edit invoked, entity = {}]";
+
+    protected List<List<FormModel>> childFormModelsList = new ArrayList<>();
+
+    private static final String EDIT_LOG = "[ Edit invoked on entity: {} ]";
     private static final String UPDATE_MSG = "%s with Id %d has been updated.";
     private static final String DELETE_MSG = "%s with Id %d has been deleted.";
-    protected static final String NO_SELECTION = "Please make a selection first.";
     private static final String CREATE_MSG = "New %s has been created successfully.";
+    protected static final String NO_SELECTION = "Please make a selection first.";
+    private static final Class<ViewMeta> ANNOTATED_CLASS = ViewMeta.class;
 
     private static final Map<Class<?>, List<FormModel>> META_MAPPING = new ConcurrentHashMap<>();
+
 
     // ---------------------------------------------------------- constructors
     protected AbstractBacking() {
@@ -97,6 +100,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected abstract void doSearch(String value);
 
+
+    // ---------------------------------------------------------- init
     @PostConstruct
     public void setup() {
         // TODO: add paging and lazy loading
@@ -106,107 +111,150 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         searchFields = searchManager.getSearchFields(getEntityName());
         // backing data for form fields
         formFields = setFormFields();
-        // dynamic columns for datatable component
+        META_MAPPING.computeIfAbsent(Address.class, this::createModel); // TODO:
+        // dynamic columns for datatables
         columnList = setColumns();
         setPage("list");
-        log.debug("<< formfields: >>: {}", formFields);
-        // log.debug("META_MAPPING {}", META_MAPPING);
+        log.debug("{}", formFields);
+        log.debug("{} \n\n", META_MAPPING);
     }
+
 
     private List<FormModel> setFormFields() {
-        List<FormModel> list = META_MAPPING.computeIfAbsent(getEntityClass(),
-            k -> createModel(k, ANNOTATED_CLASS));
-        return list.stream().filter(f -> f.isField())
-            .collect(Collectors.toList());
+        List<FormModel> formModels = META_MAPPING.computeIfAbsent(entityClass, this::createModel);
+        return
+            formModels.stream()
+                .filter(FormModel::isField)
+                .collect(Collectors.toList());
     }
+
 
     private List<ColumnModel> setColumns() {
-        List<ColumnModel> list = new ArrayList<>();
-        for (FormModel model : META_MAPPING.get(getEntityClass())) {
-            // trust me
-            list.add(new ColumnModel(model.getLabel(), (String) model.getValue()));
-        }
-        return list;
+        return
+            META_MAPPING.get(entityClass).stream()
+                .map(f -> new ColumnModel(f.getLabel(), (String) f.getValue()))
+                .collect(Collectors.toList());
     }
 
-    private List<FormModel> createModel(Class<?> clazz, Class<ViewMeta> annotated) {
-        List<FormModel> list = new ArrayList<>();
-        for (Field f : sortFields(getAnnotatedFields(clazz, annotated))) {
+
+    private List<FormModel> createModel(Class<?> clazz) {
+        List<FormModel> formModels = new ArrayList<>();
+        for (Field field : sortFields(getAnnotatedFields(clazz, ANNOTATED_CLASS))) {
+            ViewMeta annotation = field.getAnnotation(ANNOTATED_CLASS);
             FormModel model = new FormModel();
-            model.setLabel(splitCamelCase(f.getName()));
-            model.setValue(f.getName());
-            model.setField(f.getAnnotation(ViewMeta.class).formField());
-            if (f.getAnnotation(ViewMeta.class).formField()) {
-                // create form field for property
-                processInputType(f, model);
+            if (annotation.type() != ELEMENTCOLLECTION) {
+                model.setLabel(splitCamelCase(field.getName()));
             }
-            list.add(model);
+            model.setValue(field.getName());
+            model.setIsField(annotation.formField());
+            if (model.isField()) {
+                FormInputType type = annotation.type();
+                model.setType(type);
+                if (!EnumSet.<FormInputType>range(TEXT, TEXTBOX).contains(type)) {
+                    // create multi-value form field
+                    multiValueField(field, model);
+                }
+            }
+            formModels.add(model);
         }
-        return list;
+        return formModels;
     }
 
-    private void processInputType(Field field, FormModel model) {
-        FormInputType type = field.getAnnotation(ViewMeta.class).type();
-        if (EnumSet.<FormInputType>range(TEXT, TEXTBOX).contains(type)) {
-            // simple property
-            model.setType(type);
-        }
-        else {
-            // collection-valued property
-            model.setType(type);
-            processCollectionType(field, model);
-        }
-    }
 
-    private void processCollectionType(Field field, FormModel model) {
+    private void multiValueField(Field field, FormModel model) {
         if (field.getAnnotation(ManyToOne.class) != null) {
-            // ManyToOne
             processManyToOne(field, model);
         }
         else if (field.getAnnotation(ManyToMany.class) != null) {
-            // ManyToMany collection-valued property
             processManyToMany(field, model);
         }
         else if (field.getAnnotation(ElementCollection.class) != null) {
-            // TODO: parent / child embeddables collection
+            processElementCollection(field, model);
         }
         else if (field.getAnnotation(OneToMany.class) != null) {
-            // TODO: parent / child entities collection
+            processOneToMany(field, model);
         }
     }
 
-    private void processManyToOne(Field field, FormModel model) {
-        Class<?> type = field.getType();
-        log.debug("reference type: {}", type);
-        // get all referenced entities for select
-        List list = em.createQuery("from " + type.getName(), type).getResultList();
-        model.setReferencedValue(list);
+
+    private void processElementCollection(Field field, FormModel model) {
+        Class<?> refType = getCollectionAttribute(field);
+        model.setReferencedType(refType);
+        model.setCollectionType(getImplClass(field).getCanonicalName());
+        log.debug("[ Element collection reference type: {} ]", refType);
+        log.debug("[ Element collection child formModel: {} ]", childFormModel(refType));
     }
 
-    private void processManyToMany(Field field, FormModel model) {
-        Class<?> collectionFieldType = getCollectionAttribute(field);
-        Class<?> clazz = getImplClass(field);
-        // Set entitySet =  getService().entitySet(collectionFieldType);
-        List list = em.createQuery("from " + collectionFieldType.getName(), collectionFieldType)
+
+    private void processOneToMany(Field field, FormModel model) {
+        // TODO:
+    }
+
+
+    private void processManyToOne(Field field, FormModel model) {
+        Class<?> refType = field.getType();
+        log.debug("[ Reference type: {} ]", refType);
+        // get all referenced entities for select
+        List<?> entities = em.createQuery("from " + refType.getName(), refType)
             .getResultList();
+        model.setReferencedValue(entities);
+    }
+
+
+    private void processManyToMany(Field field, FormModel model) {
+        Class<?> referencedType = getCollectionAttribute(field);
+        Class<?> clazz = getImplClass(field);
+        assert referencedType != null;
+        log.debug("[ Collection referenced type: {} ]", referencedType.getName());
+
+        List<?> entities = em.createQuery("from " + referencedType.getName(),
+            referencedType).getResultList();
+
+        model.setReferencedValue(entities);
+        model.setReferencedType(referencedType);
         model.setCollectionType(clazz.getCanonicalName());
-        model.setReferencedValue(list);
-        log.debug("[collection field: {}]", collectionFieldType);
-        // testing only
-        // Iterator it = set.iterator();
-        // while (it.hasNext()) {
-        //     Object o = it.next();
-        //     log.debug("set object: {}", o);
-        //     Role role = (Role) o;
-        //     log.debug("after downcasting: {}", role.getId());
-        // }
+    }
+
+
+    public List<FormModel> childFormModel(Class<?> clazz) {
+        return
+            META_MAPPING.get(clazz);
+    }
+
+
+    public void addChild(Class<?> type) {
+        log.debug("addChild called");
+        childFormModelsList.add(childFormModel(type));
     }
 
 
     public void menuChange(ActionEvent event) {
         try {
             MenuItem item = (MenuItem) event.getSource();
-        } catch (Exception e) { /* ignore */ }
+        }
+        catch (Exception e) { /* ignore */ }
+    }
+
+
+    public void search() {
+        switch (getSearchOption()) {
+            case "searchId":
+                E entity = getService().findByID(Id);
+                if (entity != null)
+                    values = Arrays.asList(entity);
+                else
+                    values = Collections.emptyList();
+                break;
+            case "searchCreatedDate":
+                values = getService().findByCreatedDateRange(searchDateFrom, searchDateTo);
+                break;
+            case "searchDisplayAll":
+                values = getEntities();
+                break;
+            default:
+                doSearch(getSearchOption()); // delegate to subclass
+                break;
+        }
     }
 
     // ---------------------------------------------------------- crud operations
@@ -220,14 +268,17 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
+
     public void edit() {
         if (isSelected()) {
             edit(getCurrentSelected());
+            setPage("edit");
         }
         else {
             addMsg(NO_SELECTION);
         }
     }
+
 
     protected void edit(E e) {
         setCurrentEntity(e);
@@ -235,16 +286,19 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             log.debug(EDIT_LOG, e);
     }
 
+
     public void save(E e) {
         getService().save(e);
         addMsg(format(CREATE_MSG, getEntityName()));
     }
+
 
     public String update(E e) {
         getService().update(e);
         addMsg(format(UPDATE_MSG, getEntityName(), e.getId()));
         return null;
     }
+
 
     public void delete() {
         if (isSelected()) {
@@ -254,6 +308,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
             addMsg(NO_SELECTION);
         }
     }
+
 
     public void delete(E e) {
         try {
@@ -266,50 +321,30 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
-    public void search() {
-        switch (getSearchOption()) {
-            case "searchId":
-                E entity = getService().findByID(Id);
-                if (entity != null)
-                    values = Arrays.asList(entity);
-                else
-                    values = Collections.EMPTY_LIST;
-                break;
-            case "searchCreatedDate":
-                values = getService().findByCreatedDateRange(searchDateFrom,
-                    searchDateTo);
-                break;
-            case "searchDisplayAll":
-                values = getEntities();
-                break;
-            default:
-                doSearch(getSearchOption()); // delegate to subclass
-                break;
-        }
-    }
 
     // ---------------------------------------------------------- private methods
-    private <T extends BaseEntity> Class<T> getCollectionAttribute(Field field) {
-        EntityType<?> type = em.getMetamodel().entity(getEntityClass());
-        Attribute<?, ?> attribute = type.getAttribute(field.getName());
+    @SuppressWarnings("unchecked")
+    private <T extends BaseEntity<?>> Class<T> getCollectionAttribute(Field field) {
+        EntityType<?> entityType = em.getMetamodel().entity(getEntityClass());
+        Attribute<?, ?> attribute = entityType.getAttribute(field.getName());
         if (attribute.isCollection()) {
-            PluralAttribute pa = (PluralAttribute) attribute;
-            return pa.getElementType().getJavaType();
+            PluralAttribute<?, ?, T> pa = (PluralAttribute<?, ?, T>) attribute;
+            return
+                pa.getElementType().getJavaType();
         }
         return null;
     }
 
     // get the actual collection implementation class of the field
-    private Class<?> getImplClass(Field field)
-    throws FacesException {
+    private Class<?> getImplClass(Field field) throws FacesException {
         try {
             Object entity = Class.forName(getEntityClass().getName()).newInstance();
             field.setAccessible(true);
             Class<?> implClazz = field.get(entity).getClass();
-            if (log.isDebugEnabled()) {
-                log.debug("[entity: {} field implementation class: {}]", entity.getClass(),
-                    implClazz);
-            }
+            log.debug("[[ entity: {}, getImplClass: {} ]]",
+                entity.getClass(),
+                implClazz
+            );
             field.setAccessible(false);
             return implClazz;
         }
@@ -318,20 +353,11 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
-    // sort fields annotated with @ViewMeta using its order field TODO:
-    private List<Field> sortFields(List<Field> list) {
-        Collections.sort(list, new Comparator<Field>() {
-            @Override
-            public int compare(Field o1, Field o2) {
-                ViewMeta  s1 = o1.getAnnotation(ViewMeta.class);
-                ViewMeta s2 = o2.getAnnotation(ViewMeta.class);
-                if (s1 != null && s2 != null)
-                    return Integer.compare(s1.order(), s2.order());
-                else
-                    return 0;
-            }
-        });
-        return list;
+    // sort fields annotated with @ViewMeta using its order field
+    private List<Field> sortFields(List<Field> fields) {
+        fields.sort(Comparator.comparingInt(o ->
+            o.getAnnotation(ANNOTATED_CLASS).order()));
+        return fields;
     }
 
     // ---------------------------------------------------------- helper methods
@@ -370,6 +396,11 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     // ---------------------------------------------------------- setters and getters
+
+    public List<List<FormModel>> getChildFormModelsList() {
+        return childFormModelsList;
+    }
+
     public I getId() {
         return Id;
     }
@@ -383,7 +414,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     private String getEntityName() {
-        return entityClass.getSimpleName().toLowerCase();
+        return
+            entityClass.getSimpleName().toLowerCase();
     }
 
     public List<E> getValues() {
@@ -428,7 +460,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     public List<FormModel> getAttributeNames() {
         // value should be mapped since it was loaded in postconstruct
-        return Collections.unmodifiableList(META_MAPPING.get(getEntityClass()));
+        return
+            Collections.unmodifiableList(META_MAPPING.get(getEntityClass()));
     }
 
     public List<ColumnModel> getColumnList() {

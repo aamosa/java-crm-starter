@@ -1,5 +1,6 @@
 package com.customer.syn.view.contact;
 
+import com.customer.syn.model.Address;
 import com.customer.syn.model.Contact;
 import com.customer.syn.model.Task;
 import com.customer.syn.service.BaseService;
@@ -11,23 +12,30 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
 @Named
 @ViewScoped
-public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
+public class ContactBacking extends AbstractBacking<Contact, Long>
+    implements Serializable {
 
-    private static final long serialVersionUID = 1221579874527L;
+    private static final transient long serialVersionUID = 1221579874527L;
     
     private String fName;
-    private Contact contact;
     @NotNull private String lName;
+
+    private Contact contact;
+
     private List<Task> assignedTasks;
-    @Inject private ContactService contactService;
+
+    @Inject
+    private ContactService contactService;
 
 
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
+
 
     protected BaseService<Contact, Long> getService() {
         return contactService;
@@ -54,20 +62,10 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     @Override
     public void view() {
         if (isSelected()) {
-            setAssignedTasks(contactService.findTasksforContact(getCurrentSelected()));
+            setAssignedTasks(contactService.findTasksForContact(
+                getCurrentSelected()));
             setCurrentEntity(getCurrentSelected());
             setPage("detail");
-        }
-        else {
-            addMsg(NO_SELECTION);
-        }
-    }
-
-    @Override
-    public void edit() {
-        if (isSelected()) {
-            super.edit(getCurrentSelected());
-            setPage("editcontact");
         }
         else {
             addMsg(NO_SELECTION);
@@ -80,9 +78,16 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         return "index?faces-redirect=true";
     }
 
+
     public String save() {
+        if (contact.getAddress() != null) {
+            log.debug("[ Address is set: {} ]", contact.getAddress());
+            HashSet<Address> set = new HashSet<>();
+            set.add(contact.getAddress());
+            contact.setAddresses(set);
+        }
         super.save(contact);
-        return "index?faces-redirect=true&includeViewParams=true";
+        return "contact?faces-redirect=true&includeViewParams=true";
     }
 
     // --------------------------------------------------------- setters and getters
@@ -109,6 +114,14 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
     public void setContact(Contact contact) {
         this.contact = contact;
     }
+
+    // public Address getAddress() {
+    //     return this.address;
+    // }
+    //
+    // public void setAddress(Address address) {
+    //     this.address = address;
+    // }
 
     public List<Task> getAssignedTasks() {
         return assignedTasks;

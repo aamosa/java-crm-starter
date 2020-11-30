@@ -10,7 +10,8 @@ public enum FormInputType {
     TEXTBOX("textarea"),
     SELECT("select"),
     CHECKBOX("checkbox"),
-    MULTISELECT("multiselect");
+    MULTISELECT("multiselect"),
+    ELEMENTCOLLECTION("elementcollection");
 
     String value;
 

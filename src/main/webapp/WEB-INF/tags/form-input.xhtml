@@ -12,7 +12,10 @@
     <c:set var="rendered" value="${empty rendered ? true : rendered}"/>
     <c:set var="required" value="${empty required ? false : required}"/>
     <c:set var="readonly" value="${empty readonly ? false : readonly}"/>
+    <c:set var="converter" value="${empty converter ? baseEntityConverter : converter}"/>
+
     <h:outputLabel for="#{id}" rendered="#{rendered}" value="#{label}"/>
+
     <c:choose>
         <c:when test="#{type eq 'DATE'}">
             <h:inputText id="#{id}" label="#{label}" value="#{value}"
@@ -29,6 +32,7 @@
                 </ui:insert>
             </h:inputText>
         </c:when>
+
         <c:when test="#{type eq 'SECRET'}">
             <h:inputSecret id="#{id}" label="#{label}"
                            value="#{value}"
@@ -36,29 +40,37 @@
                            required="#{required}"
                            styleClass="#{component.valid ? styleClass : 'invalid'}"/>
         </c:when>
+
         <c:when test="#{type eq 'SELECT'}">
             <h:selectOneMenu value="#{value}">
-                <f:selectItems value="#{reference}" var="e"
-                               itemValue="#{e}" itemLabel="#{e}"/>
+                <f:selectItems value="#{reference}" var="e" itemValue="#{e}"
+                               itemLabel="#{e}"/>
+                <f:attribute name="referencedType" id="rt" value="#{referencedType}"/>
             </h:selectOneMenu>
         </c:when>
+
         <c:when test="#{type eq 'CHECKBOX'}">
-            <h:selectManyCheckbox id="pmnchk"
-                                  layout="pageDirection"
+            <p:selectManyCheckbox value="#{value}" id="chbk"
                                   required="true"
-                                  value="#{value}">
+                                  layout="pageDirection"
+                                  converter="#{converter}"
+                                  collectionType="#{collectionType}">
                 <f:selectItems value="#{reference}" var="r"
-                               itemLabel="#{r}" itemValue="#{r}"/>
-            </h:selectManyCheckbox>
+                               itemLabel="#{r}"
+                               itemValue="#{r}"/>
+                <f:attribute name="referencedType" id="rt" value="#{referencedType}"/>
+            </p:selectManyCheckbox>
         </c:when>
-        <c:otherwise>
-            <h:inputText styleClass="#{component.valid ? styleClass : 'invalid'}"
-                         id="#{id}"
-                         label="#{label}"
-                         value="#{value}"
-                         rendered="#{rendered}"
-                         required="#{required}"
-                         readonly="#{readonly}">
+
+        <c:when test="#{type eq 'TEXT'}">
+            <h:inputText
+                    styleClass="#{component.valid ? styleClass : 'invalid'}"
+                    id="#{id}"
+                    label="#{label}"
+                    value="#{value}"
+                    rendered="#{rendered}"
+                    required="#{required}"
+                    readonly="#{readonly}">
                 <c:if test="${required}">
                     <f:attribute name="requiredMessage" value="#{requiredMessage}"/>
                 </c:if>
@@ -66,6 +78,7 @@
                 <ui:insert/>
 
             </h:inputText>
-        </c:otherwise>
+        </c:when>
     </c:choose>
+
 </ui:composition>

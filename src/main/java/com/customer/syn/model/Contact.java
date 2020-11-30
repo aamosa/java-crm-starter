@@ -10,115 +10,129 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.customer.syn.model.Enums.Status.NEW;
+import static com.customer.syn.model.FormInputType.ELEMENTCOLLECTION;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-public class Contact extends BaseEntity<Long> implements Serializable {
+public class Contact extends BaseEntity<Long>
+    implements Serializable {
 
-	private static final long serialVersionUID = -14L;
+    private static final transient long serialVersionUID = -2687579851125L;
 
-	@Transient private boolean editable;
+    @ViewMeta(order=3)
+    @NotNull private String lastName;
 
-	@ViewMeta(order=3)
-	@NotNull private String lastName;
+    @ViewMeta(order=2)
+    @NotNull private String firstName;
 
-	@ViewMeta(order=2)
-	@NotNull private String firstName;
+    @ViewMeta(order=4)
+    @Column(unique=true)
+    @Email private String email;
 
-	@ViewMeta(order=4)
-	@Column(unique=true)
-	@Email private String email;
+    @ViewMeta(order=1, formField=false)
+    @Enumerated(STRING) private Enums.Status status = NEW;
 
-	@ViewMeta(order=1, formField=false)
-	@Enumerated(STRING) private Enums.Status status = NEW;
+    @OneToMany(mappedBy="contact", fetch=LAZY)
+    private Set<Task> tasks = new HashSet<>(0);
 
-	@OneToMany(mappedBy="contact", fetch=LAZY)
-	private Set<Task> tasks = new HashSet<>(0);
+    @Transient
+    private Address address = new Address();
 
-	@ElementCollection
-	@CollectionTable(name="address")
-	@JoinColumn(name="contact_id")
-	private Set<Address> addresses = new HashSet<>(0);
+    @ElementCollection
+    @JoinColumn(name="contact_id")
+    @CollectionTable(name="address")
+    @ViewMeta(type=ELEMENTCOLLECTION)
+    private Set<Address> addresses = new HashSet<>(0);
 
-	@ElementCollection
-	@CollectionTable(name="phone")
-	@MapKeyEnumerated(STRING) @Column(name="phone_number")
-	private Map<Enums.PhoneType, String> phones = new HashMap<>(0);
-
-
-	// ----------------------------------------------------- constructors
-	public Contact() { /* no-args constructor */ }
-
-
-	public Contact(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-	}
+    @ElementCollection
+    @CollectionTable(name="phone")
+    @Column(name="phone_number")
+    @MapKeyEnumerated(STRING)
+    private Map<Enums.PhoneType, String> phones = new HashMap<>(0);
 
 
-	// ----------------------------------------------------- setters and getters
-	public Set<Address> getAddresses() {
-		return addresses;
-	}
+    // ----------------------------------------------------- constructors
+    public Contact() { /* no-args constructor */ }
 
-	public void setAddresses(Set<Address> addresses) {
-		this.addresses = addresses;
-	}
 
-	public Map<Enums.PhoneType, String> getPhones() {
-		return phones;
-	}
+    public Contact(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
-	public void setPhones(Map<Enums.PhoneType, String> phones) {
-		this.phones = phones;
-	}
 
-	public String getFirstName() {
-		return firstName;
-	}
+    // ----------------------------------------------------- setters and getters
+    public Address getAddress() {
+        return this.address;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public Map<Enums.PhoneType, String> getPhones() {
+        return phones;
+    }
 
-	public Enums.Status getStatus() {
-		return status;
-	}
+    public void setPhones(Map<Enums.PhoneType, String> phones) {
+        this.phones = phones;
+    }
 
-	public void setStatus(Enums.Status status) {
-		this.status = status;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public Set<Task> getTasks() {
-		return tasks;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	@Override
-	public String toString() {
-		return firstName + " " + lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Enums.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Enums.Status status) {
+        this.status = status;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 
 
 }

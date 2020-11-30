@@ -15,8 +15,9 @@ public class ContactService extends BaseService<Contact, Long> {
         "select t from Task t join fetch t.createdBy where t.contact.id = :id";
 
     // ------------------------------------------------------------ business operations
-    public List<Task> findTasksforContact(Contact contact) {
-        return getEntityManager()
+    public List<Task> findTasksForContact(Contact contact) {
+        return
+            getEntityManager()
             .createQuery(TASK_SQL, Task.class).setParameter("id", contact.getId())
             .getResultList();
     }

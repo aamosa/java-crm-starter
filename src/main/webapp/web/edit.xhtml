@@ -10,14 +10,12 @@
     <div class="canvas box-shadow og-fnt lt-gry-bg">
         <div class="full-width">
             <h:form id="eform">
-                <c:forEach items="#{backingBean.formFields}"
-                           var="field">
-                    <syn:input value="#{backingBean.currentSelected[field]}"
-                               label="#{field}"/>
+                <c:forEach items="#{backingBean.formFields}" var="f">
+                    <syn:input value="#{backingBean.currentSelected[f.value]}"
+                               label="#{f.label}"/>
                 </c:forEach>
                 <h:commandButton action="#{backingBean.update(backingBean.currentSelected)}"
-                                 styleClass="tab" id="svb"
-                                 value="Save"/>
+                                 styleClass="tab" id="sbtn" value="Save"/>
             </h:form>
         </div>
     </div>

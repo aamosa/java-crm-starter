@@ -20,21 +20,31 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-public class User extends BaseEntity<Long> implements Serializable {
+public class User extends BaseEntity<Long>
+	implements Serializable {
 
-	private static final long serialVersionUID = 3184776518741L;
-	@Transient private final Logger log = LoggerFactory.getLogger(getClass());
-
-	@ViewMeta(order=4)
-	@Column(unique=true)
-	@Email @NotNull private String email;
+	private static final transient long serialVersionUID = 3184776518741L;
+	private static final transient Logger LOG = LoggerFactory.getLogger(User.class);
 
 	@Transient private boolean editable;
-	@ViewMeta(order=3) private String lastName;
-	@ViewMeta(order=2) private String firstName;
 
+	@Email @NotNull
+	@Column(unique=true)
+	@ViewMeta(order=4)
+	private String email;
+
+	@ViewMeta(order=8, formField=false)
+	private Instant lastLogin;
+
+	@ViewMeta(order=3)
+	private String lastName;
+
+	@ViewMeta(order=2)
+	private String firstName;
+
+	@Enumerated(STRING)
 	@ViewMeta(order=1, formField=false)
-	@Enumerated(STRING) private Enums.Status status = NEW;
+	private Enums.Status status = NEW;
 
 	@ViewMeta(order=5)
 	@Size(min=3, max=30)
@@ -45,8 +55,6 @@ public class User extends BaseEntity<Long> implements Serializable {
 	@Size(min=4, max=30)
 	@NotNull private String password;
 
-	@ViewMeta(order=8, formField=false)
-	private Instant lastLogin;
 
 	@ViewMeta(order=9, type=CHECKBOX)
 	@ManyToMany(fetch=LAZY, cascade={ PERSIST, MERGE })
@@ -54,6 +62,7 @@ public class User extends BaseEntity<Long> implements Serializable {
 		joinColumns=@JoinColumn(name="user_id", nullable=false),
 		inverseJoinColumns=@JoinColumn(name="role_id"))
 	private Set<Role> roles = new HashSet<>();
+
 
 	// ------------------------------------------------------------- constructors
 	public User() { /* no-args constructor */ }
@@ -65,6 +74,7 @@ public class User extends BaseEntity<Long> implements Serializable {
 		this.userName = userName;
 		this.password = password;
 	}
+
 
 	// ------------------------------------------------------------- utility methods
 	public void addRole(Role role) {
@@ -83,6 +93,7 @@ public class User extends BaseEntity<Long> implements Serializable {
 		getRoles().remove(role);
 		// role.getUsers().remove(this);
 	}
+
 
 	// ------------------------------------------------------------- setters and getters
 	public String getFirstName() {
@@ -142,12 +153,12 @@ public class User extends BaseEntity<Long> implements Serializable {
 	}
 
 	public Set<Role> getRoles() {
-		log.debug("getroles invoked");  // TODO
+		LOG.debug("getroles invoked");  // TODO
 		return this.roles;
 	}
 
 	public void setRoles(Set<Role> roles) {
-		log.debug("setroles invoked"); // TODO
+		LOG.debug("setroles invoked"); // TODO
 		this.roles = roles;
 	}
 

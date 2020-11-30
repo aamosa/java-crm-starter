@@ -1,6 +1,8 @@
 package com.customer.syn.model;
 
 import static javax.persistence.GenerationType.IDENTITY;
+
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -14,12 +16,12 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @MappedSuperclass
-public abstract class BaseEntity<I extends Number> {
+public abstract class BaseEntity<ID extends Number & Serializable> {
 
     @Column(updatable=false)
     @ViewMeta(order=1, formField=false)
     @Id @GeneratedValue(strategy=IDENTITY)
-    protected I id;
+    protected ID id;
 
 //    @Version
 //    protected I version;
@@ -68,11 +70,11 @@ public abstract class BaseEntity<I extends Number> {
 //        this.version = version;
 //    }
     
-    public I getId() {
+    public ID getId() {
         return id;
     }
 
-    public void setId(I id) {
+    public void setId(ID id) {
         this.id = id;
     }
 

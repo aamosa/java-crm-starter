@@ -5,21 +5,26 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:my="http://xmlns.jcp.org/jsf/composite/components"
         xmlns:p="http://primefaces.org/ui">
 
     <h:panelGroup id="frmgrp" layout="block">
         <div class="canvas box-shadow og-fnt lt-gry-bg">
             <div class="full-width">
                 <h:form id="cform">
+
                     <c:forEach items="#{backingBean.formFields}" var="f">
                         <div class="row">
                             <syn:input value="#{backingBean[entityName][f.value]}"
                                        label="#{f.label}"
                                        type="#{f.type}"
                                        collectionType="#{f.collectionType}"
-                                       reference="#{f.referencedValue}"/>
+                                       reference="#{f.referencedValue}"
+                                       referencedType="#{f.referencedType}"
+                                       converter="#{f.converter}"/>
                         </div>
                     </c:forEach>
+
                     <div class="row">
                         <h:commandButton action="#{backingBean.save}" id="svb"
                                          value="Create"

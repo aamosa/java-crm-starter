@@ -16,17 +16,19 @@ public class TaskService extends BaseService<Task, Long> {
     @Inject private UserService userService;
     @Inject private ContactService contactService;
 
-    private static final String QUERY =
-        "select t from Task t join fetch t.contact" +
-        " join fetch t.createdBy join fetch t.assignedTo " +
-        " where t.id = :id";
+    private static final String QUERY = "select t from Task t join fetch t.contact"
+        + " join fetch t.createdBy join fetch t.assignedTo "
+        + " where t.id = :id";
+
 
     // ------------------------------------------------------------ business operations
     public Task getTaskContactAndUsers(Long id) {
-        return getEntityManager().createQuery(QUERY, Task.class)
+        return
+            getEntityManager().createQuery(QUERY, Task.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }
+
 
     public void save(Task task, Long contactId, User loggedUser) {
         try {
@@ -38,6 +40,7 @@ public class TaskService extends BaseService<Task, Long> {
             log.error("{}", e);
         }
     }
+
 
     public List<Tuple> getTasksDTOList(Long id) {
         TypedQuery<Tuple> query = getEntityManager()

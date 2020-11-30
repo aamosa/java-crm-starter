@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,7 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends Number> imp
     @PersistenceContext protected EntityManager em;
     
     private final Class<E> clazz;
-    private static final String LOG_MSG = "[entity Id = {}, {} successfully]";
+    private static final String LOG_MSG = "[ entity Id: {}, {} successfully ]";
     private static final String GET_COUNT = "select count(e) from %s e where e.id = :id";
     private static final String DATE_RANGE = "select e from  %s e where e.createdAt between :from and :to";
     private static final String LAST_NAME = "select e from %s e where UPPER(e.lastName) = UPPER(:lastName)";
@@ -42,8 +43,7 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends Number> imp
         } 
         else {
             type = ((Class<?>) type).getGenericSuperclass();
-            this.clazz = (Class<E>) ((ParameterizedType) type)
-                    .getActualTypeArguments()[0];
+            this.clazz = (Class<E>) ((ParameterizedType) type).getActualTypeArguments()[0];
         }
     }
 
@@ -74,25 +74,33 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends Number> imp
         return em.find(type, id);
     }
 
+    public BaseEntity<? extends Number> find(Class<BaseEntity<? extends Number>> type,
+        Long id) {
+            return
+                getEntityManager().find(type, id);
+    }
+
     public E findReferenceByID(I id) {
         return em.getReference(getClazz(), id);
     }
 
     public List<E> fetchAll() {
         if (log.isDebugEnabled()) {
-            log.debug("[get all {} entities]", getEntityName());
+            log.debug("[ fetching all {}(s) ]", getEntityName());
         }
         return em.createQuery("from " + getEntityName(), getClazz())
             .getResultList();
     }
 
-    public Set entitySet(Class<E> entity) {
-        return new HashSet<>(em.createQuery("from " + entity.getName(), entity)
+    public Collection<?> getEntitiesAsSet(Class<?> entity) {
+        return
+            new HashSet<>(em.createQuery("from " + entity.getName(), entity)
             .getResultList());
     }
 
     public boolean exists(E entity) {
-        return em.createQuery(format(GET_COUNT, getEntityName()), Long.class)
+        return
+            em.createQuery(format(GET_COUNT, getEntityName()), Long.class)
             .setParameter("id", entity.getId())
             .getSingleResult() == 1;
     }

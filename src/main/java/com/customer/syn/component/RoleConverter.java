@@ -12,15 +12,14 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.customer.syn.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.customer.syn.model.Role;
 
 
 /** FacesConvertor implementation for Role entity */
 @FacesConverter(value = "roleConverter", managed = true)
-public class RoleConverter implements Converter {
+public class RoleConverter implements Converter<Role> {
 
     @Inject private FacesContext fc;
     @PersistenceContext private EntityManager em;
@@ -32,22 +31,21 @@ public class RoleConverter implements Converter {
 
     // --------------------------------------------- conversion methods
     @Override
-    public String getAsString(FacesContext facescontext, UIComponent component, Object value) {
+    public String getAsString(FacesContext facescontext, UIComponent component, Role value) {
         if (value == null) return "";
-        if (value instanceof Role) {
+        try {
             if (log.isDebugEnabled()) {
                 log.debug("[object: {}, to string conversion]", value);
             }
-            return String.valueOf(((Role) value).getId() );
-        }
-        else {
+            return String.valueOf(value.getId());
+        } catch (Exception e) {
             fc.addMessage(null, new FacesMessage(SEVERITY_ERROR, CONV_ERR, CONV_ERR));
             throw new ConverterException();
         }
     }
 
     @Override
-    public Object getAsObject(FacesContext facescontext, UIComponent component, String value) {
+    public Role getAsObject(FacesContext facescontext, UIComponent component, String value) {
         if (value == null || value.isEmpty()) return null;
         try {
             if (log.isDebugEnabled()) {
@@ -60,8 +58,5 @@ public class RoleConverter implements Converter {
             throw new ConverterException();
         }
     }
-
-    
-
 
 }

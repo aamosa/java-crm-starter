@@ -15,17 +15,16 @@
         <div id="content-wrapper" class="wht-bg">
             <div id="right-column" class="column">
                 <div class="conwrap">
-                    <ui:decorate template="/WEB-INF/include/message.xhtml"/>
+                    <ui:decorate
+                            template="/WEB-INF/include/message.xhtml"/>
                     <f:view transient="true">
                         <div class="afrm">
                             <h1 class="jumbo">Please Login</h1>
                             <h:form id="lgfrm">
-                                <syn:input value="#{login.user}" label="Username" required="true"/>
+                                <syn:input type="TEXT" value="#{login.user}" label="Username" required="true"/>
                                 <syn:input type="SECRET" value="#{login.pass}" label="Password" required="true"/>
                                 <h:panelGroup id="bpl" layout="block" styleClass="row">
-                                    <h:commandButton id="lgbn" value="Login"
-                                                     action="#{login.login}"
-                                                     styleClass="tab"/>
+                                    <h:commandButton value="Login" action="#{login.login}" styleClass="tab"/>
                                     <h:button id="rstBtn" value="Reset" styleClass="tab"/>
                                 </h:panelGroup>
                             </h:form>

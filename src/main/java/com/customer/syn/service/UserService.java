@@ -31,6 +31,7 @@ public class UserService extends BaseService<User, Long> {
         Iterator<Role> it = user.getRoles().iterator();
         while(it.hasNext()) {
             Role role = it.next();
+            log.debug("inside iterator - role: {}", role.getRoleName());
             if (role.getId() == null) {
                 break;
             }
@@ -64,12 +65,14 @@ public class UserService extends BaseService<User, Long> {
         return user;
     }
 
+
     public Set<Role> getRoles() {
-        return getEntityManager()
-            .createQuery(ROLES_QUERY, Role.class)
-            .getResultStream()
+        return
+            getEntityManager()
+            .createQuery(ROLES_QUERY, Role.class).getResultStream()
             .collect(Collectors.toSet());
     }
+
 
     public Optional<User> findByUserAndPass(String username, String password) {
         User user = null;

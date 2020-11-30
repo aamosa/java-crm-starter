@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Task extends BaseEntity<Long> implements Serializable {
 
-    private static final long serialVersionUID = 18745327891271L;
+    private static final transient long serialVersionUID = 18745327891271L;
 
     @ViewMeta(order=1)
     @NotNull private String note;
@@ -30,8 +30,8 @@ public class Task extends BaseEntity<Long> implements Serializable {
     @ViewMeta(order=4, formField=false)
     private LocalDateTime completedDate;
 
-    @ViewMeta(order=2, formField=false)
     @Enumerated(STRING)
+    @ViewMeta(order=2, formField=false)
     @NotNull private Status status = Status.NEW;
 
     @ManyToOne(fetch=LAZY)

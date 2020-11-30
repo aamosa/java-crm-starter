@@ -6,95 +6,120 @@ import java.util.Objects;
 
 public class FormModel {
 
-	private Object value;
-	private String label;
-	private boolean isField;
-	private FormInputType type;
-	private String collectionType;
-	private Object referencedValue;
+    private Object value;
+    private String label;
+    private String converter;
+    private boolean isField;
+    private FormInputType type;
+    private String collectionType;
+    private Object referencedValue;
+    private Class<?> referencedType;
 
-	// -------------------------------------------------------- constructors
-	public FormModel() { /* no-args constructor */ }
+
+    // -------------------------------------------------------- constructors
+    public FormModel() { /* no-args constructor */ }
 
 
-	// -------------------------------------------------------- setters and getters
-	public FormInputType getType() {
-		return type;
-	}
+    // -------------------------------------------------------- setters and getters
+    public Class<?> getReferencedType() {
+        return referencedType;
+    }
 
-	public void setType(FormInputType type) {
-		this.type = type;
-	}
+    public void setReferencedType(Class<?> referencedType) {
+        this.referencedType = referencedType;
+    }
 
-	public boolean isField() {
-		return isField;
-	}
+    public String getConverter() {
+        return converter;
+    }
 
-	public void setField(boolean field) {
-		isField = field;
-	}
+    public void setConverter(String converter) {
+        this.converter = converter;
+    }
 
-	public String getLabel() {
-		return label;
-	}
+    public FormInputType getType() {
+        return type;
+    }
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    public void setType(FormInputType type) {
+        this.type = type;
+    }
 
-	public Object getValue() {
-		return value;
-	}
+    public boolean isField() {
+        return isField;
+    }
 
-	public void setValue(Object value) {
-		this.value = value;
-	}
+    public void setIsField(boolean field) {
+        isField = field;
+    }
 
-	public Object getReferencedValue() {
-		return referencedValue;
-	}
+    public String getLabel() {
+        return label;
+    }
 
-	public void setReferencedValue(Object referencedValue) {
-		this.referencedValue = referencedValue;
-	}
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
-	public String getCollectionType() {
-		return this.collectionType;
-	}
+    public Object getValue() {
+        return value;
+    }
 
-	public void setCollectionType(String collectionType) {
-		this.collectionType = collectionType;
-	}
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		FormModel formModel = (FormModel) o;
-		return value.equals(formModel.value) &&
-			type.equals(formModel.type) &&
-			label.equals(formModel.label) &&
-			Objects.equals(collectionType, formModel.collectionType) &&
-			Objects.equals(referencedValue, formModel.referencedValue);
-	}
+    public Object getReferencedValue() {
+        return referencedValue;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(value, type, label, collectionType, referencedValue);
-	}
+    public void setReferencedValue(Object referencedValue) {
+        this.referencedValue = referencedValue;
+    }
 
-	@Override
-	public String toString() {
-		return "FormModel{" +
-			"value=" + value +
-			", label='" + label + '\'' +
-			", isField=" + isField +
-			", type=" + type +
-			", collectionType='" + collectionType + '\'' +
-			", referencedValue=" + referencedValue +
-			'}';
-	}
+    public String getCollectionType() {
+        return this.collectionType;
+    }
+
+    public void setCollectionType(String collectionType) {
+        this.collectionType = collectionType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        FormModel model = (FormModel) o;
+        return isField == model.isField &&
+            Objects.equals(value, model.value) &&
+            Objects.equals(label, model.label) &&
+            Objects.equals(converter, model.converter) &&
+            type == model.type &&
+            Objects.equals(collectionType, model.collectionType) &&
+            Objects.equals(referencedValue, model.referencedValue) &&
+            Objects.equals(referencedType, model.referencedType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, label, converter, isField, type, collectionType,
+            referencedValue, referencedType);
+    }
+
+    @Override
+    public String toString() {
+        return "FormModel[" +
+            "value=" + value +
+            ", label='" + label + '\'' +
+            ", converter='" + converter + '\'' +
+            ", isField=" + isField +
+            ", type=" + type +
+            ", collectionType='" + collectionType + '\'' +
+            ", referencedValue=" + referencedValue +
+            ", referencedType=" + referencedType +
+            ']';
+    }
 
 }
