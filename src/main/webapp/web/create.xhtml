@@ -14,15 +14,26 @@
                 <h:form id="cform">
 
                     <c:forEach items="#{backingBean.formFields}" var="f">
-                        <div class="row">
-                            <syn:input value="#{backingBean[entityName][f.value]}"
-                                       label="#{f.label}"
-                                       type="#{f.type}"
-                                       collectionType="#{f.collectionType}"
-                                       reference="#{f.referencedValue}"
-                                       referencedType="#{f.referencedType}"
-                                       converter="#{f.converter}"/>
-                        </div>
+                        <c:choose>
+                            <c:when test="#{f.type eq 'ELEMENTCOLLECTION'}">
+
+                                <my:elementcollection value="#{backingBean[entityName][f.value]}"
+                                                      collectionType="#{f.collectionType}"
+                                                      referencedType="#{f.referencedType}"/>
+
+                            </c:when>
+                            <c:otherwise>
+                                <div class="row">
+                                    <syn:input value="#{backingBean[entityName][f.value]}"
+                                               label="#{f.label}"
+                                               type="#{f.type}"
+                                               collectionType="#{f.collectionType}"
+                                               reference="#{f.referencedValue}"
+                                               referencedType="#{f.referencedType}"
+                                               converter="#{f.converter}"/>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </c:forEach>
 
                     <div class="row">

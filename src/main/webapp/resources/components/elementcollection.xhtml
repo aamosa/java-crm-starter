@@ -6,11 +6,15 @@
               xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 
     <cc:interface componentType="elementcollection">
-
+        <cc:attribute name="value" type="java.util.Set"/>
+        <cc:attribute name="referencedType"/>
+        <cc:attribute name="collectionType"/>
     </cc:interface>
 
     <cc:implementation>
-        <div id="#{cc.clientId}" class="row" style="border:solid 1px #ccc;">
+        <div id="#{cc.clientId}" class="row" style="border:solid 1px #000;">
+
+            <h:outputText value="#{cc.childClass}"/>
             <h:commandButton value="Add Element" id="adBtn"/>
         </div>
     </cc:implementation>
