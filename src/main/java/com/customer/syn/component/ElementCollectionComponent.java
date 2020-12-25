@@ -13,7 +13,7 @@ import javax.faces.component.UINamingContainer;
 public class ElementCollectionComponent extends UIInput
     implements NamingContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(ElementCollectionComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ElementCollectionComponent.class);
 
     private Object childClass;
 
@@ -22,13 +22,9 @@ public class ElementCollectionComponent extends UIInput
     throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class<?> refType = (Class<?>) getAttributes().get("referencedType");
         Class<?> c = Class.forName(refType.getName());
-        log.debug("class = {}", c.getName());
+        LOG.debug("class = {}", c.getName());
         return c.newInstance();
     }
-
-
-
-
 
     @Override
     public String getFamily() {

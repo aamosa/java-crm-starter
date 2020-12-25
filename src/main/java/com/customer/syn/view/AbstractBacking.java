@@ -41,20 +41,28 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Inject private FacesContext fc;
-    @Inject private ExternalContext ec;
-    @Inject private SearchManager searchManager;
-    @PersistenceContext private EntityManager em;
+    @Inject
+    private FacesContext fc;
+
+    @Inject
+    private ExternalContext ec;
+
+    @Inject
+    private SearchManager searchManager;
+
+    @PersistenceContext
+    private EntityManager em;
 
     protected I Id;
     protected E currentEntity;
     protected E currentSelected;
-    private final Class<?> entityClass;
-
     protected String page;
     protected String searchOption;
     protected LocalDate searchDateTo;
-    @PastOrPresent protected LocalDate searchDateFrom;
+    private final Class<?> entityClass;
+
+    @PastOrPresent
+    protected LocalDate searchDateFrom;
 
     protected List<E> values;
     protected List<E> entities;
@@ -62,7 +70,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     protected List<ColumnModel> columnList;
     protected List<SearchModel.Field> searchFields;
     protected List<SearchModel.SelectModel> searchOptions;
-
 
     protected List<List<FormModel>> childFormModelsList = new ArrayList<>();
 
@@ -79,8 +86,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     // ---------------------------------------------------------- constructors
     protected AbstractBacking() {
         try {
-            ParameterizedType type = (ParameterizedType) this.getClass()
-                    .getGenericSuperclass();
+            ParameterizedType type =
+                (ParameterizedType) this.getClass().getGenericSuperclass();
             this.entityClass = (Class<?>) type.getActualTypeArguments()[0];
             if (log.isDebugEnabled()) {
                 log.debug("[{} constructor initialized]", getClass());
@@ -115,8 +122,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         // dynamic columns for datatables
         columnList = setColumns();
         setPage("list");
-        log.debug("{}", formFields);
-        log.debug("{} \n\n", META_MAPPING);
+        // log.debug("{}", formFields);
+        // log.debug("{} \n\n", META_MAPPING);
     }
 
 
@@ -321,7 +328,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         }
     }
 
-
     // ---------------------------------------------------------- private methods
     @SuppressWarnings("unchecked")
     private <T extends BaseEntity<?>> Class<T> getCollectionAttribute(Field field) {
@@ -336,17 +342,17 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     // get the actual collection implementation class of the field
-    private Class<?> getImplClass(Field field) throws FacesException {
+    private Class<?> getImplClass(Field field)
+    throws FacesException {
         try {
             Object entity = Class.forName(getEntityClass().getName()).newInstance();
             field.setAccessible(true);
             Class<?> implClazz = field.get(entity).getClass();
-            log.debug("[[ entity: {}, getImplClass: {} ]]",
-                entity.getClass(),
-                implClazz
-            );
+            log.debug("[ entity: {}, getImplClass: {} ]", entity.getClass(),
+                implClazz);
             field.setAccessible(false);
-            return implClazz;
+            return
+                implClazz;
         }
         catch (Exception e) {
             throw new FacesException(e);
@@ -357,7 +363,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     private List<Field> sortFields(List<Field> fields) {
         fields.sort(Comparator.comparingInt(o ->
             o.getAnnotation(ANNOTATED_CLASS).order()));
-        return fields;
+        return
+            fields;
     }
 
     // ---------------------------------------------------------- helper methods
@@ -368,7 +375,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     // get list of fields with the specified annotation
     public static List<Field> getAnnotatedFields(final Class<?> clazz,
-                                                 final Class<? extends Annotation> aClazz) {
+            final Class<? extends Annotation> aClazz) {
         List<Field> list = new ArrayList<>();
         for (Field field : getClassFields(clazz)) {
             if (field.getAnnotation(aClazz) != null)
@@ -396,7 +403,6 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     // ---------------------------------------------------------- setters and getters
-
     public List<List<FormModel>> getChildFormModelsList() {
         return childFormModelsList;
     }

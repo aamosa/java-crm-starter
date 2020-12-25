@@ -23,15 +23,15 @@ public class ContactBacking extends AbstractBacking<Contact, Long>
     private static final transient long serialVersionUID = 1221579874527L;
     
     private String fName;
-    @NotNull private String lName;
 
-    private Contact contact;
-
-    private List<Task> assignedTasks;
+    @NotNull
+    private String lName;
 
     @Inject
     private ContactService contactService;
 
+    private Contact contact;
+    private List<Task> assignedTasks;
 
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
@@ -62,8 +62,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long>
     @Override
     public void view() {
         if (isSelected()) {
-            setAssignedTasks(contactService.findTasksForContact(
-                getCurrentSelected()));
+            setAssignedTasks(contactService.findTasksForContact(getCurrentSelected()));
             setCurrentEntity(getCurrentSelected());
             setPage("detail");
         }
