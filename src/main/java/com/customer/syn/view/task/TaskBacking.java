@@ -18,7 +18,8 @@ import java.util.Map;
 
 @Named
 @ViewScoped
-public class TaskBacking extends AbstractBacking<Task, Long> implements Serializable {
+public class TaskBacking extends AbstractBacking<Task, Long>
+    implements Serializable {
 
     private static final long serialVersionUID = 567517317613L;
 
@@ -29,9 +30,14 @@ public class TaskBacking extends AbstractBacking<Task, Long> implements Serializ
     private String assgnUserName;
     private Map<String, String> detailAttrs;
 
-    @Inject private FacesContext fc;
-    @Inject private TaskService taskService;
-    @Inject @LoggedUser private User loggedUser;
+    @Inject
+    private FacesContext fc;
+
+    @Inject
+    private TaskService taskService;
+
+    @Inject @LoggedUser
+    private User loggedUser;
 
     // ------------------------------------------------------------------ constructors
     public TaskBacking() { /* no-arg constructor */ }

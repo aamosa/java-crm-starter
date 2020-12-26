@@ -117,8 +117,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         searchOptions = searchManager.getSearchOptions(getEntityName());
         searchFields = searchManager.getSearchFields(getEntityName());
         // backing data for form fields
-        formFields = setFormFields();
         META_MAPPING.computeIfAbsent(Address.class, this::createModel); // TODO:
+        formFields = setFormFields();
         // dynamic columns for datatables
         columnList = setColumns();
         setPage("list");
@@ -375,7 +375,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     // get list of fields with the specified annotation
     public static List<Field> getAnnotatedFields(final Class<?> clazz,
-            final Class<? extends Annotation> aClazz) {
+        final Class<? extends Annotation> aClazz) {
         List<Field> list = new ArrayList<>();
         for (Field field : getClassFields(clazz)) {
             if (field.getAnnotation(aClazz) != null)

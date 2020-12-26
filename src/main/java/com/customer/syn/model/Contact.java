@@ -36,9 +36,6 @@ public class Contact extends BaseEntity<Long>
     @OneToMany(mappedBy="contact", fetch=LAZY)
     private Set<Task> tasks = new HashSet<>(0);
 
-    @Transient
-    private Address address = new Address();
-
     @ElementCollection
     @JoinColumn(name="contact_id")
     @CollectionTable(name="address")
@@ -51,6 +48,8 @@ public class Contact extends BaseEntity<Long>
     @MapKeyEnumerated(STRING)
     private Map<Enums.PhoneType, String> phones = new HashMap<>(0);
 
+    @Transient
+    private Address address = new Address();
 
     // ----------------------------------------------------- constructors
     public Contact() { /* no-args constructor */ }
@@ -62,7 +61,6 @@ public class Contact extends BaseEntity<Long>
         this.email = email;
     }
 
-
     // ----------------------------------------------------- setters and getters
     public Address getAddress() {
         return this.address;
@@ -71,7 +69,6 @@ public class Contact extends BaseEntity<Long>
     public void setAddress(Address address) {
         this.address = address;
     }
-
 
     public Set<Address> getAddresses() {
         return addresses;

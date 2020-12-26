@@ -1,19 +1,20 @@
 <ui:component xmlns="http://www.w3.org/1999/xhtml"
               xmlns:f="http://xmlns.jcp.org/jsf/core"
+              xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
               xmlns:h="http://xmlns.jcp.org/jsf/html"
               xmlns:syn="http://syn.customer.com/jsf"
               xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
               xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 
     <cc:interface componentType="elementcollection">
-        <cc:attribute name="value" type="java.util.Set"/>
+        <cc:attribute name="value"/>
         <cc:attribute name="referencedType"/>
         <cc:attribute name="collectionType"/>
     </cc:interface>
 
     <cc:implementation>
-        <div id="#{cc.clientId}" class="row" style="border:solid 1px #ccc;">
-            <syn:input value="#{cc.value}"/>
+        <div id="#{cc.clientId}" class="row" style="border:solid 1px #ff0000;">
+
             <h:commandButton value="Add Element" id="adBtn"/>
         </div>
     </cc:implementation>

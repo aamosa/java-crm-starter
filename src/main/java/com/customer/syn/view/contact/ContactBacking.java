@@ -114,14 +114,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long>
         this.contact = contact;
     }
 
-    // public Address getAddress() {
-    //     return this.address;
-    // }
-    //
-    // public void setAddress(Address address) {
-    //     this.address = address;
-    // }
-
     public List<Task> getAssignedTasks() {
         return assignedTasks;
     }
