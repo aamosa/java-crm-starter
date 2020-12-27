@@ -7,15 +7,23 @@
               xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 
     <cc:interface componentType="elementcollection">
-        <cc:attribute name="value"/>
+        <cc:attribute name="value" type="java.util.HashSet"/>
         <cc:attribute name="referencedType"/>
         <cc:attribute name="collectionType"/>
     </cc:interface>
 
     <cc:implementation>
-        <div id="#{cc.clientId}" class="row" style="border:solid 1px #ff0000;">
+        <div id="#{cc.clientId}" class="row" style="border:solid 1px #0000ff;">
+            <c:set var="backingBean" value="#{cc.attrs.backingBean}"/>
 
-            <h:commandButton value="Add Element" id="adBtn"/>
+            <c:forEach items="#{backingBean.metaMapping[cc.childClass]}"
+                       var="v">
+                <syn:input value="#{backingBean.contact.address[v.value]}"
+                           label="#{v.label}"
+                           type="#{v.type}"/>
+            </c:forEach>
+
+            <h:commandButton value="Add" id="adBtn"/>
         </div>
     </cc:implementation>
 

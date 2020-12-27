@@ -73,12 +73,12 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
 
     protected List<List<FormModel>> childFormModelsList = new ArrayList<>();
 
+    private static final Class<ViewMeta> ANNOTATED_CLASS = ViewMeta.class;
     private static final String EDIT_LOG = "[ Edit invoked on entity: {} ]";
     private static final String UPDATE_MSG = "%s with Id %d has been updated.";
     private static final String DELETE_MSG = "%s with Id %d has been deleted.";
     private static final String CREATE_MSG = "New %s has been created successfully.";
     protected static final String NO_SELECTION = "Please make a selection first.";
-    private static final Class<ViewMeta> ANNOTATED_CLASS = ViewMeta.class;
 
     private static final Map<Class<?>, List<FormModel>> META_MAPPING = new ConcurrentHashMap<>();
 
@@ -86,8 +86,7 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     // ---------------------------------------------------------- constructors
     protected AbstractBacking() {
         try {
-            ParameterizedType type =
-                (ParameterizedType) this.getClass().getGenericSuperclass();
+            ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
             this.entityClass = (Class<?>) type.getActualTypeArguments()[0];
             if (log.isDebugEnabled()) {
                 log.debug("[{} constructor initialized]", getClass());
@@ -122,8 +121,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         // dynamic columns for datatables
         columnList = setColumns();
         setPage("list");
-        // log.debug("{}", formFields);
-        // log.debug("{} \n\n", META_MAPPING);
+        log.debug("{}", formFields);
+        log.debug("{} \n\n", META_MAPPING);
     }
 
 
@@ -403,6 +402,10 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
     }
 
     // ---------------------------------------------------------- setters and getters
+    public Map<Class<?>, List<FormModel>> getMetaMapping() {
+        return this.META_MAPPING;
+    }
+
     public List<List<FormModel>> getChildFormModelsList() {
         return childFormModelsList;
     }
