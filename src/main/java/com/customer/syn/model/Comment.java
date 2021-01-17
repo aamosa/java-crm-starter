@@ -9,10 +9,19 @@ import javax.persistence.Entity;
 @Entity
 public class Comment extends BaseEntity<Long> implements Serializable {
 
-    private static final long serialVersionUID = 96L;
+    private static final long serialVersionUID = 4575411275546L;
 
-    @Basic
-    @Column(nullable = false)
+    @Column(nullable=false)
     private String commentText;
+
+
+    // ------------------------------------------------ setters and getters
+    private String getCommentText() {
+        return this.commentText;
+    }
+
+    private void setCommentText(String value) {
+        this.commentText = value;
+    }
 
 }

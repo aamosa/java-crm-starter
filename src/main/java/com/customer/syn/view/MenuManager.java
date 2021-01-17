@@ -12,84 +12,67 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import javax.persistence.metamodel.PluralAttribute;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @ApplicationScoped
 @Named(value = "menuBacking")
 public class MenuManager implements Serializable {
 
-    private static final long serialVersionUID = 54L;
+    private static final long serialVersionUID = 219321578524L;
     private static final Logger log = LoggerFactory.getLogger(MenuManager.class);
 
     private List<User> users;
     private Set<Role> rolesMenu;
+    @Inject private UserService userService;
+    @PersistenceContext private EntityManager em;
+
     private static final Map<String, String> NAV_MENU = new HashMap<>();
 
-    @Inject private UserService userService;
-    @Inject private SearchManager searchManager;
 
     // ---------------------------------------------------------------- constructors
     public MenuManager() { /* no-args constructor */ }
 
-    
     @PostConstruct
     public void init() {
-        // TODO: load from config file or db here
-        loadNavMenu();
+        loadNavMenu(); // TODO: load from config file or db here
         loadSelects();
+        // getMetaModel();
         if (log.isDebugEnabled()) {
             log.debug("[{} postconstruct initialized]", getClass());
         }
     }
 
-
     private void loadNavMenu() {
-        // TODO:
+        // TODO: rework
         NAV_MENU.put(Utils.getPath().concat("contact.xhtml"), "Contacts");
         NAV_MENU.put(Utils.getPath().concat("user.xhtml"), "Users");
         NAV_MENU.put(Utils.getPath().concat("task.xhtml"), "Tasks");
     }
 
-
     private void loadSelects() {
-        // TODO: reload when new entity created
-        if (this.users == null) {
+        if (this.users == null) { // TODO: refresh
             this.users = userService.fetchAll();
         }
-
         if (this.rolesMenu == null) {
             this.rolesMenu = userService.getRoles();
         }
     }
 
-
     public String pageTitle(String viewId) {
-            return NAV_MENU.get(viewId);
-        }
-
-
-    public enum DataType {
-        TEXT("text"),
-        DATE("date"),
-        NUMBER("number"),
-        SELECT("select"),
-        CHECKBOX("checkbox"),
-        SECRET("secret");
-
-        String value;
-
-        DataType(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
+        return NAV_MENU.get(viewId);
     }
 
-    
-    // ---------------------------------------------------------------- getters
+    // ---------------------------------------------------------------- read-only getters
     public Map<String, String> getMenu() {
         return NAV_MENU;
     }

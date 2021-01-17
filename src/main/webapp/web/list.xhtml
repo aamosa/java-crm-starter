@@ -32,7 +32,7 @@
             </p:menuButton>
          </f:facet>
          <p:columns headerText="#{col.header}"
-                    value="#{backingBean.tableColumns}"
+                    value="#{backingBean.columnList}"
                     var="col">
                 <h:outputText value="#{c[col.property]}" />
          </p:columns>

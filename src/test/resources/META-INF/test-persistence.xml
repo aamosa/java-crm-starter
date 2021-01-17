@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence
+        xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                            http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+        version="2.2">
+    <persistence-unit name="synTest">
+        <jta-data-source>java:app/jdbc/h2_embedded</jta-data-source>
+
+        <properties>
+            <!-- JPA -->
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="javax.persistence.schema-generation.create-source" value="metadata-then-script"/>
+
+            <!-- Hibernate -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="false"/>
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+
+            <!-- EclipseLink -->
+            <property name="eclipselink.logging.thread" value="false"/>
+            <property name="eclipselink.logging.session" value="false"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.timestamp" value="false"/>
+            <property name="eclipselink.logging.logger" value="ServerLogger"/>
+
+        </properties>
+    </persistence-unit>
+</persistence>

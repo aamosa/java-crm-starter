@@ -5,49 +5,47 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:my="http://xmlns.jcp.org/jsf/composite/components"
         xmlns:p="http://primefaces.org/ui">
 
-    <h:panelGroup layout="block" id="gform" styleClass="afrm">
-        <h:form id="cform">
-            <c:forEach items="#{backingBean.formFields}"
-                       var="field"
-                       varStatus="loop">
-                <syn:input value="#{backingBean[entityName][field]}"
-                           label="#{field}" />
-            </c:forEach>
+    <h:panelGroup id="frmgrp" layout="block">
+        <div class="canvas box-shadow og-fnt lt-gry-bg">
+            <div class="full-width">
+                <h:form id="cform">
 
-            <c:if test="#{entityName eq 'user'}">
-                <p:selectManyCheckbox id="roles"
-                                      layout="pageDirection"
-                                      converter="roleConverter"
-                                      required="true"
-                                      value="#{backingBean.userRoles}">
-                    <f:selectItems value="#{menuBacking.rolesMenu}"
-                                   var="r"
-                                   itemLabel="#{r.roleName}"
-                                   itemValue="#{r}" />
-                </p:selectManyCheckbox>
-            </c:if>
+                    <c:forEach items="#{backingBean.formFields}" var="f">
+                        <c:choose>
+                            <c:when test="#{f.type eq 'ELEMENTCOLLECTION'}">
 
-            <c:if test="#{entityName eq 'task'}">
-                <syn:input value="#{backingBean.contactId}"
-                           label="Contact Id" />
-                <syn:input value="#{backingBean.createdUserId}" label="User Id" />
-                <h:selectOneMenu id="asgnusr" value="#{backingBean.assignedUser}">
-                    <f:selectItems value="#{backingBean.userList}"
-                                   var="u"
-                                   itemValue="#{u}"
-                                   itemLabel="#{u.id}" />
-                </h:selectOneMenu>
-            </c:if>
+                                <my:elementcollection value="#{backingBean[entityName][f.value]}"
+                                                      collectionType="#{f.collectionType}"
+                                                      referencedType="#{f.referencedType}"
+                                                      backingBean="#{backingBean}"
+                                                      entityName="#{entityName}"/>
 
-            <h:panelGroup id="bnPl" layout="block" styleClass="row">
-                <h:commandButton action="#{backingBean.save}" id="svb"
-                                 value="Create"
-                                 styleClass="tab" />
-                <h:button id="rtb" value="Reset" styleClass="tab" />
-            </h:panelGroup>
-        </h:form>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="row">
+                                    <syn:input value="#{backingBean[entityName][f.value]}"
+                                               label="#{f.label}"
+                                               type="#{f.type}"
+                                               collectionType="#{f.collectionType}"
+                                               reference="#{f.referencedValue}"
+                                               referencedType="#{f.referencedType}"
+                                               converter="#{f.converter}"/>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
 
+                    <div class="row">
+                        <h:commandButton action="#{backingBean.save}" id="svb"
+                                         value="Create"
+                                         styleClass="tab"/>
+                        <h:button id="rtb" value="Reset" styleClass="tab"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
     </h:panelGroup>
 </ui:composition>

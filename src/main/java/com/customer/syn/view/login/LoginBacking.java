@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
-@Named(value = "login")
 @RequestScoped
+@Named(value = "login")
 public class LoginBacking implements Serializable {
 
     private static final long serialVersionUID = 3L;
@@ -41,12 +41,11 @@ public class LoginBacking implements Serializable {
 
 
     public void login() throws IOException {
-        AuthenticationStatus status = securityContext.authenticate(
-                (HttpServletRequest) ec.getRequest(), 
-                (HttpServletResponse) ec.getResponse(),
-                AuthenticationParameters.withParams()
-                    .newAuthentication(true)
-                    .credential(new UsernamePasswordCredential(user, pass)));
+        AuthenticationStatus status = securityContext.authenticate( (HttpServletRequest) ec.getRequest(),
+            (HttpServletResponse) ec.getResponse(),
+            AuthenticationParameters.withParams()
+                .newAuthentication(true)
+                .credential(new UsernamePasswordCredential(user, pass)));
         if (status == SEND_CONTINUE) {
             fc.responseComplete();
         } 

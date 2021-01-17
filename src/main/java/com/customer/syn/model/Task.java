@@ -2,6 +2,9 @@ package com.customer.syn.model;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.EnumType.STRING;
+import static com.customer.syn.model.FormInputType.SELECT;
+import static com.customer.syn.model.FormInputType.DATE;
+import static com.customer.syn.model.FormInputType.DATETIME;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,52 +19,53 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Task extends BaseEntity<Long> implements Serializable {
 
-    private static final long serialVersionUID = 149L;
+    private static final transient long serialVersionUID = 18745327891271L;
 
-    @ViewMeta(order = 1)
+    @ViewMeta(order=1)
     @NotNull private String note;
     
-    @ViewMeta(order = 3, formField = false)
+    @ViewMeta(order=3, type=DATE)
     private LocalDate dueDate;
     
-    @ViewMeta(order = 4, formField = false)
+    @ViewMeta(order=4, formField=false)
     private LocalDateTime completedDate;
 
     @Enumerated(STRING)
-    @ViewMeta(order = 2, formField = false)
-    @NotNull private Status status = Status.OPEN;
-    
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CONTACT_ID")
+    @ViewMeta(order=2, formField=false)
+    @NotNull private Status status = Status.NEW;
+
+    @ManyToOne(fetch=LAZY)
+    @JoinColumn(name="contact_id")
     private Contact contact;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CREATED_BY")
-    @NotNull private User createdBy;
-    
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ASSIGNED_TO")
+    @ManyToOne(fetch=LAZY)
+    @JoinColumn(name="created_by")
+    private User createdBy;
+
+    @ViewMeta(type=SELECT)
+    @ManyToOne(fetch=LAZY)
+    @JoinColumn(name="assigned_to")
     private User assignedTo;
 
-    
+
+    public enum Status {
+        NEW, OPEN, PENDING, COMPLETED
+    }
+
     // ------------------------------------------------------------------ constructors
     public Task() { /* no-args constructor */ }
 
 
-    public Task(String note, Contact contact, User createdUser, User assignedUser) {
+    public Task(String note,
+                Contact contact,
+                User createdUser,
+                User assignedUser) {
         this.note = note;
         this.contact = contact;
         this.createdBy = createdUser;
         this.assignedTo = assignedUser;
-        this.status = Status.OPEN;
     }
-    
-    
-    public enum Status {
-        OPEN, PENDING, COMPLETED
-    }
-    
-    
+
     // ------------------------------------------------------------------ setters and getters
     public String getNote() {
         return note;
@@ -103,20 +107,20 @@ public class Task extends BaseEntity<Long> implements Serializable {
         this.contact = contact;
     }
 
-    public User getCreatedUser() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedUser(User createdUser) {
-        this.createdBy = createdUser;
+    public void setCreatedBy(User user) {
+        this.createdBy = user;
     }
 
-    public User getAssignedUser() {
+    public User getAssignedTo() {
         return assignedTo;
     }
 
-    public void setAssignedUser(User assignedUser) {
-        this.assignedTo = assignedUser;
+    public void setAssignedTo(User user) {
+        this.assignedTo = user;
     }
     
 

@@ -1,0 +1,22 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:p="http://primefaces.org/ui">
+
+    <div class="canvas box-shadow og-fnt lt-gry-bg">
+        <div class="full-width">
+            <h:form id="eform">
+                <c:forEach items="#{backingBean.formFields}" var="f">
+                    <syn:input value="#{backingBean.currentSelected[f.value]}"
+                               label="#{f.label}"/>
+                </c:forEach>
+                <h:commandButton action="#{backingBean.update(backingBean.currentSelected)}"
+                                 styleClass="tab" id="sbtn" value="Save"/>
+            </h:form>
+        </div>
+    </div>
+</ui:composition>

@@ -9,15 +9,15 @@ import javax.security.enterprise.authentication.mechanism.http.CustomFormAuthent
 import javax.security.enterprise.authentication.mechanism.http.LoginToContinue;
 
 @CustomFormAuthenticationMechanismDefinition(
-        loginToContinue = @LoginToContinue(loginPage = "/login.xhtml",
-        errorPage = "",
-        useForwardToLogin = false)
+	loginToContinue = @LoginToContinue(loginPage = "/login.xhtml",
+		errorPage = "",
+		useForwardToLogin = false)
 )
 @FacesConfig
 @ApplicationScoped
 public class ApplicationConfig {
 
-   @Inject
-   private MenuManager menuManager;
+	@Inject
+	private MenuManager menuManager;
 
 }

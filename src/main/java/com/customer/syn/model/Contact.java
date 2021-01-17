@@ -10,45 +10,82 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.customer.syn.model.Enums.Status.NEW;
+import static com.customer.syn.model.FormInputType.ELEMENTCOLLECTION;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-public class Contact extends BaseEntity<Long> implements Serializable {
+public class Contact extends BaseEntity<Long>
+    implements Serializable {
 
-    private static final long serialVersionUID = -14L;
+    private static final transient long serialVersionUID = -2687579851125L;
 
-    @Transient private boolean editable;
-
-    @ViewMeta(order = 2)
+    @ViewMeta(order=3)
     @NotNull private String lastName;
 
-    @ViewMeta(order = 1)
+    @ViewMeta(order=2)
     @NotNull private String firstName;
 
-    @ViewMeta(order = 9)
-    @Enumerated(STRING) private Enums.Status status = NEW;
-
-    @ElementCollection
-    @CollectionTable(name = "ADDRESS")
-    @JoinColumn(name = "CONTACT_ID")
-    private Set<Address> addresses = new HashSet<>();
-
-    @ElementCollection
-    @CollectionTable(name = "PHONE")
-    @MapKeyEnumerated(STRING)
-    @Column(name = "PHONE_NUMBER")
-    private Map<Enums.PhoneType, String> phones = new HashMap<>();
-
-    @ViewMeta(order = 3)
-    @Column(unique = true)
+    @ViewMeta(order=4)
+    @Column(unique=true)
     @Email private String email;
 
-    @OneToMany(mappedBy = "contact", fetch = LAZY)
-    private Set<Task> tasks = new HashSet<>();
+    @ViewMeta(order=1, formField=false)
+    @Enumerated(STRING) private Enums.Status status = NEW;
 
+    @OneToMany(mappedBy="contact", fetch=LAZY)
+    private Set<Task> tasks = new HashSet<>(0);
+
+    @ElementCollection
+    @JoinColumn(name="contact_id")
+    @CollectionTable(name="address")
+    @ViewMeta(type=ELEMENTCOLLECTION)
+    private Set<Address> addresses = new HashSet<>(0);
+
+    @ElementCollection
+    @CollectionTable(name="phone")
+    @Column(name="phone_number")
+    @MapKeyEnumerated(STRING)
+    private Map<Enums.PhoneType, String> phones = new HashMap<>(0);
+
+    @Transient
+    private Address address = new Address();
+
+    // ----------------------------------------------------- constructors
+    public Contact() { /* no-args constructor */ }
+
+
+    public Contact(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
     // ----------------------------------------------------- setters and getters
+    public Address getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public Map<Enums.PhoneType, String> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(Map<Enums.PhoneType, String> phones) {
+        this.phones = phones;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -88,5 +125,11 @@ public class Contact extends BaseEntity<Long> implements Serializable {
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
+
 
 }

@@ -1,103 +1,57 @@
 package com.customer.syn.view.contact;
 
-import java.io.Serializable;
-import java.util.List;
+import com.customer.syn.model.Address;
+import com.customer.syn.model.Contact;
+import com.customer.syn.model.Task;
+import com.customer.syn.service.BaseService;
+import com.customer.syn.service.ContactService;
+import com.customer.syn.view.AbstractBacking;
 
-import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
-
-import com.customer.syn.model.Contact;
-import com.customer.syn.model.Task;
-import com.customer.syn.service.BaseRepositoryImpl;
-import com.customer.syn.service.ContactService;
-import com.customer.syn.view.AbstractBacking;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
 
 @Named
 @ViewScoped
-public class ContactBacking extends AbstractBacking<Contact, Long> implements Serializable {
+public class ContactBacking extends AbstractBacking<Contact, Long>
+    implements Serializable {
 
-    private static final long serialVersionUID = 12L;
-    
+    private static final transient long serialVersionUID = 1221579874527L;
+
     private String fName;
-    @NotNull private String lName;
+
+    @NotNull
+    private String lName;
+
+    @Inject
+    private ContactService contactService;
+
     private Contact contact;
     private List<Task> assignedTasks;
-    @Inject private ContactService contactService;
-
 
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
 
-
-    @Override
-    protected BaseRepositoryImpl<Contact, Long> getService() {
-        return contactService;
+    public void initialize() {
+        contact = new Contact();
+        setPage("create");
     }
-
 
     @Override
     protected void doSearch(String value) {
-        if (value != null && "searchContactName".equals(value)) {
+        if ("searchContactName".equals(value)) {
             if (getfName() != null && !getfName().trim().isEmpty()
-                    && !getlName().trim().isEmpty()) {
+                && !getlName().trim().isEmpty()) {
                 values = getService().findByFullName(getfName(), getlName());
-            }
-            else {
+            } else {
                 values = getService().findByLastName(getlName());
             }
         }
     }
-
-
-    public void initialize() {
-        contact = new Contact();
-        setPage("create");
-        if (log.isDebugEnabled())
-            log.debug("[{} instantiated]", contact);
-    }
-
-
-    @Override
-    public void view() {
-        if (isSelected()) {
-            setAssignedTasks(contactService.findTasksforContact(
-                    getCurrentSelected()));
-            setCurrentEntity(getCurrentSelected());
-            setPage("detail");
-        }
-        else {
-            addMsg(NO_SELECTION);
-        }
-    }
-    
-    
-    @Override
-    public void edit() {
-        if (isSelected()) {
-            super.edit(getCurrentSelected());
-            setPage("editcontact");
-        }
-        else {
-            addMsg(NO_SELECTION);
-        }
-    }
-   
-    
-    @Override
-    public String update(Contact contact) {
-        super.update(contact);
-        return "index?faces-redirect=true";
-    }
-     
-    
-    public String save() {
-        super.save(contact);
-        return "index?faces-redirect=true&includeViewParams=true";
-    }
-    
 
     // --------------------------------------------------------- setters and getters
     public String getfName() {
@@ -112,8 +66,41 @@ public class ContactBacking extends AbstractBacking<Contact, Long> implements Se
         return lName;
     }
 
+    protected BaseService<Contact, Long> getService() {
+        return
+            contactService;
+    }
+
     public void setlName(String lName) {
         this.lName = lName;
+    }
+
+    @Override
+    public void view() {
+        if (isSelected()) {
+            setAssignedTasks(contactService.findTasksForContact(getCurrentSelected()));
+            setCurrentEntity(getCurrentSelected());
+            setPage("detail");
+        } else {
+            addMsg(NO_SELECTION);
+        }
+    }
+
+    @Override
+    public String update(Contact contact) {
+        super.update(contact);
+        return "index?faces-redirect=true";
+    }
+
+    public String save() {
+        if (contact.getAddress() != null) {
+            log.debug("[ Address is set: {} ]", contact.getAddress());
+            HashSet<Address> set = new HashSet<>();
+            set.add(contact.getAddress());
+            contact.setAddresses(set);
+        }
+        super.save(contact);
+        return "contact?faces-redirect=true&includeViewParams=true";
     }
 
     public Contact getContact() {

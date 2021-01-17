@@ -9,7 +9,7 @@ public class Country {
     private String country;
     private String countryCode;
 
-
+    // ----------------------------------------------------- constructors
     public Country() { /* no-args constructor */ }
 
     // ----------------------------------------------------- setters and getters
@@ -29,6 +29,10 @@ public class Country {
         this.countryCode = countryCode;
     }
 
+    @Override
+    public String toString() {
+        return country;
+    }
 
     @Override
     public boolean equals(Object o) {

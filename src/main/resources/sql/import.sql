@@ -7,12 +7,12 @@ INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt)
 INSERT INTO `contact` (firstName, lastName, email, status, updatedAt, createdAt) VALUES ('AMY','FOWLER','amyfowler@gmail.com','ACTIVE', '2020-03-23 18:22:01.141', '2019-03-15 11:43:10.110');
 
 -- address
-INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countryCode) VALUES (1,'5168 ELECTRON BLVD','PASADENA','90103','CA','United States','USA');
-INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country, countryCode) VALUES (1,'446 EINSTEIN WAY','SAN JOSE','90014','CA','United States','USA');
+INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country) VALUES (1,'5168 ELECTRON BLVD','PASADENA','90103','CA','United States');
+INSERT INTO `address` (contact_id,  address1, city, postalCode, stateProvince, country) VALUES (1,'446 EINSTEIN WAY','SAN JOSE','90014','CA','United States');
 
 -- users
-INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('JOHN', 'ROSS', 'jross@crm.com', 'JROSS', 'password2', '2019-12-23 10:26:21.001', '2019-12-01 15:11:09.003');
-INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('JOE', 'GUMBI', 'jgumbi@crm.com', 'JGUMBI', 'password1', '2020-01-05 11:16:25.421', '2019-12-05 11:01:19.109');
+INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('QA', 'USER', 'quser@crm.com', 'QAUSER', 'password2', '2019-12-23 10:26:21.001', '2019-12-01 15:11:09.003');
+INSERT INTO `user` (firstName, lastName, email, userName, password, updatedAt, createdAt) VALUES ('DEMO', 'USER', 'duser@crm.com', 'DUSER', 'password1', '2020-01-05 11:16:25.421', '2019-12-05 11:01:19.109');
 
 -- roles
 INSERT INTO `role` (roleName, updatedAt, createdAt) VALUES ('ADMIN', '2019-02-19 12:19:17.000', '2019-01-01 07:10:09.003');

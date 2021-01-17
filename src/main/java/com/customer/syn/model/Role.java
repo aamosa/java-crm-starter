@@ -10,37 +10,29 @@ import javax.persistence.ManyToMany;
 
 
 @Entity
-public class Role extends BaseEntity<Long> implements Serializable {
+public class Role extends BaseEntity<Long>
+    implements Serializable {
 
-    private static final long serialVersionUID = 6L;
+    private static final long serialVersionUID = 297194452872L;
 
-    @Column(nullable = false)
+    @Column(nullable=false)
     private String roleName;
     
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy="roles")
     private Set<User> users = new HashSet<>();
-    
 
     // ------------------------------------------------------- constructors
     public Role() { /* no-args constructor */ }
-    
-   
+
     public Role(String role) {
         this.roleName = role;
     }
 
-    
     public Role(String roleName, User user) {
         this.roleName = roleName;
         this.getUsers().add(user);
     }
 
-
-    @Override
-    public String toString() {
-        return getRoleName();
-    }
-    
     // ------------------------------------------------------- setters and getters
     public String getRoleName() {
         return roleName;
@@ -52,6 +44,11 @@ public class Role extends BaseEntity<Long> implements Serializable {
 
     public Set<User> getUsers() {
         return users;
+    }
+
+    @Override
+    public String toString() {
+        return getRoleName();
     }
 
 }
