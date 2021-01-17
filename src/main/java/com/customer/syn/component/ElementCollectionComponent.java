@@ -7,6 +7,10 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIInput;
 import javax.faces.component.UINamingContainer;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.ConverterException;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @FacesComponent(value = "elementcollection")
@@ -20,13 +24,13 @@ public class ElementCollectionComponent extends UIInput
 
 
     public Object getChildObject()
-    throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class<?> refType = (Class<?>) getAttributes().get("referencedType");
         Class<?> c = Class.forName(refType.getName());
-        this.childClass = refType;
-
-        return c.newInstance();
+        return
+            c.newInstance();
     }
+
 
     public Class<?> getChildClass() {
         this.childClass = (Class<?>) getAttributes().get("referencedType");
@@ -37,8 +41,41 @@ public class ElementCollectionComponent extends UIInput
 
 
     @Override
+    public Object getValue() {
+        return
+            super.getValue();
+    }
+
+
+    @Override
+    public Object getSubmittedValue() {
+        return
+            super.getSubmittedValue();
+    }
+
+
+    @Override
+    protected Object getConvertedValue(FacesContext facesContext, Object submittedValue)
+        throws ConverterException {
+        if (submittedValue == null) {
+            return null;
+        }
+
+        try {
+            Set set = new HashSet();
+            set.add(submittedValue);
+            return set;
+        } catch (Exception e) {
+            LOG.error("{}", e);
+            throw new ConverterException();
+        }
+    }
+
+
+    @Override
     public String getFamily() {
-        return UINamingContainer.COMPONENT_FAMILY;
+        return
+            UINamingContainer.COMPONENT_FAMILY;
     }
 
 

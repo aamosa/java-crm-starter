@@ -5,6 +5,7 @@ import com.customer.syn.model.BaseEntity;
 import com.customer.syn.model.FormInputType;
 import com.customer.syn.model.ViewMeta;
 import com.customer.syn.service.BaseService;
+import com.customer.syn.util.Utils;
 import org.primefaces.model.menu.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +123,8 @@ public abstract class AbstractBacking<E extends BaseEntity<I>, I extends Number>
         columnList = setColumns();
         setPage("list");
         log.debug("{}", formFields);
-        log.debug("{} \n\n", META_MAPPING);
+        log.debug("{} \n", META_MAPPING);
+        log.debug("CDI BEANS: {}\n", Utils.getAllCurrentCDIBeans());
     }
 
 

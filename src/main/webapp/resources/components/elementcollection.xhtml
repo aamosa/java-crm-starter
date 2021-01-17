@@ -1,10 +1,11 @@
-<ui:component xmlns="http://www.w3.org/1999/xhtml"
-              xmlns:f="http://xmlns.jcp.org/jsf/core"
-              xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-              xmlns:h="http://xmlns.jcp.org/jsf/html"
-              xmlns:syn="http://syn.customer.com/jsf"
-              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-              xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+<ui:component
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:syn="http://syn.customer.com/jsf"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 
     <cc:interface componentType="elementcollection">
         <cc:attribute name="value" type="java.util.HashSet"/>
@@ -13,17 +14,16 @@
     </cc:interface>
 
     <cc:implementation>
-        <div id="#{cc.clientId}" class="row" style="border:solid 1px #0000ff;">
+        <div id="#{cc.clientId}" class="row" style="border:solid 1px #cfcfee;">
             <c:set var="backingBean" value="#{cc.attrs.backingBean}"/>
+            <c:set var="entity" value="#{cc.attrs.entityName}"/>
 
-            <c:forEach items="#{backingBean.metaMapping[cc.childClass]}"
-                       var="v">
-                <syn:input value="#{backingBean.contact.address[v.value]}"
+            <c:forEach items="#{backingBean.metaMapping[cc.childClass]}" var="v">
+                <syn:input value="#{cc.childObject[v.value]}"
                            label="#{v.label}"
                            type="#{v.type}"/>
             </c:forEach>
 
-            <h:commandButton value="Add" id="adBtn"/>
         </div>
     </cc:implementation>
 

@@ -21,7 +21,7 @@ public class ContactBacking extends AbstractBacking<Contact, Long>
     implements Serializable {
 
     private static final transient long serialVersionUID = 1221579874527L;
-    
+
     private String fName;
 
     @NotNull
@@ -36,11 +36,6 @@ public class ContactBacking extends AbstractBacking<Contact, Long>
     // --------------------------------------------------------- constructors
     public ContactBacking() { /* no-args constructor */ }
 
-
-    protected BaseService<Contact, Long> getService() {
-        return contactService;
-    }
-
     public void initialize() {
         contact = new Contact();
         setPage("create");
@@ -50,43 +45,12 @@ public class ContactBacking extends AbstractBacking<Contact, Long>
     protected void doSearch(String value) {
         if ("searchContactName".equals(value)) {
             if (getfName() != null && !getfName().trim().isEmpty()
-                    && !getlName().trim().isEmpty()) {
+                && !getlName().trim().isEmpty()) {
                 values = getService().findByFullName(getfName(), getlName());
-            }
-            else {
+            } else {
                 values = getService().findByLastName(getlName());
             }
         }
-    }
-
-    @Override
-    public void view() {
-        if (isSelected()) {
-            setAssignedTasks(contactService.findTasksForContact(getCurrentSelected()));
-            setCurrentEntity(getCurrentSelected());
-            setPage("detail");
-        }
-        else {
-            addMsg(NO_SELECTION);
-        }
-    }
-
-    @Override
-    public String update(Contact contact) {
-        super.update(contact);
-        return "index?faces-redirect=true";
-    }
-
-
-    public String save() {
-        if (contact.getAddress() != null) {
-            log.debug("[ Address is set: {} ]", contact.getAddress());
-            HashSet<Address> set = new HashSet<>();
-            set.add(contact.getAddress());
-            contact.setAddresses(set);
-        }
-        super.save(contact);
-        return "contact?faces-redirect=true&includeViewParams=true";
     }
 
     // --------------------------------------------------------- setters and getters
@@ -102,8 +66,41 @@ public class ContactBacking extends AbstractBacking<Contact, Long>
         return lName;
     }
 
+    protected BaseService<Contact, Long> getService() {
+        return
+            contactService;
+    }
+
     public void setlName(String lName) {
         this.lName = lName;
+    }
+
+    @Override
+    public void view() {
+        if (isSelected()) {
+            setAssignedTasks(contactService.findTasksForContact(getCurrentSelected()));
+            setCurrentEntity(getCurrentSelected());
+            setPage("detail");
+        } else {
+            addMsg(NO_SELECTION);
+        }
+    }
+
+    @Override
+    public String update(Contact contact) {
+        super.update(contact);
+        return "index?faces-redirect=true";
+    }
+
+    public String save() {
+        if (contact.getAddress() != null) {
+            log.debug("[ Address is set: {} ]", contact.getAddress());
+            HashSet<Address> set = new HashSet<>();
+            set.add(contact.getAddress());
+            contact.setAddresses(set);
+        }
+        super.save(contact);
+        return "contact?faces-redirect=true&includeViewParams=true";
     }
 
     public Contact getContact() {

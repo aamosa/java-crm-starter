@@ -10,7 +10,8 @@ import javax.persistence.ManyToMany;
 
 
 @Entity
-public class Role extends BaseEntity<Long> implements Serializable {
+public class Role extends BaseEntity<Long>
+    implements Serializable {
 
     private static final long serialVersionUID = 297194452872L;
 

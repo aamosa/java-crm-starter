@@ -15,9 +15,10 @@ import java.util.Map;
 
 
 @WebListener
-public class MyServletListener implements ServletContextListener {
+public class MyServletListener
+    implements ServletContextListener {
 
-	private final Logger log = LoggerFactory.getLogger(MyServletListener.class);
+    private final Logger log = LoggerFactory.getLogger(MyServletListener.class);
 
 	/*
 		@Override

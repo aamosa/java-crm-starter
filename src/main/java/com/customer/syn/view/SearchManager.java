@@ -30,7 +30,7 @@ public class SearchManager {
 		// parse config and create search model
 		SearchParser parser = new SearchParser("/searchfields.xml");
 		if (log.isDebugEnabled()) {
-			log.debug("[{} postconstruct initialized]", getClass());
+			log.debug("[{} postconstruct init]", getClass());
 		}
 	}
 
@@ -40,10 +40,12 @@ public class SearchManager {
 
 	public List<SearchModel.Field> getSearchFields(String key) {
 		List<SearchModel.SelectModel> list = SearchParser.getMapping().get(key);
-		return list.stream().filter(s -> s.getRenderFields().size() > 0)
-		           .map(SearchModel.SelectModel::getRenderFields).flatMap(List::stream)
-		           .collect(collectingAndThen(toList(),
-			           Collections::unmodifiableList));
+		return
+			list.stream().filter(s -> s.getRenderFields().size() > 0)
+				.map(SearchModel.SelectModel::getRenderFields)
+				.flatMap(List::stream)
+				.collect(collectingAndThen(toList(),
+					Collections::unmodifiableList));
 	}
 
 	public FormInputType[] getDataTypes() {

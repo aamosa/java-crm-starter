@@ -1,7 +1,4 @@
 tmp/
-tmp/**/*
-/log/
-/target/
 target/
 .settings/
 .project/
@@ -9,20 +6,27 @@ target/
 .vscode/
 .metadata/
 build/
-/node/
+node/
 node_tmp/
 node_modules/
 .gradle/
-/build/
+build/
 classes/
 out/
 .sass-cache/
-/nb-configuration.xml
+/.awcache/*
+/.cache-loader/*
+/.sts4-cache/*
 
+.cproject
+.buildpath
 .classpath
 .loadpath
 .project
 .factorypath
+
+.externalToolBuilders/**
+*.launch
 
 *~
 ._*
@@ -45,16 +49,7 @@ out/
 *.swp
 *~.nib
 *.pydevproject
-local.properties
+nb-configuration.xml
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-
-npm-debug.log.*
-/.awcache/*
-/.cache-loader/*
-/.sts4-cache/*
-.externalToolBuilders/**
-*.launch
-.cproject
-.buildpath

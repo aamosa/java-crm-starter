@@ -33,9 +33,9 @@ public class AppIdentityStore implements IdentityStore {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             userService.updateLogin(user);
-            return new CredentialValidationResult(user.getUserName(),
-                    user.getRoles().stream().map(Role::getRoleName)
-                            .collect(Collectors.toSet()));
+            return
+                new CredentialValidationResult(user.getUserName(), user.getRoles().stream()
+                    .map(Role::getRoleName).collect(Collectors.toSet()));
         } else {
             return INVALID_RESULT;
         }

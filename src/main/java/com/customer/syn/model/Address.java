@@ -1,5 +1,6 @@
 package com.customer.syn.model;
 
+import javax.inject.Named;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.JoinColumn;
@@ -7,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.util.Objects;
+
 
 @Embeddable
 public class Address {

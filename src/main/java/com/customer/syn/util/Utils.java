@@ -8,7 +8,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,14 +32,22 @@ public final class Utils {
     
     private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
-    private Utils() { /* prevent instantiation :p */ }
+    private Utils() { /* prevent instantiation */ }
 
     
     // ------------------------------------------------------- util methods
+    public static List<String> getAllCurrentCDIBeans() {
+        BeanManager bm = CDI.current().getBeanManager();
+        return
+            bm.getBeans(Object.class).stream().map(Bean::getName)
+                .collect(Collectors.toList());
+    }
+
+
     public static String getPath() {
-        String path = FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestServletPath();
-        return path.substring(0, path.lastIndexOf('/') + 1);
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath();
+        return
+            path.substring(0, path.lastIndexOf('/') + 1);
     }
 
 
@@ -80,7 +92,8 @@ public final class Utils {
     public static Field getField(Class<?> clazz, String name) 
             throws NoSuchFieldException {
         try {
-            return clazz.getDeclaredField(name);
+            return
+                clazz.getDeclaredField(name);
         } 
         catch (NoSuchFieldException e) {
             Class<?> superClass = clazz.getSuperclass();
@@ -104,7 +117,9 @@ public final class Utils {
 
 
     public static <T extends BaseEntity<Number>, I> T findInListById(List<T> list, I Id) {
-        return list.stream().filter(i -> i.getId().equals(Id)).findFirst().orElse(null);
+        return
+            list.stream().filter(i -> i.getId().equals(Id)).findFirst()
+                .orElse(null);
     }
 
 

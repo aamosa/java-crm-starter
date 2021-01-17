@@ -20,7 +20,8 @@
                                 <my:elementcollection value="#{backingBean[entityName][f.value]}"
                                                       collectionType="#{f.collectionType}"
                                                       referencedType="#{f.referencedType}"
-                                                      backingBean="#{backingBean}" />
+                                                      backingBean="#{backingBean}"
+                                                      entityName="#{entityName}"/>
 
                             </c:when>
                             <c:otherwise>
