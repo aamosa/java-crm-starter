@@ -14,7 +14,7 @@
     <properties>
         <h2.version>1.4.200</h2.version>
         <junit.version>4.13.1</junit.version>
-        <log4j.version>2.13.3</log4j.version>
+        <log4j.version>2.15.0</log4j.version>
         <payara.version>5.201</payara.version>
         <javaee.api.version>8.0</javaee.api.version>
         <primefaces.version>7.0</primefaces.version>
