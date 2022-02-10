@@ -18,7 +18,7 @@
         <payara.version>5.201</payara.version>
         <javaee.api.version>8.0</javaee.api.version>
         <primefaces.version>7.0</primefaces.version>
-        <hibernate.version>5.4.1.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version>
         <payara.autodeploy>${autodeploy}</payara.autodeploy>
         <payara.embedded.version>5.2020.4</payara.embedded.version>
         <maven.compiler.source>1.8</maven.compiler.source>
